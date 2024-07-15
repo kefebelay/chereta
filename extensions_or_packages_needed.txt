@@ -1,7 +1,7 @@
 The following is what is going to be used for the online bidding system project
 
 server(Laravel)
-	
+	using laravel breeze for built in authentication
 
 client(React)
 	-UseState and useEffect: for managing the data on the front-end without reloading the page
