@@ -1,14 +1,12 @@
-import './index.css'
-import Routes from './routes'
+import "./index.css";
+import Routes from "./routes";
 
-function App() {  
-
+function App() {
   return (
-      <div>
-    <Routes />
+    <div>
+      <Routes />
     </div>
-    
-  )
+  );
 }
 
-export default App
+export default App;

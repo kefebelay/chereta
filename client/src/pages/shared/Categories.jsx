@@ -6,13 +6,9 @@ export default function Categories() {
     <div>
       <Navbar />
 
-    
       <div>
-        
         <CategoriesCard />
-
       </div>
-
     </div>
-  )
+  );
 }
