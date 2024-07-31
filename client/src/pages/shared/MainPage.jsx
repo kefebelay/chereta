@@ -9,7 +9,7 @@ export default function MainPage() {
   return (
     <div className="">
       <Navbar />
-      <div className=" overflow-y-auto min-h-screen mt-20 mb-9">
+      <div className=" mt-20 mb-9">
         <div id="Hero" className="mb-20 md:mb-0">
           <HeroSection />
         </div>

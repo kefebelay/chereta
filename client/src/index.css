@@ -15,7 +15,7 @@
     --primary: #096BF4;
     --secondary: #a7a4e2;
     --accent: rgb(68, 61, 255);
-    --nav-bg: #aaaaaa;
+    --nav-bg: #6fa3f8;
     --background2: #ffffff;
   }
   .dark {
@@ -53,12 +53,15 @@
 }
 
 .navbar {
-  backdrop-filter: blur(80px);
   background-color: var(--background);
-  opacity: 90%;
+  backdrop-filter: blur(20px);
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   z-index: 999;
+}
+.navbar-menu{
+  top: calc(100% - 40px);
+  height: calc(100vh - 50px);
 }

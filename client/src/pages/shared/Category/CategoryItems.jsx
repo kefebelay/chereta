@@ -40,12 +40,12 @@ export default function CategoryItems() {
           <Loading />
         </div>
       ) : (
-        <div>
+        <div className="mt-10">
           <h1 className="text-center m-6 text-4xl font-bold">{catName}</h1>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 grid-cols-1 gap-6 mt-5 p-4 place-items-center">
             {items.map((item) => (
               <Link
-                to={`/item/${id}`}
+                to={`/product/${item.id}`}
                 key={item.id}
                 className="max-w-sm rounded overflow-hidden shadow-lg"
               >
@@ -56,9 +56,14 @@ export default function CategoryItems() {
                 />
                 <div className="px-6 py-4">
                   <h2 className="font-bold text-xl mb-2">{item.title}</h2>
-                  <p className="text-accent text-base">
-                    Birr: {item.price * 74}
-                  </p>
+                  <div className="flex justify-between">
+                    <p className="text-accent text-base">
+                      Birr: {item.price * 74}
+                    </p>
+                    <button className="btn bg-primary w-16 text-center">
+                      Bid
+                    </button>
+                  </div>
                 </div>
               </Link>
             ))}

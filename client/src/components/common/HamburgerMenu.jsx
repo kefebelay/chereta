@@ -1,11 +1,20 @@
 import { useState } from "react";
 import ThemeSwitcher from "./ThemeSwitcherBtn";
+import { Link } from "react-router-dom";
 
 const Hamburger = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+  };
+  const handleClick = () => {
+    const aboutSection = document.getElementById("About");
+    if (aboutSection) {
+      aboutSection.scrollIntoView({ behavior: "smooth" });
+    } else {
+      console.error('Element with id "About" not found');
+    }
   };
 
   return (
@@ -41,63 +50,58 @@ const Hamburger = () => {
                 <img src="/public/chereta_logo.svg" className=" h-9 w-9" />
               </a>
               <button className="bg-background" onClick={toggleMenu}>
-                <svg
-                  className="h-6 w-6 cursor-pointer hover:-translate-y-1"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  ></path>
-                </svg>
+                <i className="fa-solid fa-bars text-text"></i>
               </button>
             </div>
             <div>
               <ul>
                 <li className="mb-1">
-                  <a
-                    className="block p-4 text-sm font-semibold  hover:bg-blue-50 hover:text-blue-600 rounded"
-                    href="#"
+                  <Link
+                    to={"/"}
+                    className={`text-md  hover:text-accent  bg-transparent ${
+                      location.pathname === "/" ? "text-accent font-bold " : ""
+                    }`}
                   >
                     Home
-                  </a>
+                  </Link>
                 </li>
                 <li className="mb-1">
-                  <a
-                    className="block p-4 text-sm font-semibold hover:bg-blue-50 hover:text-blue-600 rounded"
-                    href="#"
+                  <Link
+                    className="text-md hover:text-accent bg-none bg-transparent"
+                    to={"/#About"}
+                    onClick={handleClick}
                   >
-                    About Us
-                  </a>
+                    About
+                  </Link>
                 </li>
                 <li className="mb-1">
-                  <a
-                    className="block p-4 text-sm font-semibold hover:bg-blue-50 hover:text-blue-600 rounded"
-                    href="#"
+                  <Link
+                    to={"/categories"}
+                    className={`text-md ${
+                      location.pathname === "/categories"
+                        ? "text-accent font-bold "
+                        : ""
+                    }
+                  hover:text-accent bg-transparent" to={"/categories"} `}
                   >
-                    Services
-                  </a>
+                    Categories
+                  </Link>
                 </li>
                 <li className="mb-1">
-                  <a
-                    className="block p-4 text-sm font-semibold  hover:bg-blue-50 hover:text-blue-600 rounded"
-                    href="#"
+                  <Link
+                    className="text-md  hover:text-accent bg-transparent"
+                    to={"/products"}
                   >
-                    Pricing
-                  </a>
+                    Products
+                  </Link>
                 </li>
                 <li className="mb-1">
-                  <a
-                    className="block p-4 text-sm font-semibold hover:bg-blue-50 hover:text-blue-600 rounded"
-                    href="#"
+                  <Link
+                    className="btn hidden md:inline-block md:ml-auto md:mr-3 bg-primary text-white text-md font-bold w-28 text-center"
+                    to={"/login"}
                   >
-                    Contact
-                  </a>
+                    Log In
+                  </Link>
                 </li>
               </ul>
             </div>

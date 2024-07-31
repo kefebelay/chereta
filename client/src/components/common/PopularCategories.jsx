@@ -1,29 +1,57 @@
+import Axios from "axios";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import Loading from "./Loading";
+
 export default function PopularCategories() {
+  const [isLoading, setisLoading] = useState(true);
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    async function get() {
+      try {
+        setisLoading(true);
+        const response = await Axios.get(
+          "https://api.escuelajs.co/api/v1/categories"
+        );
+        const limitedItems = response.data.slice(0, 3);
+        setItems(limitedItems);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setisLoading(false);
+      }
+    }
+    get();
+  }, []);
+
   return (
-    <div className="bg-background2">
-      <h1 className="text-center text-5xl font-extrabold m-9 bg-background2">
-        Popular Categories
-      </h1>
-      <h2 className="text-center text-gray-600 text-lg bg-background2">
-        Here are a list of most popular categories that our users usually Choose
-      </h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-7 mt-8 bg-background2 p-20">
-        <div className="bg-secondary flex flex-col items-center rounded-lg p-3 hover:-translate-y-1 shadow-md shadow-gray-700">
-          <h3 className="p-3 w-full text-center">Category 1</h3>
-          <div className=" h-72 w-80 bg-black rounded-xl m-2"></div>
-          <button className="btn bg-primary w-full text-white">View</button>
+    <div className="bg-transparent">
+      {isLoading ? (
+        <div className="grid h-screen place-items-center bg-transparent">
+          <Loading />
         </div>
-        <div className="bg-secondary flex flex-col items-center rounded-lg p-3 hover:-translate-y-1 shadow-md shadow-gray-700">
-          <h3 className="p-3 w-full text-center">Category 2</h3>
-          <div className=" h-72 w-80 bg-black rounded-xl m-3"></div>
-          <button className="btn bg-primary w-full text-white">View</button>
+      ) : (
+        <div className="bg-transparent">
+          <h1 className="text-4xl text-center p-10 font-extrabold bg-transparent">
+            Popular Categories
+          </h1>
+          <div className="grid gap-6 md:grid-cols-3 place-items-center cente grid-cols-1 m-3 p-3 bg-transparent">
+            {items.map((item) => (
+              <Link
+                to={`/categories/${item.id}`}
+                key={item.id}
+                className=" h-96 rounded-lg"
+              >
+                <h1 className="text-center p-3">{item.name}</h1>
+                <div className="h-60 p-3">
+                  <img className="rounded-lg" src={item.image} />
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
-        <div className="bg-secondary flex flex-col items-center rounded-lg p-3 hover:-translate-y-1 shadow-md shadow-gray-700">
-          <h3 className="p-3 w-full text-center">Category 3</h3>
-          <div className=" h-72 w-80 bg-black rounded-xl m-3"></div>
-          <button className="btn bg-primary w-full text-white">View</button>
-        </div>
-      </div>
+      )}
     </div>
   );
 }

@@ -1,7 +1,7 @@
 export default function HeroSection() {
   return (
     <div className="flex md:ml-28 sm:mb-20 md:mb-0">
-      <div className=" md:mt-28 px-3">
+      <div className=" md:mt-10 px-3 md:mb-20">
         <h1 className=" md:text-5xl text-3xl font-extrabold text-center">
           Find It,
           <span className=" text-accent">Bid </span>It, Own It, Transforming

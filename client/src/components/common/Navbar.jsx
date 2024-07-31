@@ -16,8 +16,8 @@ const Navbar = () => {
   };
 
   return (
-    <div className="">
-      <nav className=" relative px-4 py-2 flex justify-between items-center shadow-md shadow-nav-bg">
+    <div className="navbar ">
+      <nav className=" px-4 py-2 flex justify-between items-center shadow-md shadow-nav-bg">
         <Link
           className="text-3xl font-bold leading-none md:ml-28 ml-3 bg-transparent"
           to={"/"}
@@ -33,7 +33,7 @@ const Navbar = () => {
             <Link
               to={"/"}
               className={`text-md  hover:text-accent  bg-transparent ${
-                location.pathname === "/" ? "text-accent font-bold " : ""
+                location.pathname === "/" ? "text-primary font-bold " : ""
               }`}
             >
               Home
@@ -55,7 +55,7 @@ const Navbar = () => {
               to={"/categories"}
               className={`text-md ${
                 location.pathname === "/categories"
-                  ? "text-accent font-bold "
+                  ? "text-primary font-bold "
                   : ""
               }
                   hover:text-accent bg-transparent" to={"/categories"} `}
@@ -65,12 +65,18 @@ const Navbar = () => {
           </li>
 
           <li className="bg-transparent">
-            <a
-              className="text-md  hover:text-accent bg-transparent"
-              href="#Contact"
+            <Link
+              className={`
+              ${
+                location.pathname === "/products"
+                  ? "text-primary font-bold "
+                  : ""
+              }
+              text-md  hover:text-accent bg-transparent`}
+              to={"/products"}
             >
-              Contact
-            </a>
+              Products
+            </Link>
           </li>
 
           <li className="bg-transparent">
@@ -78,7 +84,7 @@ const Navbar = () => {
           </li>
         </ul>
         <Link
-          className="btn hidden md:inline-block md:ml-auto md:mr-3 bg-primary text-white text-md font-bold "
+          className="btn hidden md:inline-block md:ml-auto md:mr-3 bg-primary text-white text-md font-bold w-28 text-center"
           to={"/login"}
         >
           Log In
