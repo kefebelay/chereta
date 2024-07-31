@@ -31,16 +31,21 @@ export default function CategoriesCard() {
           <Loading />
         </div>
       ) : (
-        <div className="grid gap-12 md:grid-cols-3  grid-cols-1 m-3 p-3 overflow-hidden place-items-center">
+        <div className="grid gap-12 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 m-3 p-3 overflow-hidden place-items-center">
           {items.map((item) => (
             <Link
               to={`/categories/${item.id}`}
               key={item.id}
-              className=" h-96 w-80 "
+              className=" h-96 w-80 overflow-hidden shadow-md bg-background2 rounded-md hover:-translate-y-1 duration-700 transition-transform"
             >
-              <h1 className="text-center p-3">{item.name}</h1>
-              <div className="h-60 ">
-                <img src={item.image} className="tounded-md hover:scale-105 " />
+              <h1 className="text-center p-3 bg-transparent font-bold">
+                {item.name}
+              </h1>
+              <div className="h-60 p-3 bg-transparent">
+                <img
+                  src={item.image}
+                  className="rounded-md hover:scale-105 transition-transform duration-300"
+                />
               </div>
             </Link>
           ))}

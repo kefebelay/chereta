@@ -41,11 +41,16 @@ export default function PopularCategories() {
               <Link
                 to={`/categories/${item.id}`}
                 key={item.id}
-                className=" h-96 rounded-lg"
+                className=" h-96 overflow-hidden rounded-lg hover:-translate-y-1 transition-transform duration-700"
               >
-                <h1 className="text-center p-3">{item.name}</h1>
+                <h1 className="text-center p-3 font-bold text-lg">
+                  {item.name}
+                </h1>
                 <div className="h-60 p-3">
-                  <img className="rounded-lg" src={item.image} />
+                  <img
+                    className="rounded-lg hover:scale-105 transition-transform duration-400"
+                    src={item.image}
+                  />
                 </div>
               </Link>
             ))}

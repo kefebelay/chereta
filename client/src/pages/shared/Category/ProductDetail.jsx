@@ -50,7 +50,7 @@ export default function Item() {
                   </span>
                 </p>
               </div>
-              <div className=" bg-primary brightness-90  p-2">
+              <div className=" bg-accent brightness-90  p-2">
                 <p className=" font-bold bg-transparent text-white">
                   Highest bid:
                   <span className=" text-white text-xl bg-transparent">
@@ -65,10 +65,17 @@ export default function Item() {
             </div>
           </div>
           <div className=" h-2/4 p-7">
-            <img src={item.images} className=" pb-1" />
+            <img
+              src={item.images}
+              className=" pb-1 rounded-lg hover:scale-105 transition-transform duration-300"
+            />
             <div className="h-44 flex w-full gap-1">
               {item.images.map((item) => (
-                <img className="w-full" src={item} key={item} />
+                <img
+                  className="w-full rounded-lg hover:scale-105 transition-transform duration-300"
+                  src={item}
+                  key={item}
+                />
               ))}
             </div>
           </div>

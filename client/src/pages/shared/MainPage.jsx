@@ -10,7 +10,7 @@ export default function MainPage() {
     <div className="">
       <Navbar />
       <div className=" mt-20 mb-9">
-        <div id="Hero" className="mb-20 md:mb-0">
+        <div id="Hero" className="mb-24 md:mb-0">
           <HeroSection />
         </div>
 

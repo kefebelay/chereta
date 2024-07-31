@@ -42,10 +42,10 @@ export default function Items() {
               <Link
                 to={`/product/${item.id}`}
                 key={item.id}
-                className="max-w-sm rounded overflow-hidden shadow-lg"
+                className="max-w-sm rounded overflow-hidden shadow-lg hover:-translate-y-1 transition-transform duration-700"
               >
                 <img
-                  className="w-full rounded-lg"
+                  className="w-full rounded-lg hover:scale-110 transition-transform duration-500 "
                   src={item.images}
                   alt="Image description"
                 />

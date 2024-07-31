@@ -40,17 +40,19 @@ export default function CategoryItems() {
           <Loading />
         </div>
       ) : (
-        <div className="mt-10">
-          <h1 className="text-center m-6 text-4xl font-bold">{catName}</h1>
+        <div className="mt-24">
+          <h1 className="text-center m-6 text-4xl font-bold text-primary">
+            {catName}
+          </h1>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 grid-cols-1 gap-6 mt-5 p-4 place-items-center">
             {items.map((item) => (
               <Link
                 to={`/product/${item.id}`}
                 key={item.id}
-                className="max-w-sm rounded overflow-hidden shadow-lg"
+                className="max-w-sm rounded overflow-hidden shadow-lg hover:-translate-y-1 transition-transform duration-700"
               >
                 <img
-                  className="w-full rounded-lg"
+                  className="w-full rounded-lg hover:scale-105 transition-transform duration-300 "
                   src={item.images}
                   alt="Image description"
                 />
