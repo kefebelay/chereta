@@ -52,7 +52,7 @@ export default function Items() {
                 <div className="px-6 py-4">
                   <h2 className="font-bold text-xl mb-2">{item.title}</h2>
                   <div className="flex justify-between">
-                    <p className="text-accent text-base">
+                    <p className="text-birr text-base">
                       Birr: {item.price * 74}
                     </p>
                     <button className="py-2 px-4 rounded-xl bg-primary w-16 text-center text-white">

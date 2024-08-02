@@ -1,10 +1,10 @@
 export default function Why_choose_us() {
   return (
     <div>
-      <h1 className="text-center text-5xl font-extrabold m-9">
+      <h1 className="text-center text-5xl font-extrabold m-9 text-primary">
         Why Choose Us?
       </h1>
-      <h2 className="text-center text-gray-700 text-lg">
+      <h2 className="text-center text-text2 text-lg">
         Chereta is an easy to use and navigate, simple to use and a very
         interactive and practical Online Bidding Website{" "}
       </h2>

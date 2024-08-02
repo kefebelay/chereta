@@ -16,6 +16,7 @@ export default {
         background2: "var(--background2)",
         background3: "var(--background3)",
         glow: "var(--glow)",
+        birr: "var(--birr)",
       },
     },
   },

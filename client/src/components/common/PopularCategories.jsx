@@ -26,29 +26,29 @@ export default function PopularCategories() {
   }, []);
 
   return (
-    <div className="bg-transparent">
+    <div className="bg-transparent mb-10">
       {isLoading ? (
         <div className="grid h-screen place-items-center bg-transparent">
           <Loading />
         </div>
       ) : (
-        <div className="bg-transparent">
-          <h1 className="text-4xl text-center p-10 font-extrabold bg-transparent">
+        <div className="bg-transparent ">
+          <h1 className="text-4xl text-center p-10 font-extrabold bg-transparent text-primary">
             Popular Categories
           </h1>
-          <div className="grid gap-6 md:grid-cols-3 place-items-center cente grid-cols-1 m-3 p-3 bg-transparent">
+          <div className="grid gap-6 md:grid-cols-3 place-items-center grid-cols-1 m-3 p-3 bg-transparent">
             {items.map((item) => (
               <Link
                 to={`/categories/${item.id}`}
                 key={item.id}
-                className=" h-96 overflow-hidden rounded-lg hover:-translate-y-1 transition-transform duration-700"
+                className=" shadow-md rounded-lg hover:-translate-y-1 transition-transform duration-700 m-12 bg-accent"
               >
-                <h1 className="text-center p-3 font-bold text-lg">
+                <h1 className="text-center p-3 font-bold text-lg bg-transparent text-white">
                   {item.name}
                 </h1>
-                <div className="h-60 p-3">
+                <div className="h-auto p-3 bg-transparent">
                   <img
-                    className="rounded-lg hover:scale-105 transition-transform duration-400"
+                    className="rounded-lg hover:scale-105 transition-transform duration-500 overflow-hidden"
                     src={item.image}
                   />
                 </div>

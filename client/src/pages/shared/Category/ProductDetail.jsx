@@ -37,14 +37,14 @@ export default function Item() {
         <div className="md:flex md:flex-row-reverse p-10 mt-14">
           <div className="text-center ">
             <div className="w-auto">
-              <h1 className="m-5 font-extrabold lg:text-4xl text-2xl text-accent">
+              <h1 className="m-5 font-extrabold lg:text-4xl text-2xl text-primary">
                 {item.title}
               </h1>
-              <p className="mx-10 mb-4">{item.description}</p>
+              <p className="mx-10 mb-4 text-text2">{item.description}</p>
               <div className=" bg-background2  p-2  mb-4">
                 <p className=" font-bold bg-transparent">
                   Starting price:
-                  <span className=" text-accent text-xl bg-transparent">
+                  <span className=" text-birr text-xl bg-transparent">
                     {" "}
                     Birr {item.price * 74}
                   </span>
@@ -64,10 +64,10 @@ export default function Item() {
               </button>
             </div>
           </div>
-          <div className=" h-2/4 p-7">
+          <div className=" h-2/5 p-7">
             <img
               src={item.images}
-              className=" pb-1 rounded-lg hover:scale-105 transition-transform duration-300"
+              className=" pb-1 rounded-lg hover:scale-105 transition-transform duration-300 cursor-zoom-in"
             />
             <div className="h-44 flex w-full gap-1">
               {item.images.map((item) => (

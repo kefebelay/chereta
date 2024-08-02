@@ -10,7 +10,9 @@ export default function HeroSection() {
       </div>
       <div className=" md:mt-10 md:mb-20 w-full">
         <h1 className=" lg:text-5xl md:text-4xl text-2xl md:p-4 font-extrabold text-center">
-          Ethiopias Thriving Online Marketplace for Everything Bid High, Win Big
+          Ethiopias Thriving Online{" "}
+          <span className="text-primary m-3">Marketplace </span> for Everything
+          Bid High, Win Big
         </h1>
         <p className="p-3 text-center text-text2">
           Welcome to Chereta, Discover a world of possibilities. Buy and sell
@@ -18,10 +20,10 @@ export default function HeroSection() {
         </p>
 
         <div className="mt-6 mx-11 md:mx-0 md:flex md:gap-4 justify-center">
-          <button className="btn bg-secondary shadow-lg w-full md:w-auto mb-4 md:mb-auto">
+          <button className="btn bg-secondary shadow-lg w-full md:w-full mb-4 md:mb-auto">
             How does it work?
           </button>
-          <button className="btn bg-primary shadow-lg w-full md:w-auto text-white">
+          <button className="btn bg-primary shadow-lg w-full md:w-full md:mr-20 text-white">
             Get started
           </button>
         </div>

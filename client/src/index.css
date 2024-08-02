@@ -11,13 +11,15 @@
 @layer base {
   :root {
     --text: #050316;
-    --text2: #a7a4e2;
+    --text2: #747386;
     --background: #e8e8e8;
     --primary: #096BF4;
     --secondary: #a7a4e2;
-    --accent: rgb(61, 116, 255);
+    --accent: rgb(107, 130, 193);
     --nav-bg: #6fa3f8;
     --background2: #ffffff;
+    --birr: #659bf2;
+
   }
   .dark {
     --text: #eae9fc;
@@ -25,7 +27,7 @@
     --background: #090929;
     --primary: #316bd8;
     --secondary: #211d5d;
-    --accent: #3857d3;
+    --accent: rgb(76, 91, 129);
     --nav-bg: #231b5c;
     --background2: #070737;
 

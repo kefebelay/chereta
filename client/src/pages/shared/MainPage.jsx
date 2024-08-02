@@ -14,7 +14,7 @@ export default function MainPage() {
           <HeroSection />
         </div>
 
-        <div id="Popular-categories" className="p-3 mb-8 bg-background2">
+        <div id="Popular-categories" className="p-3 mb-9 bg-background2">
           <PopularCategories />
         </div>
         <div id="whyChooseUs bg-background">
