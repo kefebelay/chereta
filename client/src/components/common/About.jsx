@@ -24,35 +24,37 @@ export default function About() {
         users to compete for items in an open and dynamic environment. Join us
         to explore a world where every item tells a story, and every bid brings
         you closer to owning something special.
-        <br />
-        <br />
-        <span className="w-full m-3 bg-transparent text-accent">
+      </p>
+      <br />
+      <br />
+      <span className="w-full m-3 bg-transparent text-accent">
+        {" "}
+        Key Features{" "}
+      </span>
+      <br />
+      <ul className="bg-transparent list-disc ml-8">
+        <li className="bg-transparent text-text2">
+          Dynamic Auctions: Engage in live bidding wars and experience the
+          thrill of auctions.
+        </li>
+        <li className="bg-transparent text-text2">
+          Diverse Listings: Discover unique items across various categories.
+        </li>
+        <li className="bg-transparent text-text2">
+          Secure Transactions: Enjoy a safe and secure shopping experience.
+        </li>
+        <li className="bg-transparent text-text2">
           {" "}
-          Key Features{" "}
-        </span>
-        <br />
-        <ul className="bg-transparent list-disc ml-8">
-          <li className="bg-transparent text-text2">
-            Dynamic Auctions: Engage in live bidding wars and experience the
-            thrill of auctions.
-          </li>
-          <li className="bg-transparent text-text2">
-            Diverse Listings: Discover unique items across various categories.
-          </li>
-          <li className="bg-transparent text-text2">
-            Secure Transactions: Enjoy a safe and secure shopping experience.
-          </li>
-          <li className="bg-transparent text-text2">
-            {" "}
-            User-Friendly Interface: Navigate easily through our platform and
-            find the perfect items to bid on.
-          </li>
-        </ul>
-        <br />
-        <br />
+          User-Friendly Interface: Navigate easily through our platform and find
+          the perfect items to bid on.
+        </li>
+      </ul>
+      <br />{" "}
+      <p className="bg-transparent text-text2">
         Start your auction journey today and experience e-commerce like never
         before!
       </p>
+      <br />
     </div>
   );
 }

@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
-class LoginController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-
+        $user = User::get();
+        return response()->json($user);
     }
 
     /**
@@ -27,7 +29,7 @@ class LoginController extends Controller
      */
     public function show(string $id)
     {
-        //
+
     }
 
     /**
