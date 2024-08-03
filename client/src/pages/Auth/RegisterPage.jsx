@@ -19,28 +19,32 @@ export default function RegisterPage() {
     setUser((prev) => ({ ...prev, [name]: value }));
   }
 
-  async function submitBtn() {
+  async function submitBtn(e) {
+    e.preventDefault();
+
     try {
-      const res = await Axios.post("http://localhost:3000/api/register", user);
+      const res = await Axios.post("http://127.0.0.1:8000/api/register", user);
       console.log(res);
+      console.log(setSuccessMessage("Registration successful"));
+      navigate("/login");
     } catch (err) {
       setErrorMessage("An error occurred");
     }
   }
 
   return (
-    <div>
-      <h1 className="text-center text-5xl font-extrabold m-9 text-primary">
-        Register
+    <div className="w-full bg-transparent grid grid-cols-1 place-items-center">
+      <h1 className="text-center text-3xl md:text-5xl font-extrabold m-9 text-primary">
+        Sign-up
       </h1>
       <div>
-        <form className="flex flex-col w-96 bg-transparent " type="submit">
+        <form className="flex flex-col bg-transparent" type="submit">
           <input
             onChange={setInput}
             name="email"
             type="email"
             placeholder="Enter Email"
-            className="border border-text2 p-3 rounded-lg m-3"
+            className="border border-text2 p-3 rounded-lg m-3 w-80"
             value={user.email}
           />
           <input
