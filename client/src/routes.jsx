@@ -9,6 +9,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 import CategoryItems from "./pages/shared/Category/CategoryItems";
 import Products from "./pages/shared/Category/Products";
 import ProductDetail from "./pages/shared/Category/ProductDetail";
+import SellerInfo from "./pages/Seller/SellerInfo";
 
 export default function routes() {
   return (
@@ -24,6 +25,7 @@ export default function routes() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/seller/dashboard" element={<SellerDashboard />} />
+          <Route path="/seller/info/:id" element={<SellerInfo />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Router>

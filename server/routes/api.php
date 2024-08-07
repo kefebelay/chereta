@@ -14,6 +14,6 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 Route::post('/login', [AuthenticatedSessionController::class, 'store']);
 Route::post('/register', [RegisteredUserController::class, 'store']);
 Route::get('/users',[UserController::class, 'index']);
-Route::middleware('cors')->group(function () {
+Route::middleware('CorsMiddleware')->group(function () {
     Route::post('/api/register', 'AuthController@register');
 });

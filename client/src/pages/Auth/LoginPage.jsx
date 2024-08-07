@@ -38,9 +38,11 @@ export default function LoginPage() {
         Login
       </h1>
       <div className="flex p-10 gap-4 md:justify-between md:flex-row justify-center">
-        <div className="md:h-[29rem] md:w-[30rem] bg-background2 hidden md:block w-full"></div>
+        <div className="md:h-auto md:auto bg-background2 hidden md:flex md:justify-center md:mx-4 p-7">
+          <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F003%2F689%2F228%2Foriginal%2Fonline-registration-or-sign-up-login-for-account-on-smartphone-app-user-interface-with-secure-password-mobile-application-for-ui-web-banner-access-cartoon-people-illustration-vector.jpg&f=1&nofb=1&ipt=8d5c16cbadb7c5b9f586f2410e54333255dd2ab4c4b300096f0973c26738f1cb&ipo=images" />
+        </div>
         <div className=" grid grid-cols-1 place-items-center bg-background2 rounded-lg p-9 md:w-full">
-          <div className="bg-transparent border border-text2 p-3 rounded-lg md:w-96 w-72">
+          <div className="bg-transparent p-3 rounded-lg md:w-96 w-72">
             <h1 className="bg-transparent text-center text-2xl md:text-3xl font-extrabold  text-primary">
               Enter detail to login
             </h1>
@@ -80,7 +82,7 @@ export default function LoginPage() {
 
               <p className="text-center text-text2 bg-transparent p-3">
                 Dont have an account?{" "}
-                <Link to={"/register"} className="text-primary">
+                <Link to={"/register"} className="text-primary bg-transparent">
                   Register
                 </Link>
               </p>

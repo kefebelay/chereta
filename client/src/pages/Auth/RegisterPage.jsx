@@ -9,7 +9,10 @@ export default function RegisterPage() {
     username: "",
     email: "",
     password: "",
+    company_name: "",
   });
+  const [userType, setUserType] = useState("");
+  const [sellerType, setSellerType] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const navigate = useNavigate();
@@ -23,9 +26,13 @@ export default function RegisterPage() {
     e.preventDefault();
 
     try {
-      const res = await Axios.post("http://127.0.0.1:8000/api/register", user);
+      const res = await Axios.post("http://127.0.0.1:8000/api/register", {
+        ...user,
+        userType,
+        sellerType,
+      });
       console.log(res);
-      console.log(setSuccessMessage("Registration successful"));
+      setSuccessMessage("Registration successful");
       navigate("/login");
     } catch (err) {
       setErrorMessage("An error occurred");
@@ -38,54 +45,55 @@ export default function RegisterPage() {
         Sign-up
       </h1>
       <div>
-        <form className="flex flex-col bg-transparent" type="submit">
-          <input
-            onChange={setInput}
-            name="email"
-            type="email"
-            placeholder="Enter Email"
-            className="border border-text2 p-3 rounded-lg m-3 w-80"
-            value={user.email}
-          />
-          <input
-            onChange={setInput}
-            name="password"
-            type="password"
-            placeholder="Enter Password"
-            className="border border-text2 p-3 rounded-lg m-3"
-            value={user.password}
-          />
-          <input
-            onChange={setInput}
-            name="name"
-            type="text"
-            placeholder="Enter full name"
-            className="border border-text2 p-3 rounded-lg m-3"
-            value={user.name}
-          />
-          <input
-            onChange={setInput}
-            name="username"
-            type="text"
-            placeholder="Enter username"
-            className="border border-text2 p-3 rounded-lg m-3"
-            value={user.username}
-          />
-          <input
-            onChange={setInput}
-            name="phone_number"
-            type="text"
-            placeholder="Enter phone number"
-            className="border border-text2 p-3 rounded-lg m-3"
-            value={user.phone_number}
-          />
-          <button
-            onClick={submitBtn}
-            className="btn bg-primary text-center mt-4 mx-4 text-white font-bold"
-          >
-            Register
-          </button>
-        </form>
+        {!userType ? (
+          <div className="flex flex-col bg-transparent">
+            <button
+              onClick={() => setUserType("buyer")}
+              className="btn bg-primary text-center mt-4 mx-4 text-white font-bold"
+            >
+              Sign up as Buyer
+            </button>
+            <button
+              onClick={() => setUserType("seller")}
+              className="btn bg-primary text-center mt-4 mx-4 text-white font-bold"
+            >
+              Sign up as Seller
+            </button>
+          </div>
+        ) : userType === "seller" && !sellerType ? (
+          <div className="flex flex-col bg-transparent">
+            <button
+              onClick={() => setSellerType("company")}
+              className="btn bg-primary text-center mt-4 mx-4 text-white font-bold"
+            >
+              Company Seller
+            </button>
+            <button
+              onClick={() => setSellerType("individual")}
+              className="btn bg-primary text-center mt-4 mx-4 text-white font-bold"
+            >
+              Individual Seller
+            </button>
+          </div>
+        ) : (
+          <div>
+            {userType === "buyer" && (
+              <BuyerForm setInput={setInput} user={user} />
+            )}
+            {userType === "seller" && sellerType === "company" && (
+              <CompanySellerForm setInput={setInput} user={user} />
+            )}
+            {userType === "seller" && sellerType === "individual" && (
+              <IndividualSellerForm setInput={setInput} user={user} />
+            )}
+            <button
+              onClick={submitBtn}
+              className="btn bg-primary text-center mt-4 mx-4 text-white font-bold"
+            >
+              Register
+            </button>
+          </div>
+        )}
         <div className="text-center text-red-500">{errorMessage}</div>
         <div className="text-center text-green-500">{successMessage}</div>
       </div>

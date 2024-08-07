@@ -2,7 +2,7 @@ import { useState } from "react";
 import ThemeSwitcher from "./ThemeSwitcherBtn";
 import { Link } from "react-router-dom";
 
-const Hamburger = () => {
+export default function Hamburger() {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -110,6 +110,4 @@ const Hamburger = () => {
       )}
     </div>
   );
-};
-
-export default Hamburger;
+}

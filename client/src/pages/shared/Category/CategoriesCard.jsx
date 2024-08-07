@@ -2,6 +2,7 @@ import Axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Loading from "../../../components/common/Loading";
+import Footer from "../../../components/common/Footer";
 
 export default function CategoriesCard() {
   const [isLoading, setisLoading] = useState(true);
@@ -14,7 +15,8 @@ export default function CategoriesCard() {
         const items = await Axios.get(
           "https://api.escuelajs.co/api/v1/categories"
         );
-        setItems(items.data);
+        const filteredItems = items.data.slice(0, 6);
+        setItems(filteredItems);
       } catch (err) {
         console.log(err);
       } finally {
@@ -51,6 +53,7 @@ export default function CategoriesCard() {
           ))}
         </div>
       )}
+      <Footer />
     </div>
   );
 }
