@@ -1,101 +1,55 @@
 import { useState } from "react";
-import Axios from "axios";
-import { useNavigate } from "react-router-dom";
-
+import SignUp from "../../components/Buyer/SignUp";
+import CompanySellerSignup from "../../components/Seller/CompanySignUpForm";
+import IndividualSellerSignUpForm from "../../components/Seller/IndividualSellerSignUpForm";
 export default function RegisterPage() {
-  const [user, setUser] = useState({
-    name: "",
-    phone_number: "",
-    username: "",
-    email: "",
-    password: "",
-    company_name: "",
-  });
-  const [userType, setUserType] = useState("");
-  const [sellerType, setSellerType] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
-  const navigate = useNavigate();
-
-  function setInput(e) {
-    const { name, value } = e.target;
-    setUser((prev) => ({ ...prev, [name]: value }));
-  }
-
-  async function submitBtn(e) {
-    e.preventDefault();
-
-    try {
-      const res = await Axios.post("http://127.0.0.1:8000/api/register", {
-        ...user,
-        userType,
-        sellerType,
-      });
-      console.log(res);
-      setSuccessMessage("Registration successful");
-      navigate("/login");
-    } catch (err) {
-      setErrorMessage("An error occurred");
-    }
-  }
+  const [user, setUser] = useState("buyer");
 
   return (
-    <div className="w-full bg-transparent grid grid-cols-1 place-items-center">
-      <h1 className="text-center text-3xl md:text-5xl font-extrabold m-9 text-primary">
-        Sign-up
+    <div className="bg-transparent m-8">
+      <h1 className="text-center text-5xl text-primary pb-7 font-bold bg-transparent">
+        Register
       </h1>
-      <div>
-        {!userType ? (
-          <div className="flex flex-col bg-transparent">
-            <button
-              onClick={() => setUserType("buyer")}
-              className="btn bg-primary text-center mt-4 mx-4 text-white font-bold"
-            >
-              Sign up as Buyer
-            </button>
-            <button
-              onClick={() => setUserType("seller")}
-              className="btn bg-primary text-center mt-4 mx-4 text-white font-bold"
-            >
-              Sign up as Seller
-            </button>
-          </div>
-        ) : userType === "seller" && !sellerType ? (
-          <div className="flex flex-col bg-transparent">
-            <button
-              onClick={() => setSellerType("company")}
-              className="btn bg-primary text-center mt-4 mx-4 text-white font-bold"
-            >
-              Company Seller
-            </button>
-            <button
-              onClick={() => setSellerType("individual")}
-              className="btn bg-primary text-center mt-4 mx-4 text-white font-bold"
-            >
-              Individual Seller
-            </button>
-          </div>
-        ) : (
-          <div>
-            {userType === "buyer" && (
-              <BuyerForm setInput={setInput} user={user} />
-            )}
-            {userType === "seller" && sellerType === "company" && (
-              <CompanySellerForm setInput={setInput} user={user} />
-            )}
-            {userType === "seller" && sellerType === "individual" && (
-              <IndividualSellerForm setInput={setInput} user={user} />
-            )}
-            <button
-              onClick={submitBtn}
-              className="btn bg-primary text-center mt-4 mx-4 text-white font-bold"
-            >
-              Register
-            </button>
-          </div>
-        )}
-        <div className="text-center text-red-500">{errorMessage}</div>
-        <div className="text-center text-green-500">{successMessage}</div>
+      <div className="p-4 md:p-0 rounded-lg border border-text2 md:py-10 md:w-[600px] mx-auto bg-transparent">
+        <div className="flex gap-3 bg-transparent justify-center w-auto">
+          <button
+            className={`transition-all duration-300 ${
+              user === "buyer"
+                ? "px-3 py-1 bg-primary text-white rounded-md"
+                : "px-3 py-1 bg-transparent text-primary"
+            }`}
+            onClick={() => setUser("buyer")}
+          >
+            Buyer
+          </button>
+          <span className="text-2xl text-text2">|</span>
+          <button
+            className={`transition-all duration-300 ${
+              user === "individual seller"
+                ? "px-3 py-1 bg-primary text-white rounded-md"
+                : "px-3 py-1 bg-transparent text-primary"
+            }`}
+            onClick={() => setUser("individual seller")}
+          >
+            Individual Seller
+          </button>
+          <span className="text-2xl text-text2">|</span>
+          <button
+            className={`transition-all duration-300 ${
+              user === "Company seller"
+                ? "px-3 py-1 bg-primary text-white rounded-md"
+                : "px-3 py-1 bg-transparent text-primary"
+            }`}
+            onClick={() => setUser("Company seller")}
+          >
+            Company Seller
+          </button>
+        </div>
+        <div className="form-container mt-4">
+          {user === "buyer" && <SignUp />}
+          {user === "individual seller" && <IndividualSellerSignUpForm />}
+          {user === "Company seller" && <CompanySellerSignup />}
+        </div>
       </div>
     </div>
   );

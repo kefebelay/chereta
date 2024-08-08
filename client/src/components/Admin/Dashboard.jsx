@@ -1,11 +1,10 @@
-import { useState } from "react";
 import PropTypes from "prop-types";
 import { Link, useLocation } from "react-router-dom";
 import ThemeSwitcher from "../common/ThemeSwitcherBtn";
 
 export default function Dashboard({ isOpen, setIsOpen }) {
   const location = useLocation();
-  const breadCrumbs = location.pathname.split("/").filter((segment) => segment);
+  const breadCrumbs = location.pathname.split("/");
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -13,98 +12,142 @@ export default function Dashboard({ isOpen, setIsOpen }) {
 
   return (
     <div>
-      <div className="bg-background w-full h-14 p-3 pl-9 pr-9 flex justify-between border-b border-text2">
-        {!isOpen ? (
-          <button onClick={toggleSidebar}>
-            <i className="fa-solid fa-bars-staggered text-3xl bg-transparent"></i>
-          </button>
-        ) : (
-          <h1 className=""></h1>
-        )}
+      <div className="bg-background w-full h-14 p-3 pl-9 pr-9 flex justify-between border-b border-slate-500 fixed">
+        <div className="flex">
+          {!isOpen ? (
+            <div className="flex flex-row-reverse gap-6">
+              <button onClick={toggleSidebar}>
+                <i className="fa-solid fa-bars-staggered text-primary text-3xl bg-transparent"></i>
+              </button>
+
+              <img
+                className="h-8  bg-transparent"
+                src="../../../public/chereta_logo.svg"
+                alt="logo"
+              />
+            </div>
+          ) : (
+            <h1 className=""></h1>
+          )}
+          <div
+            className={`${
+              isOpen ? "ml-72" : "ml-3"
+            } transition-margin duration-200 text-text2 font-bold p-4`}
+          >
+            {breadCrumbs.map((crumb, index) => (
+              <span className="text-text2" key={index}>
+                <span className="text-text2">{crumb}</span>
+                {index !== breadCrumbs.length - 1 && (
+                  <span className="text-text2"> &gt;&gt; </span>
+                )}
+              </span>
+            ))}
+          </div>
+        </div>
         <ThemeSwitcher />
       </div>
       <div className="flex">
         <div
-          className={`bg-background border-r border-text2 h-screen fixed ${
+          className={`bg-background shadow-md shadow-gray-500 h-screen fixed ${
             isOpen ? "w-64 p-5" : "w-0"
           } transition-width duration-300 overflow-hidden z-10`}
         >
-          <button onClick={toggleSidebar} className="  bg-transparent ">
-            {isOpen && (
-              <i className="fa-solid fa-square-xmark text-3xl bg-transparent ml-44 mt-3"></i>
-            )}
-          </button>
-          <ul className={`${isOpen ? "block" : "hidden"} mt-10 bg-transparent`}>
+          <div className="flex justify-between">
+            <img
+              className="h-8  bg-transparent"
+              src="../../../public/chereta_logo.svg"
+              alt="logo"
+            />
+            <button onClick={toggleSidebar} className="  bg-transparent ">
+              {isOpen && (
+                <i className="fa-solid text-primary fa-square-xmark text-3xl bg-transparentmt-3"></i>
+              )}
+            </button>
+          </div>
+          <ul
+            className={`${
+              isOpen ? "block" : "hidden"
+            } mt-10 bg-transparent flex flex-col gap-3`}
+          >
             <li className="mb-2">
               <Link
                 to="/admin/dashboard/analytics"
-                className={`block py-2 px-4 rounded bg-background2 ${
-                  location.pathname === "/admin/analytics"
-                    ? "bg-gray-700 font-bold"
-                    : "hover:bg-gray-700 hover:text-white"
+                className={`py-2 px-4 rounded bg-background2 border border-gray-500 
+                shadow-sm shadow-text2 flex gap-3 ${
+                  location.pathname === "/admin/dashboard/analytics"
+                    ? "bg-primary font-bold text-white"
+                    : " hover:text-white hover:bg-primary"
                 }`}
               >
+                <i
+                  className={`fa-solid fa-chart-line bg-transparent mt-1
+                ${
+                  location.pathname === "/admin/dashboard/analytics" &&
+                  "text-white"
+                } `}
+                ></i>
                 Analytics
               </Link>
             </li>
             <li className="mb-2">
               <Link
                 to="/admin/dashboard/user-management"
-                className={`block py-2 px-4 rounded bg-background2 ${
-                  location.pathname === "/admin/user-management"
-                    ? "bg-gray-700 font-bold"
-                    : "hover:bg-gray-700"
+                className={`flex gap-3 py-2 px-4 rounded bg-background2 border border-text2 ${
+                  location.pathname === "/admin/dashboard/user-management"
+                    ? "bg-primary font-bold text-white"
+                    : "hover:bg-primary hover:text-white"
                 }`}
               >
+                <i
+                  className={`fa-solid fa-users-gear bg-transparent mt-1
+                 ${
+                   location.pathname === "/admin/dashboard/user-management" &&
+                   "text-white"
+                 } `}
+                ></i>
                 User Management
               </Link>
             </li>
             <li className="mb-2">
               <Link
-                to="/admin/reports"
-                className={`block py-2 px-4 rounded bg-background2 ${
+                to="/admin/dashboard/reports"
+                className={`py-2 px-4 rounded bg-background2 border border-text2 flex gap-3 shadow-md ${
                   location.pathname === "/admin/dashboard/reports"
-                    ? "bg-gray-700 font-bold"
-                    : "hover:bg-gray-700"
+                    ? "bg-primary font-bold text-white"
+                    : "hover:bg-primary hover:text-white"
                 }`}
               >
+                <i
+                  className={`fa-regular fa-flag bg-transparent mt-1
+                 ${
+                   location.pathname === "/admin/dashboard/reports" &&
+                   "text-white"
+                 } `}
+                ></i>
                 Reports
               </Link>
             </li>
             <li className="mb-2">
               <Link
-                to="/admin/delivery-personnel-management"
-                className={`block py-2 px-4 rounded bg-background2 ${
-                  location.pathname ===
-                  "/admin/dashboard/delivery-personnel-management"
-                    ? "bg-gray-700 font-bold"
-                    : "hover:bg-gray-700"
+                to="/admin/dashboard/delivery-personnel"
+                className={`flex gap-3 py-2 px-4 rounded bg-background2 border border-text2 ${
+                  location.pathname === "/admin/dashboard/delivery-personnel"
+                    ? "bg-primary font-bold text-white"
+                    : "hover:bg-primary hover:text-white"
                 }`}
               >
+                <i
+                  className={`fa-regular fa-id-card  bg-transparent mt-1
+                 ${
+                   location.pathname ===
+                     "/admin/dashboard/delivery-personnel" && "text-white"
+                 } `}
+                ></i>
                 Delivery Personnel
-              </Link>
-            </li>
-            <li className="mb-2">
-              <Link
-                to="/admin/address"
-                className={`block py-2 px-4 rounded bg-background2 ${
-                  location.pathname === "/admin/dashboard/address"
-                    ? "bg-gray-700 font-bold"
-                    : "hover:bg-gray-700"
-                }`}
-              >
-                Address
               </Link>
             </li>
           </ul>
         </div>
-      </div>
-      <div
-        className={`${
-          isOpen ? "ml-72" : "ml-3"
-        } transition-margin duration-200 text-text2 font-bold p-4`}
-      >
-        {breadCrumbs[0].toUpperCase()} &gt; {breadCrumbs[1].toUpperCase()}
       </div>
     </div>
   );

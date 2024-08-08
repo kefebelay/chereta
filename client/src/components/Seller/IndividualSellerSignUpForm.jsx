@@ -1,11 +1,10 @@
 import { useState } from "react";
 
-export default function CompanySellerSignup() {
+export default function IndividualSellerSignUpForm() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
-    companyName: "",
   });
 
   const handleChange = (e) => {
@@ -16,19 +15,20 @@ export default function CompanySellerSignup() {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle form submission
-    console.log("Company Seller form submitted:", formData);
+    console.log("Individual Seller form submitted:", formData);
   };
 
   return (
     <div className="max-w-md mx-auto mt-10">
       <h2 className="text-2xl font-bold mb-5 text-center text-text2 m-3">
-        Company Seller Sign Up
+        Individual Seller Sign Up
       </h2>
       <p className="mb-3 text-sm text-left text-text2">
-        Sign up as a company seller to post items for auction and manage your
-        sales. Provide accurate information to verify your business and protect
-        your account. Use a strong, unique password for security. Happy selling
-        on Chereta!
+        Sign up as an individual seller, and you can post items for auction,
+        manage your listings, and track your sales. Ensure you provide accurate
+        and complete information to help verify your identity and protect your
+        account. Remember to use a strong, unique password to enhance the
+        security of your account. Happy selling on Chereta!
       </p>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
@@ -58,16 +58,6 @@ export default function CompanySellerSignup() {
             name="password"
             className="w-full p-2 border border-gray-300 rounded"
             value={formData.password}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block mb-2">Company Name</label>
-          <input
-            type="text"
-            name="companyName"
-            className="w-full p-2 border border-gray-300 rounded"
-            value={formData.companyName}
             onChange={handleChange}
           />
         </div>

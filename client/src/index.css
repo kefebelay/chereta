@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Global */
 * {
   font-family: "Ubuntu", sans-serif;
   color: var(--text);
@@ -56,6 +57,7 @@
   height: 70%;
 }
 
+/* Navbar */
 .navbar {
   background-color: var(--background);
   backdrop-filter: blur(20px);
@@ -68,4 +70,34 @@
 .navbar-menu{
   top: calc(100% - 40px);
   height: calc(100vh - 50px);
+}
+
+/* RegisterPage */
+.form-container > * {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.form-container > *:nth-child(1) {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.form-container > *:nth-child(2) {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.form-container > *:nth-child(3) {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+button {
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  transform: scale(1.05);
 }

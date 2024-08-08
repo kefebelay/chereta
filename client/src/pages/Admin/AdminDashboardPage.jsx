@@ -1,9 +1,7 @@
 import { useState } from "react";
 import Dashboard from "../../components/Admin/Dashboard";
-import { useLocation } from "react-router-dom";
 
 export default function AdminDashboardPage() {
-  const location = useLocation();
   const [Open, isOpen] = useState(true);
   return (
     <div className="">
@@ -18,56 +16,69 @@ export default function AdminDashboardPage() {
             Dashboard Overview
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold mb-2">Total Buyers</h3>
-              <p className="text-3xl">1,200</p>
+            <div className="bg-secondary p-6 rounded-lg shadow-md">
+              {" "}
+              <h3 className="text-xl text-white font-bold mb-2 bg-transparent">
+                Total Buyers{" "}
+              </h3>
+              <p className="text-3xl text-white bg-transparent">1,200</p>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold mb-2">Total Sellers</h3>
-              <p className="text-3xl">300</p>
+            <div className="bg-secondary p-6 rounded-lg shadow-md">
+              {" "}
+              <h3 className="text-xl font-bold mb-2 bg-transparent text-white">
+                Total Sellers
+              </h3>
+              <p className="text-3xl bg-transparent text-white">1,200</p>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold mb-2">Delivery Personnel</h3>
-              <p className="text-3xl">50</p>
+            <div className="bg-secondary p-6 rounded-lg shadow-md">
+              {" "}
+              <h3 className="text-xl font-bold mb-2 bg-transparent text-white">
+                Delivery Personnel
+              </h3>
+              <p className="text-3xl bg-transparent text-white">1,200</p>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold mb-2">Total Listings</h3>
-              <p className="text-3xl">5,000</p>
+            <div className="bg-secondary p-6 rounded-lg shadow-md">
+              {" "}
+              <h3 className="text-xl font-bold mb-2 bg-transparent text-white">
+                Total Listings
+              </h3>
+              <p className="text-3xl bg-transparent text-white">1,200</p>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold mb-2">Active Listings</h3>
-              <p className="text-3xl">4,500</p>
+            <div className="bg-secondary p-6 rounded-lg shadow-md">
+              {" "}
+              <h3 className="text-xl font-bold mb-2 bg-transparent text-white">
+                Active Listings
+              </h3>
+              <p className="text-3xl bg-transparent text-white">1,200</p>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold mb-2">Total Items Sold</h3>
-              <p className="text-3xl">10,000</p>
+            <div className="bg-secondary p-6 rounded-lg shadow-md">
+              {" "}
+              <h3 className="text-xl font-bold mb-2 bg-transparent text-white">
+                Total Items Sold
+              </h3>
+              <p className="text-3xl bg-transparent text-white">1,200</p>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold mb-2">Total Revenue</h3>
-              <p className="text-3xl">$500,000</p>
+            <div className="bg-secondary p-6 rounded-lg shadow-md text-white">
+              {" "}
+              <h3 className="text-xl font-bold mb-2 bg-transparent text-white">
+                Total Revenue
+              </h3>
+              <p className="text-3xl bg-transparent text-white">1,200</p>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold mb-2">Pending Orders</h3>
-              <p className="text-3xl">150</p>
+            <div className="bg-secondary p-6 rounded-lg shadow-md">
+              {" "}
+              <h3 className="text-xl font-bold mb-2 bg-transparent text-white">
+                Pending Orders
+              </h3>
+              <p className="text-3xl bg-transparent text-white">1,200</p>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold mb-2">Completed Orders</h3>
-              <p className="text-3xl">9,850</p>
+            <div className="bg-secondary p-6 rounded-lg shadow-md">
+              {" "}
+              <h3 className="text-xl font-bold mb-2 bg-transparent text-white">
+                Completed Orders
+              </h3>
+              <p className="text-3xl bg-transparent text-white">1,200</p>
             </div>
-          </div>
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h3 className="text-xl font-bold mb-4">Recent Orders</h3>
-            <ul>
-              <li className="mb-2">
-                Order #12345 - John Doe - $150.00 - Completed
-              </li>
-              <li className="mb-2">
-                Order #12346 - Jane Smith - $200.00 - Pending
-              </li>
-              <li className="mb-2">
-                Order #12347 - Bob Johnson - $300.00 - Shipped
-              </li>
-            </ul>
           </div>
         </div>
       </div>
