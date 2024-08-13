@@ -1,17 +1,52 @@
 import { useState } from "react";
 import SellerDashboard from "../../components/Seller/SellerDashboard";
 
-export default function DashboardPage() {
-  const [isOpen, setIsOpen] = useState(true);
+export default function SellerDashboardPage() {
+  const [Open, isOpen] = useState(true);
   return (
-    <div>
-      <SellerDashboard isOpen={isOpen} setIsOpen={setIsOpen} />
+    <div className="">
+      <SellerDashboard isOpen={Open} setIsOpen={isOpen} />
       <div
         className={`flex-1 px-10 ${
-          isOpen ? "ml-64" : "ml-0"
+          Open ? "ml-64" : "ml-0"
         } transition-margin duration-300`}
       >
-        <h1>Seller DashboardPage</h1>
+        <div className="p-6">
+          <h2 className="text-3xl font-bold mb-10 text-center text-primary">
+            Overview
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div className="bg-secondary p-6 rounded-lg shadow-md">
+              {" "}
+              <h3 className="text-xl text-white font-bold mb-2 bg-transparent">
+                Total Sold{" "}
+              </h3>
+              <p className="text-3xl text-white bg-transparent">1,200</p>
+            </div>
+
+            <div className="bg-red-500 p-6 rounded-lg shadow-md">
+              {" "}
+              <h3 className="text-xl font-bold mb-2 bg-transparent text-white">
+                Total Listings
+              </h3>
+              <p className="text-3xl bg-transparent text-white">1,200</p>
+            </div>
+            <div className="bg-yellow-500 p-6 rounded-lg shadow-md">
+              {" "}
+              <h3 className="text-xl font-bold mb-2 bg-transparent text-white">
+                Active Listings
+              </h3>
+              <p className="text-3xl bg-transparent text-white">1,200</p>
+            </div>
+            <div className="bg-lime-500 p-6 rounded-lg shadow-md">
+              {" "}
+              <h3 className="text-xl font-bold mb-2 bg-transparent text-white">
+                Total Items Sold
+              </h3>
+              <p className="text-3xl bg-transparent text-white">1,200</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

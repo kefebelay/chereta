@@ -34,14 +34,16 @@ export default function Dashboard({ isOpen, setIsOpen }) {
               isOpen ? "ml-72" : "ml-3"
             } transition-margin duration-200 text-text2 font-bold p-4`}
           >
-            {breadCrumbs.map((crumb, index) => (
-              <span className="text-text2" key={index}>
-                <span className="text-text2">{crumb}</span>
-                {index !== breadCrumbs.length - 1 && (
-                  <span className="text-text2"> &gt;&gt; </span>
-                )}
-              </span>
-            ))}
+            <div className="hidden md:block">
+              {breadCrumbs.map((crumb, index) => (
+                <span className="text-text2 text-xs" key={index}>
+                  <span className="text-text2">{crumb}</span>
+                  {index !== breadCrumbs.length - 1 && (
+                    <span className="text-text2"> &gt;&gt; </span>
+                  )}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
         <ThemeSwitcher />
@@ -71,6 +73,19 @@ export default function Dashboard({ isOpen, setIsOpen }) {
           >
             <li className="mb-2">
               <Link
+                to="/admin/dashboard/"
+                className={`py-2 px-4 rounded bg-background2 border border-text2 shadow-sm shadow-text2 flex gap-3 ${
+                  location.pathname === "/admin/dashboard/"
+                    ? "bg-primary font-bold"
+                    : "hover:text-white hover:bg-primary"
+                }`}
+              >
+                <i className="fa-solid fa-table-columns bg-transparent mt-1"></i>
+                Overview
+              </Link>
+            </li>
+            <li className="mb-2">
+              <Link
                 to="/admin/dashboard/analytics"
                 className={`py-2 px-4 rounded bg-background2 border border-gray-500 
                 shadow-sm shadow-text2 flex gap-3 ${
@@ -87,6 +102,26 @@ export default function Dashboard({ isOpen, setIsOpen }) {
                 } `}
                 ></i>
                 Analytics
+              </Link>
+            </li>
+            <li className="mb-2">
+              <Link
+                to="/admin/dashboard/category"
+                className={`py-2 px-4 rounded bg-background2 border border-gray-500 
+                shadow-sm shadow-text2 flex gap-3 ${
+                  location.pathname === "/admin/dashboard/category"
+                    ? "bg-primary font-bold text-white"
+                    : " hover:text-white hover:bg-primary"
+                }`}
+              >
+                <i
+                  className={`fa-solid fa-list bg-transparent mt-1
+                ${
+                  location.pathname === "/admin/dashboard/category" &&
+                  "text-white"
+                } `}
+                ></i>
+                Category
               </Link>
             </li>
             <li className="mb-2">

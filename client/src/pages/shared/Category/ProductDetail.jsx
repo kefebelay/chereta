@@ -9,6 +9,11 @@ export default function Item() {
   const { id } = useParams();
   const [item, setItem] = useState([]);
   const [isLoading, setisLoading] = useState(true);
+
+  function onBid() {
+    alert("Bid placed successfully");
+  }
+
   useEffect(() => {
     async function getItems() {
       try {
@@ -34,13 +39,15 @@ export default function Item() {
           <Loading />
         </div>
       ) : (
-        <div className="md:flex md:flex-row-reverse p-10 mt-14">
+        <div className="flex md:flex-row-reverse flex-col-reverse p-10 mt-14">
           <div className="text-center ">
             <div className="w-auto">
-              <h1 className="m-5 font-extrabold lg:text-4xl text-2xl text-primary">
+              <h1 className="m-5 font-extrabold lg:text-4xl text-2xl text-primary hidden md:block">
                 {item.title}
               </h1>
-              <p className="mx-10 mb-4 text-text2">{item.description}</p>
+              <p className="py-6 mb-4 text-text2 text-left">
+                {item.description}
+              </p>
               <div className=" bg-background2  p-2  mb-4">
                 <p className=" font-bold bg-transparent">
                   Starting price:
@@ -59,24 +66,34 @@ export default function Item() {
                   </span>
                 </p>
               </div>
-              <button className="btn bg-primary w-32 text-center mt-4 text-white font-bold">
+              <button
+                onClick={onBid}
+                className="btn bg-primary w-32 text-center mt-4 text-white font-bold"
+              >
                 Bid
               </button>
             </div>
           </div>
-          <div className=" h-2/5 p-7">
-            <img
-              src={item.images}
-              className=" pb-1 rounded-lg hover:scale-105 transition-transform duration-300 cursor-zoom-in"
-            />
-            <div className="h-44 flex w-full gap-1">
-              {item.images.map((item) => (
+          <div>
+            <h1 className="text-center font-extrabold lg:text-4xl text-2xl text-primary md:hidden block">
+              {item.title}
+            </h1>
+            <div className=" h-1/6 p-7">
+              <div className=" md:h-[35rem] w-full flex justify-center p-4">
                 <img
-                  className="w-full rounded-lg hover:scale-105 transition-transform duration-300"
-                  src={item}
-                  key={item}
+                  src={item.images}
+                  className="h-full pb-1 rounded-lg hover:scale-105 transition-transform duration-300 "
                 />
-              ))}
+              </div>
+              <div className=" flex w-full h-full gap-2 px-4 md:px-24">
+                {item.images.map((item) => (
+                  <img
+                    className="w-full h-full rounded-lg hover:scale-105 transition-transform duration-300"
+                    src={item}
+                    key={item}
+                  />
+                ))}
+              </div>
             </div>
           </div>
         </div>

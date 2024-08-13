@@ -1,24 +1,41 @@
 import { useState } from "react";
 import ThemeSwitcher from "./ThemeSwitcherBtn";
 import { Link } from "react-router-dom";
+import Popup from "./Popup";
 
 export default function Hamburger() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [popup, setPopup] = useState(false);
 
-  const toggleMenu = () => {
+  function toggleMenu() {
     setIsOpen(!isOpen);
-  };
-  const handleClick = () => {
+  }
+
+  function onLogout() {
+    setIsLoggedIn(false);
+    setPopup(false);
+  }
+
+  function handleClick() {
     const aboutSection = document.getElementById("About");
     if (aboutSection) {
       aboutSection.scrollIntoView({ behavior: "smooth" });
     } else {
       console.error('Element with id "About" not found');
     }
-  };
+  }
 
   return (
     <div className="md:hidden">
+      {popup && (
+        <Popup
+          onYes={onLogout}
+          popup={popup}
+          setPopup={setPopup}
+          message="Are you sure you want to logout?"
+        />
+      )}
       <div className="flex">
         <div className="p-3">
           <ThemeSwitcher />
@@ -39,18 +56,14 @@ export default function Hamburger() {
       </div>
 
       {isOpen && (
-        <div className="navbar-menu relative z-50">
-          <div
-            className="navbar-backdrop fixed inset-0 bg-background opacity-25"
-            onClick={toggleMenu}
-          ></div>
-          <nav className="fixed top-0 left-0 bottom-0 flex flex-col w-5/6 max-w-sm py-6 px-6 bg-background border-r-2 border-accent shadow-md overflow-y-auto">
+        <div className="navbar-menu relative z-10">
+          <nav className="fixed inset-0 flex flex-col w-48 max-w-sm py-6 px-6 border-r-2 border-accent shadow-md overflow-y-auto">
             <div className="flex items-center mb-8">
               <a className="mr-auto text-3xl font-bold " href="#">
                 <img src="/public/chereta_logo.svg" className=" h-9 w-9" />
               </a>
               <button className="bg-background" onClick={toggleMenu}>
-                <i className="fa-solid fa-bars text-text"></i>
+                <i className="fa-solid fa-rectangle-xmark"></i>
               </button>
             </div>
             <div>
@@ -95,14 +108,26 @@ export default function Hamburger() {
                     Products
                   </Link>
                 </li>
-                <li className="mb-1">
-                  <Link
-                    className="btn hidden md:inline-block md:ml-auto md:mr-3 bg-primary text-white text-md font-bold w-28 text-center"
-                    to={"/login"}
-                  >
-                    Log In
-                  </Link>
-                </li>
+
+                {isLoggedIn ? (
+                  <li className="mt-3">
+                    <Link
+                      className="btn  md:inline-block md:ml-auto md:mr-3 bg-primary text-white text-md font-bold w-28 text-center"
+                      to={"/login"}
+                    >
+                      Log In
+                    </Link>
+                  </li>
+                ) : (
+                  <li className="mt-3">
+                    <Link
+                      className="btn  md:inline-block md:ml-auto md:mr-3 bg-primary text-white text-md font-bold w-28 text-center"
+                      onClick={() => setPopup(true)}
+                    >
+                      Logout
+                    </Link>
+                  </li>
+                )}
               </ul>
             </div>
           </nav>

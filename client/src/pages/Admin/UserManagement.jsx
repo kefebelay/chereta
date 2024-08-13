@@ -23,8 +23,7 @@ export default function UserManagement() {
   const [users, setUsers] = useState([]);
   const [popup, setPopup] = useState(false);
 
-  //pagination
-  const ITEMS_PER_PAGE = 6;
+  const ITEMS_PER_PAGE = 8;
   const { currentPage, totalPages, currentItems, handlePageChange } =
     usePagination(items, ITEMS_PER_PAGE);
 
@@ -44,6 +43,7 @@ export default function UserManagement() {
         };
       });
       setUsers(usersWithAccountType);
+      setItems(usersWithAccountType);
     }
     getUsers();
   }, []);
@@ -92,7 +92,7 @@ export default function UserManagement() {
               </tr>
             </thead>
             <tbody>
-              {users.map((user) => (
+              {currentItems.map((user) => (
                 <React.Fragment key={user.id}>
                   <tr
                     onClick={() => handleRowClick(user.id)}

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Dashboard from "../../components/Admin/Dashboard";
 import Axios from "axios";
+import usePagination from "../../hooks/usePagination";
+import Pagination from "../../components/common/Pagination";
 
 export default function DeliveryPersonnel() {
   const [popup, setPopup] = useState(false);
@@ -12,6 +14,10 @@ export default function DeliveryPersonnel() {
     phone_number: "",
     vehicleType: "",
   });
+
+  const ITEMS_PER_PAGE = 8;
+  const { currentPage, totalPages, currentItems, handlePageChange } =
+    usePagination(personnel, ITEMS_PER_PAGE);
   function handleDelete(id) {
     setPopup(!popup);
     console.log("deleted" + { id });
@@ -19,7 +25,7 @@ export default function DeliveryPersonnel() {
 
   useEffect(() => {
     async function getPersonnel() {
-      const res = await Axios.get("https://jsonplaceholder.typicode.com/users"); // Replace with your actual API endpoint
+      const res = await Axios.get("https://jsonplaceholder.typicode.com/users");
       setPersonnel(res.data);
     }
     getPersonnel();
@@ -86,7 +92,7 @@ export default function DeliveryPersonnel() {
               </tr>
             </thead>
             <tbody>
-              {personnel.map((person) => (
+              {currentItems.map((person) => (
                 <tr
                   key={person.id}
                   className=" hover-m-2 hover:border hover:border-text2 transition-transform duration-500 cursor-pointer mb-2"
@@ -109,6 +115,11 @@ export default function DeliveryPersonnel() {
               ))}
             </tbody>
           </table>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
         </div>
         <div className="mt-8">
           <h2 className="text-2xl font-semibold mb-4">

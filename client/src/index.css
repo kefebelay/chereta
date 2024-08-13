@@ -3,11 +3,14 @@
 @tailwind utilities;
 
 /* Global */
+
 * {
   font-family: "Ubuntu", sans-serif;
   color: var(--text);
   background: var(--background);
 }
+
+/* Do Not Edit */
 
 @layer base {
   :root {
@@ -35,6 +38,8 @@
   }
 }
 
+/* Do Not Edit */
+
 .btn {
   cursor: pointer;
   border-radius: 10px;
@@ -58,6 +63,7 @@
 }
 
 /* Navbar */
+
 .navbar {
   background-color: var(--background);
   backdrop-filter: blur(20px);
@@ -73,6 +79,7 @@
 }
 
 /* RegisterPage */
+
 .form-container > * {
   opacity: 0;
   transform: translateY(-20px);

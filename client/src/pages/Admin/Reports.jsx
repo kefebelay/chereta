@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
 import Dashboard from "../../components/Admin/Dashboard";
 import Axios from "axios";
+import usePagination from "../../hooks/usePagination";
+import Pagination from "../../components/common/Pagination";
 
 export default function Reports() {
   const [isOpen, setIsOpen] = useState(true);
   const [reports, setReports] = useState([]);
   const [popup, setPopup] = useState(false);
   const [selectedReportId, setSelectedReportId] = useState(null);
+  const ITEMS_PER_PAGE = 8;
+  const { currentPage, totalPages, currentItems, handlePageChange } =
+    usePagination(reports, ITEMS_PER_PAGE);
 
   useEffect(() => {
     async function getReports() {
@@ -37,23 +42,30 @@ export default function Reports() {
           Reports Page
         </h1>
         {popup && (
-          <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-35">
+          <div
+            className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-35"
+            onClick={() => {
+              setPopup(!popup);
+            }}
+          >
             <div className="bg-background p-6 rounded-lg">
-              <h2 className="text-2xl font-semibold mb-4 bg-transparent">
-                Are you sure you want to delete this Seller?
+              <h2 className="text-lg font-semibold mb-4 bg-transparent">
+                Are you sure you want to ban this Seller?
               </h2>
-              <button
-                onClick={() => setPopup(!popup)}
-                className="bg-primary text-white px-4 py-2 rounded-lg"
-              >
-                Yes
-              </button>
-              <button
-                onClick={() => setPopup(!popup)}
-                className="bg-gray-500 text-white px-4 py-2 rounded-lg ml-4"
-              >
-                No
-              </button>
+              <div className="flex justify-center gap-3">
+                <button
+                  onClick={() => setPopup(!popup)}
+                  className="bg-primary text-white px-4 py-2 rounded-lg"
+                >
+                  Yes
+                </button>
+                <button
+                  onClick={() => setPopup(!popup)}
+                  className="bg-gray-500 text-white px-4 py-2 rounded-lg ml-4"
+                >
+                  No
+                </button>
+              </div>
             </div>
           </div>
         )}
@@ -72,7 +84,7 @@ export default function Reports() {
               </tr>
             </thead>
             <tbody>
-              {reports.map((report) => (
+              {currentItems.map((report) => (
                 <React.Fragment key={report.id}>
                   <tr
                     onClick={() => handleRowClick(report.id)}
@@ -125,6 +137,11 @@ export default function Reports() {
               ))}
             </tbody>
           </table>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
         </div>
       </div>
     </div>

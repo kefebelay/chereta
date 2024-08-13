@@ -15,7 +15,10 @@ import ProductDetail from "./pages/shared/Category/ProductDetail";
 
 import SellerInfo from "./pages/Seller/SellerInfo";
 import SellerDashboard from "./pages/Seller/SellerDashboardPage";
-
+import SellerAnalytics from "./pages/Seller/Analytics";
+import SellerProducts from "./pages/Seller/Products";
+import Orders from "./pages/Seller/Orders";
+import Comments from "./pages/Seller/Comments";
 // Admin routes
 
 import AdminDashboard from "./pages/Admin/AdminDashboardPage";
@@ -23,6 +26,8 @@ import UserManagement from "./pages/Admin/UserManagement";
 import Analytics from "./pages/Admin/Analytics";
 import Reports from "./pages/Admin/Reports";
 import DeliveryPersonnel from "./pages/Admin/DeliveryPersonnel";
+import Profile from "./pages/shared/Profile";
+import Category from "./pages/Admin/Categories";
 
 //end of routes and pages imported
 
@@ -40,6 +45,7 @@ export default function routes() {
           <Route path="/product/:id" element={<ProductDetail />} />
           <Route path="/categories/:id" element={<CategoryItems />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/profile" element={<Profile />} />
 
           {/* Admin routes */}
 
@@ -50,15 +56,29 @@ export default function routes() {
             element={<UserManagement />}
           />
           <Route path="/admin/dashboard/reports" element={<Reports />} />
+          <Route path="/admin/dashboard/category" element={<Category />} />
           <Route
             path="/admin/dashboard/delivery-personnel"
             element={<DeliveryPersonnel />}
           />
 
           {/* Seller routes */}
+
           <Route path="/seller/info/:id" element={<SellerInfo />} />
           <Route path="/seller/dashboard" element={<SellerDashboard />} />
           <Route path="/seller/dashboard/:id" element={<SellerInfo />} />
+          <Route
+            path="/seller/dashboard/analytics"
+            element={<SellerAnalytics />}
+          />
+          <Route
+            path="/seller/dashboard/products"
+            element={<SellerProducts />}
+          />
+          <Route path="/seller/dashboard/orders" element={<Orders />} />
+          <Route path="/seller/dashboard/comments" element={<Comments />} />
+
+          {/* General routes */}
 
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

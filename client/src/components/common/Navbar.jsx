@@ -2,21 +2,37 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import Hamburger from "./HamburgerMenu";
 import ThemeSwitcher from "./ThemeSwitcherBtn";
+import Popup from "./Popup";
 
 const Navbar = () => {
+  const [popup, setPopup] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
-  const handleClick = () => {
+  function handleClick() {
     const aboutSection = document.getElementById("About");
     if (aboutSection) {
       aboutSection.scrollIntoView({ behavior: "smooth" });
     } else {
       console.error('Element with id "About" not found');
     }
-  };
+  }
+
+  function onLogout() {
+    setIsLoggedIn(false);
+    setPopup(false);
+  }
 
   return (
     <div className="navbar ">
+      {popup && (
+        <Popup
+          onYes={onLogout}
+          popup={popup}
+          setPopup={setPopup}
+          message="Are you sure you want to logout?"
+        />
+      )}
       <nav className=" px-4 py-2 flex justify-between items-center shadow-md shadow-nav-bg">
         <Link
           className="text-3xl font-bold leading-none md:ml-28 ml-3 bg-transparent"
@@ -33,7 +49,8 @@ const Navbar = () => {
             <Link
               to={"/"}
               className={`text-md  hover:text-accent  bg-transparent ${
-                location.pathname === "/" ? "text-primary font-bold " : ""
+                location.pathname === "/" &&
+                "text-primary font-bold underline underline-offset-4 "
               }`}
             >
               Home
@@ -42,7 +59,10 @@ const Navbar = () => {
 
           <li className="bg-transparent">
             <Link
-              className="text-md hover:text-accent bg-none bg-transparent"
+              className={`text-md  hover:text-accent  bg-transparent ${
+                location.pathname === "/#About" &&
+                "text-primary font-bold underline underline-offset-4 "
+              }`}
               to={"/#About"}
               onClick={handleClick}
             >
@@ -54,11 +74,10 @@ const Navbar = () => {
             <Link
               to={"/categories"}
               className={`text-md ${
-                location.pathname === "/categories"
-                  ? "text-primary font-bold "
-                  : ""
+                location.pathname === "/categories" &&
+                "text-primary font-bold underline underline-offset-4"
               }
-                  hover:text-accent bg-transparent" to={"/categories"} `}
+                  hover:text-accent bg-transparent"  `}
             >
               Categories
             </Link>
@@ -68,11 +87,10 @@ const Navbar = () => {
             <Link
               className={`
               ${
-                location.pathname === "/products"
-                  ? "text-primary font-bold "
-                  : ""
+                location.pathname === "/products" &&
+                "text-primary font-bold underline underline-offset-4"
               }
-              text-md  hover:text-accent bg-transparent`}
+              text-md  hover:text-accent bg-transparent `}
               to={"/products"}
             >
               Products
@@ -83,14 +101,39 @@ const Navbar = () => {
             <ThemeSwitcher />
           </li>
         </ul>
-        <Link
-          className="btn hidden md:inline-block md:ml-auto md:mr-3 bg-primary text-white text-md font-bold w-28 text-center"
-          to={"/login"}
-        >
-          Log In
-        </Link>
+        {isLoggedIn ? (
+          <div className="md:flex gap-3 hidden justify-center items-center">
+            <Link to={"/profile"} className="rounded-full bg-black h-10 w-10">
+              <img
+                className="w-full h-full rounded-full"
+                src="https://picsum.photos/200/300"
+                alt="profile"
+              />
+            </Link>
+            <Link
+              className="btn hidden md:inline-block md:ml-auto md:mr-3 bg-primary text-white text-md font-bold w-28 text-center"
+              to={"/"}
+              onClick={() => {
+                setPopup(true);
+              }}
+            >
+              Logout
+            </Link>
+          </div>
+        ) : (
+          <Link
+            className="btn hidden md:inline-block md:ml-auto md:mr-3 bg-primary text-white text-md font-bold w-28 text-center"
+            to={"/login"}
+            onClick={() => {
+              setPopup(true);
+              setIsLoggedIn(true);
+            }}
+          >
+            Log In
+          </Link>
+        )}
 
-        <div className="md:hidden">
+        <div className="md:hidden mr-10">
           <Hamburger />
         </div>
       </nav>
