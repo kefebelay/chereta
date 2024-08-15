@@ -11,6 +11,7 @@ import {
   Legend,
 } from "chart.js";
 import Dashboard from "../../components/Seller/SellerDashboard";
+import Underline from "../../components/common/Underline";
 
 ChartJS.register(
   CategoryScale,
@@ -65,6 +66,7 @@ export default function Analytics() {
         <h1 className="text-center text-3xl font-bold text-primary mt-12">
           Analytics
         </h1>
+        <Underline mt={3} mb={1} />
         <div className="mt-10 p-4">
           <h2 className="text-xl font-semibold mb-4">Sales Over Time</h2>
           <Line data={lineData} />

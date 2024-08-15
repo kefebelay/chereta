@@ -1,5 +1,6 @@
 import { useState } from "react";
 import SellerDashboard from "../../components/Seller/SellerDashboard";
+import Underline from "../../components/common/Underline";
 
 // Dummy data for comments
 const dummyComments = [
@@ -34,8 +35,9 @@ export default function Comments() {
       <SellerDashboard isOpen={true} setIsOpen={() => {}} />
       <div className="flex-1 px-10 ml-64 transition-margin duration-300 p-7">
         <h1 className="text-3xl font-bold text-center text-primary p-3">
-          Product Comments
+          Comments
         </h1>
+        <Underline w="full" mt={2} mb={10} />
         <div className="space-y-4">
           {dummyComments.map((comment) => (
             <div

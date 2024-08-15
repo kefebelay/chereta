@@ -1,4 +1,4 @@
-import { Link, redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function HeroSection() {
   function handleClick() {
@@ -32,18 +32,16 @@ export default function HeroSection() {
           <Link
             to={"/#About"}
             onClick={handleClick}
-            className="btn bg-secondary shadow-lg  md:w-full mb-4 md:mb-auto text-center"
+            className="bg-transparent font-bold text-lg border-2 p-2 hover:bg-secondary hover:text-white rounded-lg
+             border-secondary md:w-full mb-4 md:mb-auto text-center hover:drop-shadow-xl hover:shadow-primary box hover:-translate-y-0.5 transition-transform duration-200"
           >
-            <h1 className="bg-transparent font-bold md:text-xl ">
-              {" "}
-              How does it work?{" "}
-            </h1>
+            How does it work?{" "}
           </Link>
           <Link
             to={"/signup"}
             className="btn bg-primary shadow-lg md:w-full md:mr-20 text-white text-center"
           >
-            <h1 className="bg-transparent font-bold md:text-xl ">
+            <h1 className="bg-transparent font-bold md:text-xl text-white">
               Get Started
             </h1>
           </Link>

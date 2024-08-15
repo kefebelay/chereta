@@ -22,7 +22,7 @@ export default function Dashboard({ isOpen, setIsOpen }) {
 
               <img
                 className="h-8  bg-transparent"
-                src="../../../public/chereta_logo.svg"
+                src="/chereta_logo.svg"
                 alt="logo"
               />
             </div>
@@ -57,7 +57,7 @@ export default function Dashboard({ isOpen, setIsOpen }) {
           <div className="flex justify-between">
             <img
               className="h-8  bg-transparent"
-              src="../../../public/chereta_logo.svg"
+              src="/chereta_logo.svg"
               alt="logo"
             />
             <button onClick={toggleSidebar} className="  bg-transparent ">
@@ -76,7 +76,7 @@ export default function Dashboard({ isOpen, setIsOpen }) {
                 to="/admin/dashboard/"
                 className={`py-2 px-4 rounded bg-background2 border border-text2 shadow-sm shadow-text2 flex gap-3 ${
                   location.pathname === "/admin/dashboard/"
-                    ? "bg-primary font-bold"
+                    ? "bg-primary font-bold text-white"
                     : "hover:text-white hover:bg-primary"
                 }`}
               >

@@ -48,7 +48,7 @@ export default function Orders() {
 
   const [isOpen, setIsOpen] = useState(true);
   return (
-    <div>
+    <div className="">
       <SellerDashboard isOpen={isOpen} setIsOpen={setIsOpen} />
       <div className="flex-1 px-10 ml-64 transition-margin duration-300 p-7">
         <h1 className="text-3xl font-bold text-center text-primary p-3">

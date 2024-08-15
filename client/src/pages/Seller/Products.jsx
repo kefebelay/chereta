@@ -2,6 +2,7 @@ import { useState } from "react";
 import SellerDashboard from "../../components/Seller/SellerDashboard";
 import AllProducts from "../../components/Seller/Products";
 import LiveProducts from "../../components/Seller/LiveProducts";
+import Underline from "../../components/common/Underline";
 
 export default function Products() {
   const [isOpen, setIsOpen] = useState(true);
@@ -17,9 +18,10 @@ export default function Products() {
           isOpen ? "ml-72" : "ml-3"
         }`}
       >
-        <h1 className="text-3xl font-bold text-center text-primary p-3">
+        <h1 className="text-3xl font-bold text-center text-primary p-3 ">
           Products
         </h1>
+        <Underline />
         <div className="">
           <div className="flex justify-center gap-6 rounded">
             <button
@@ -58,7 +60,7 @@ export default function Products() {
               </div>
             )}
           </div>
-          <div>
+          <div className="mt-4">
             <h1 className="text-3xl font-bold text-center text-primary p-3">
               Create Product
             </h1>
