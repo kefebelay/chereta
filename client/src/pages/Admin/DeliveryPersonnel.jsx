@@ -146,7 +146,6 @@ export default function DeliveryPersonnel() {
                 value={newPersonnel.email}
                 onChange={handleInputChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
-                id="email"
                 placeholder="Enter email"
               />
             </div>
@@ -155,13 +154,12 @@ export default function DeliveryPersonnel() {
                 Phone Number
               </label>
               <input
-                type="email"
-                name="email"
+                type="text"
+                name="phone_number"
                 value={newPersonnel.phone_number}
                 onChange={handleInputChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
-                id="email"
-                placeholder="Enter email"
+                placeholder="Enter Phone Number"
               />
             </div>
             <div className="mb-4">
@@ -176,7 +174,6 @@ export default function DeliveryPersonnel() {
                 value={newPersonnel.vehicleType}
                 onChange={handleInputChange}
                 className="shadow appearance-none border rounded w-full py-2 px-3 leading-tight "
-                id="vehicleType"
               >
                 <option value="">Select vehicle type</option>
                 <option value="Car">Car</option>

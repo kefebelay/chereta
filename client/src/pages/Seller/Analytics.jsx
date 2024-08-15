@@ -42,7 +42,7 @@ export default function Analytics() {
     // Generate random data
     const generateRandomData = (numPoints) => {
       return Array.from({ length: numPoints }, () =>
-        Math.floor(Math.random() * 100)
+        Math.floor(Math.random() * 40)
       );
     };
 
@@ -63,22 +63,27 @@ export default function Analytics() {
           Open ? "ml-64" : "ml-0"
         } transition-margin duration-300 p-3`}
       >
-        <h1 className="text-center text-3xl font-bold text-primary mt-12">
+        <h1 className="text-center text-3xl font-bold text-primary mt-10">
           Analytics
         </h1>
-        <Underline mt={3} mb={1} />
-        <div className="mt-10 p-4">
-          <h2 className="text-xl font-semibold mb-4">Sales Over Time</h2>
+        <Underline mt={4} mb={0} />
+        <div className=" p-4">
           <Line data={lineData} />
-          <div className="mt-4 space-y-2">
+          <div className="mt-10">
+            <h1 className="text-2xl font-bold text-center text-primary">
+              {" "}
+              Sales Data{" "}
+            </h1>
+            <Underline mt={3} />
             {lineData.labels.map((label, index) => (
               <div key={index} className="text-lg flex items-center">
                 <span className="font-bold">{label}:</span>
-                <span className="ml-2 text-teal-600">
+                <span key={index} className="ml-2 text-teal-600">
                   Sales - {lineData.datasets[0].data[index]}
                 </span>
               </div>
             ))}
+            <h2 className="text-xl font-semibold mb-4">Sales Over Time</h2>
           </div>
         </div>
       </div>

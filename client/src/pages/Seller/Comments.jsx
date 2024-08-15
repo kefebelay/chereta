@@ -1,25 +1,21 @@
 import { useState } from "react";
 import SellerDashboard from "../../components/Seller/SellerDashboard";
 import Underline from "../../components/common/Underline";
+import Pagination from "../../components/common/Pagination";
 
 // Dummy data for comments
-const dummyComments = [
-  {
-    id: 1,
-    text: "Great product!",
-    user: "Buyer123",
-    product: "Product A",
-  },
-  {
-    id: 2,
-    text: "Excellent quality.",
-    user: "User456",
-    product: "Product B",
-  },
-];
+const dummyComments = Array.from({ length: 50 }, (_, i) => ({
+  id: i + 1,
+  text: `Comment text ${i + 1}`,
+  user: `User${i + 1}`,
+  product: `Product ${(i % 5) + 1}`,
+}));
+
+const PAGE_SIZE = 7;
 
 export default function Comments() {
   const [replyText, setReplyText] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
   const handleReplyChange = (event) => {
     setReplyText(event.target.value);
@@ -28,6 +24,18 @@ export default function Comments() {
   const handleReplySubmit = (commentId) => {
     console.log(`Seller replied to comment ${commentId}: ${replyText}`);
     setReplyText("");
+  };
+
+  const totalPages = Math.ceil(dummyComments.length / PAGE_SIZE);
+  const paginatedComments = dummyComments.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE
+  );
+
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
   };
 
   return (
@@ -39,36 +47,42 @@ export default function Comments() {
         </h1>
         <Underline w="full" mt={2} mb={10} />
         <div className="space-y-4">
-          {dummyComments.map((comment) => (
+          {paginatedComments.map((comment) => (
             <div
               key={comment.id}
               className="bg-transparent border border-text2 p-4 rounded-lg shadow-sm"
             >
-              <h1 className="text-primary text-center text-lg">
+              <h2 className="text-primary text-lg mb-2">
                 Product: {comment.product}
-              </h1>
-              <p className="text-primary">
-                <span className="text-text">Comment: </span> &quot;{" "}
-                {comment.text} &quot;
+              </h2>
+              <p className="text-primary mb-2">
+                <span className="font-semibold text-text">Comment: </span>
+                &quot;{comment.text}&quot;
               </p>
-              <p className="text-sm text-text2">By: {comment.user}</p>
-              {/* Seller's reply input */}
-              <input
-                type="text"
-                placeholder="Reply to this comment..."
-                value={replyText}
-                onChange={handleReplyChange}
-                className="border rounded-md p-2 mt-2 w-fit border-text2 "
-              />
-              <button
-                onClick={() => handleReplySubmit(comment.id)}
-                className="bg-primary text-white rounded-md p-2 mt-2"
-              >
-                Reply
-              </button>
+              <p className="text-sm text-text2 mb-4">By: {comment.user}</p>
+              <div className="flex flex-col md:flex-row items-center gap-4">
+                <input
+                  type="text"
+                  placeholder="Reply to this comment..."
+                  value={replyText}
+                  onChange={handleReplyChange}
+                  className="border rounded-md p-2 w-full md:w-3/4 border-text2"
+                />
+                <button
+                  onClick={() => handleReplySubmit(comment.id)}
+                  className="bg-primary text-white rounded-md p-2 mt-2 md:mt-0 md:ml-2"
+                >
+                  Reply
+                </button>
+              </div>
             </div>
           ))}
         </div>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
       </div>
     </div>
   );

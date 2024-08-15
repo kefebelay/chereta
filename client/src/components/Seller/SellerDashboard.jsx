@@ -2,9 +2,11 @@ import PropTypes from "prop-types";
 import { Link, useLocation } from "react-router-dom";
 import ThemeSwitcher from "../common/ThemeSwitcherBtn";
 import Notification from "../common/Notification";
+import { useState } from "react";
 
 export default function SellerDashboard({ isOpen, setIsOpen }) {
   const location = useLocation();
+  const [Count, setCount] = useState(9);
   const breadCrumbs = location.pathname.split("/").filter((segment) => segment);
 
   const toggleSidebar = () => {
@@ -55,8 +57,13 @@ export default function SellerDashboard({ isOpen, setIsOpen }) {
               alt="logo"
             />
           </Link>
-          <Link to={"/notifications"}>
-            <Notification Count={9} />
+          <Link
+            to={"/notifications"}
+            onClick={() => {
+              setCount(0);
+            }}
+          >
+            <Notification Count={Count} />
           </Link>
           <ThemeSwitcher />
         </div>

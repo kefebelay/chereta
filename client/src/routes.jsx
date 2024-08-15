@@ -10,6 +10,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 import CategoryItems from "./pages/shared/Category/CategoryItems";
 import Products from "./pages/shared/Category/Products";
 import ProductDetail from "./pages/shared/Category/ProductDetail";
+import Notification from "./pages/shared/Notification";
 
 // Seller routes
 
@@ -80,6 +81,7 @@ export default function routes() {
 
           {/* General routes */}
 
+          <Route path="/notifications" element={<Notification />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Router>

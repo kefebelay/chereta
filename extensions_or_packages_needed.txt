@@ -6,5 +6,6 @@ server(Laravel)
 client(React)
 	-UseState and useEffect: for managing the data on the front-end without reloading the page
 	-Axios: for communicating with the backend API
-	-React Router: for routing between pages
+	-React-Router-DOM: for routing between pages
 	-Tailwind Css: for easier Web page design 
+	-react-chartjs-2 and chart.js: for chart ui
