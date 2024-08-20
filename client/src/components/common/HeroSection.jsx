@@ -2,11 +2,11 @@ import { Link } from "react-router-dom";
 
 export default function HeroSection() {
   function handleClick() {
-    const aboutSection = document.getElementById("About");
+    const aboutSection = document.getElementById("HowItWorks");
     if (aboutSection) {
       aboutSection.scrollIntoView({ behavior: "smooth" });
     } else {
-      console.error('Element with id "About" not found');
+      console.error('Element with id "HowItWorks" not found');
     }
   }
   return (
@@ -30,7 +30,7 @@ export default function HeroSection() {
         </p>
         <div className="mt-6 mx-11 md:mx-0 md:flex md:gap-4 justify-center flex flex-col">
           <Link
-            to={"/#About"}
+            to={"/#HowItWorks"}
             onClick={handleClick}
             className="bg-transparent font-bold text-lg border-2 p-2 hover:bg-secondary hover:text-white rounded-lg
              border-secondary md:w-full mb-4 md:mb-auto text-center hover:drop-shadow-xl hover:shadow-primary box hover:-translate-y-0.5 transition-transform duration-200"

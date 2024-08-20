@@ -13,12 +13,14 @@ export default function Why_choose_us() {
           <h3 className="text-xl text-center pb-3 font-extrabold text-primary">
             Seamless User Experience
           </h3>
-          <img
-            src="/assets/img/why_choose_us_img.svg"
-            alt="Seamless UI vector"
-          />
-
-          <p className="text-text2 text-center">
+          <div className="flex justify-center m-3 rounded-full p-3">
+            <img
+              src="/assets/img/seamless_ui.jfif"
+              alt="Seamless UI vector"
+              className="rounded-full"
+            />
+          </div>
+          <p className="text-text2 text-left">
             At Chereta, we prioritize your convenience and ease of use. Our
             platform offers a user-friendly interface, ensuring that both buyers
             and sellers can navigate through auctions effortlessly. From placing
@@ -29,18 +31,21 @@ export default function Why_choose_us() {
 
         <div className=" rounded-lg p-6">
           <h3 className="text-xl text-center pb-3 text-primary font-extrabold">
-            Transparent and Fair Auctions
+            variety of products
           </h3>
-          <img
-            src="/assets/img/why_choose_us_img.svg"
-            alt="Fair Auction vector"
-          />
-          <p className="text-text2 text-center ">
-            Transparency is at the heart of our auctions. We provide detailed
-            information about each listing, including clear terms of sale and
-            real-time bidding updates. Our commitment to fair play ensures that
-            all participants have equal access to information and opportunities,
-            fostering trust and integrity throughout the auction process.
+          <div className="flex justify-center m-3 rounded-full border border-secondary p-3">
+            <img
+              src="/assets/img/variety_ui.png"
+              alt="variety of products vector"
+              className=""
+            />
+          </div>
+          <p className="text-text2 text-left ">
+            At Chereta, we offer a wide variety of products to choose from.
+            Whether you arere looking for a new laptop, a rare vintage item, or
+            a unique art piece, we have it all. Our platform is designed to
+            showcase a diverse range of products, ensuring that buyers can find
+            exactly what they are looking for.
           </p>
         </div>
 
@@ -48,10 +53,14 @@ export default function Why_choose_us() {
           <h3 className="text-xl text-center pb-3 text-primary font-extrabold">
             Global Reach with Local Expertise
           </h3>
-          <img
-            src="/assets/img/why_choose_us_img.svg"
-            alt="Global reach vector"
-          />
+          <div className="flex justify-center m-3 rounded-full">
+            {" "}
+            <img
+              src="/assets/img/global.png"
+              alt="Global reach vector"
+              className="rounded-full size-3/4"
+            />
+          </div>
           <p className="text-text2 text-center ">
             Chereta combines the best of both worlds by offering a global
             platform with a deep understanding of local markets. While you can

@@ -8,10 +8,18 @@ import Footer from "../../../components/common/Footer";
 export default function Item() {
   const { id } = useParams();
   const [item, setItem] = useState([]);
+  const [bid, setBid] = useState(0);
+  const [showBidPopup, setShowBidPopup] = useState(false);
   const [isLoading, setisLoading] = useState(true);
 
   function onBid() {
-    alert("Bid placed successfully");
+    setShowBidPopup(true);
+  }
+
+  function placeBid() {
+    // Call API to place bid
+    console.log("Bid placed: ", bid);
+    setShowBidPopup(false);
   }
 
   useEffect(() => {
@@ -39,8 +47,8 @@ export default function Item() {
           <Loading />
         </div>
       ) : (
-        <div className="flex md:flex-row-reverse flex-col-reverse p-10 mt-14">
-          <div className="text-center ">
+        <div className="flex md:flex-row-reverse flex-col-reverse px-10 mt-20 gap-3">
+          <div className="text-center md:flex-1">
             <div className="w-auto">
               <h1 className="m-5 font-extrabold lg:text-4xl text-2xl text-primary hidden md:block">
                 {item.title}
@@ -78,23 +86,32 @@ export default function Item() {
             <h1 className="text-center font-extrabold lg:text-4xl text-2xl text-primary md:hidden block">
               {item.title}
             </h1>
-            <div className=" h-1/6 p-7">
-              <div className=" md:h-[35rem] w-full flex justify-center p-4">
-                <img
-                  src={item.images}
-                  className="h-full pb-1 rounded-lg hover:scale-105 transition-transform duration-300 "
-                />
-              </div>
-              <div className=" flex w-full h-full gap-2 px-4 md:px-24">
-                {item.images.map((item) => (
-                  <img
-                    className="w-full h-full rounded-lg hover:scale-105 transition-transform duration-300"
-                    src={item}
-                    key={item}
-                  />
-                ))}
-              </div>
+
+            <div className=" md:h-[35rem] md:flex-1 flex justify-center p-4">
+              <img
+                src={item.images}
+                className="h-full w-full pb-1 rounded-lg hover:scale-105 transition-transform duration-300 "
+              />
             </div>
+          </div>
+        </div>
+      )}
+      {showBidPopup && (
+        <div className="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex justify-center items-center">
+          <div className=" p-10 rounded-lg border border-text2 shadow-sm">
+            <h2 className="text-lg font-bold mb-2">Place your bid</h2>
+            <input
+              type="number"
+              value={item.price * 74}
+              onChange={(e) => setBid(e.target.value)}
+              className="w-full p-2 mb-2 border border-gray-400"
+            />
+            <button
+              onClick={placeBid}
+              className="bg-primary text-white p-2 rounded-lg w-full"
+            >
+              Bid
+            </button>
           </div>
         </div>
       )}

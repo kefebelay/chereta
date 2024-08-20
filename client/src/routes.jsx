@@ -12,6 +12,9 @@ import Products from "./pages/shared/Category/Products";
 import ProductDetail from "./pages/shared/Category/ProductDetail";
 import Notification from "./pages/shared/Notification";
 
+// Buyer routes
+import MyBids from "./pages/Buyer/MyBids";
+
 // Seller routes
 
 import SellerInfo from "./pages/Seller/SellerInfo";
@@ -78,6 +81,10 @@ export default function routes() {
           />
           <Route path="/seller/dashboard/orders" element={<Orders />} />
           <Route path="/seller/dashboard/comments" element={<Comments />} />
+
+          {/* Buyer routes */}
+
+          <Route path="/my-bids" element={<MyBids />} />
 
           {/* General routes */}
 

@@ -4,7 +4,7 @@ import Hamburger from "./HamburgerMenu";
 import ThemeSwitcher from "./ThemeSwitcherBtn";
 import Popup from "./Popup";
 
-const Navbar = () => {
+export default function Navbar() {
   const [popup, setPopup] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(true);
@@ -103,6 +103,15 @@ const Navbar = () => {
         </ul>
         {isLoggedIn ? (
           <div className="md:flex gap-3 hidden justify-center items-center">
+            <Link
+              to={"/my-bids"}
+              className="flex hover:text-accent hover:scale-105 transition-transform duration-300 cursor-pointer"
+            >
+              <i className="fas fa-gavel text-3xl text-primary "></i>
+              <span className="bg-red-500 rounded-full w-5 h-5 font-bold flex justify-center items-center animate-pulse text-white">
+                3
+              </span>
+            </Link>
             <Link to={"/profile"} className="rounded-full bg-black h-10 w-10">
               <img
                 className="w-full h-full rounded-full"
@@ -125,7 +134,6 @@ const Navbar = () => {
             className="btn hidden md:inline-block md:ml-auto md:mr-3 bg-primary text-white text-md font-bold w-28 text-center"
             to={"/login"}
             onClick={() => {
-              setPopup(true);
               setIsLoggedIn(true);
             }}
           >
@@ -139,6 +147,4 @@ const Navbar = () => {
       </nav>
     </div>
   );
-};
-
-export default Navbar;
+}

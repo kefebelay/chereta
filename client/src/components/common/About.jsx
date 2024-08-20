@@ -1,11 +1,11 @@
 export default function About() {
   return (
-    <div className="bg-background2">
-      <h1 className="text-center text-5xl bg-background2 my-auto text-primary p-8 pt-24 font-bold">
+    <div className="">
+      <h1 className="text-center text-5xl my-auto text-primary p-8 pt-24 font-bold">
         About
       </h1>
       <div className="mx-10 bg-transparent">
-        <p className="bg-background2 text-text2">
+        <p className=" text-text2">
           Welcome to{" "}
           <span className="text-primary bg-transparent">Chereta!!!</span>
           <br />
