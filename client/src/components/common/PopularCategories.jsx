@@ -33,10 +33,14 @@ export default function PopularCategories() {
         </div>
       ) : (
         <div className="bg-transparent">
-          <h1 className="text-4xl text-center p-10 font-extrabold bg-transparent text-primary">
+          <h1 className="text-4xl text-center p-8 font-extrabold bg-transparent text-primary">
             Popular Categories
           </h1>
-          <div className="grid gap-8 md:grid-cols-3 grid-cols-1 mx-auto p-5 bg-transparent">
+          <p className="text-center text-text2 bg-transparent">
+            Here are the most popular categories chosen by our buyers and
+            sellers
+          </p>
+          <div className="grid gap-8 md:grid-cols-3 grid-cols-1 px-20 p-5 bg-transparent m">
             {items.map((item) => (
               <Link
                 to={`/categories/${item.id}`}
@@ -50,7 +54,7 @@ export default function PopularCategories() {
                     alt={item.name}
                   />
                 </div>
-                <div className="p-4 bg-secondary text-center">
+                <div className="p-4 bg-primary text-center">
                   <h1 className="text-xl font-semibold text-white bg-transparent">
                     {item.name}
                   </h1>

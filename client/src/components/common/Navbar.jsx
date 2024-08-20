@@ -73,11 +73,11 @@ export default function Navbar() {
           <li className="bg-transparent">
             <Link
               to={"/categories"}
-              className={`text-md ${
+              className={`text-md  bg-transparent ${
                 location.pathname === "/categories" &&
                 "text-primary font-bold underline underline-offset-4"
               }
-                  hover:text-accent bg-transparent"  `}
+                  hover:text-accent"  `}
             >
               Categories
             </Link>
