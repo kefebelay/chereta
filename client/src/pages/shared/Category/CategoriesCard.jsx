@@ -29,28 +29,33 @@ export default function CategoriesCard() {
   return (
     <div>
       {isLoading ? (
-        <div className="grid h-screen place-items-center ">
+        <div className="grid h-screen place-items-center">
           <Loading />
         </div>
       ) : (
-        <div className="grid gap-16 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 m-3 p-9 overflow-hidden place-items-center">
-          {items.map((item) => (
-            <Link
-              to={`/categories/${item.id}`}
-              key={item.id}
-              className=" h-[30rem] w-[25rem] overflow-hidden shadow-md bg-background2 rounded-md hover:-translate-y-2 duration-700 transition-transform"
-            >
-              <h1 className="text-center p-3 bg-transparent font-bold">
-                {item.name}
-              </h1>
-              <div className="h-60 p-3 bg-transparent">
-                <img
-                  src={item.image}
-                  className="rounded-md hover:scale-105 transition-transform duration-300"
-                />
-              </div>
-            </Link>
-          ))}
+        <div className="bg-transparent">
+          <div className="grid gap-8 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 mx-auto p-9 overflow-hidden place-items-center">
+            {items.map((item) => (
+              <Link
+                to={`/categories/${item.id}`}
+                key={item.id}
+                className="bg-accent shadow-lg rounded-lg transform hover:scale-105 transition-transform duration-300 m-4 overflow-hidden"
+              >
+                <div className="h-80 w-full overflow-hidden">
+                  <img
+                    src={item.image}
+                    className="w-full h-full object-cover transition-transform duration-300"
+                    alt={item.name}
+                  />
+                </div>
+                <div className="p-4 bg-primary text-center">
+                  <h1 className="text-xl font-semibold text-white bg-transparent">
+                    {item.name}
+                  </h1>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
       )}
       <Footer />

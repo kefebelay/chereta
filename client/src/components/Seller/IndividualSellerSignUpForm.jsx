@@ -19,16 +19,14 @@ export default function IndividualSellerSignUpForm() {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10">
-      <h2 className="text-2xl font-bold mb-5 text-center text-text2 m-3">
-        Individual Seller Sign Up
-      </h2>
+    <div className="max-w-md mx-auto mt-3">
       <p className="mb-3 text-sm text-left text-text2">
-        Sign up as an individual seller, and you can post items for auction,
-        manage your listings, and track your sales. Ensure you provide accurate
-        and complete information to help verify your identity and protect your
-        account. Remember to use a strong, unique password to enhance the
-        security of your account. Happy selling on Chereta!
+        Sign up as an <span className="text-primary">Individual seller</span>,
+        and you can post items for auction, manage your listings, and track your
+        sales. Ensure you provide accurate and complete information to help
+        verify your identity and protect your account. Remember to use a strong,
+        unique password to enhance the security of your account. Happy selling
+        on Chereta!
       </p>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">

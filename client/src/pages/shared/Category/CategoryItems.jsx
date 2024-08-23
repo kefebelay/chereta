@@ -103,7 +103,7 @@ export default function CategoryItems() {
                       Birr: {item.price * 74}
                     </p>
                     <button className="btn bg-primary text-white px-4 py-2 rounded-lg">
-                      Bid
+                      Detail
                     </button>
                   </div>
                   <p className="text-sm text-gray-500">

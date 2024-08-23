@@ -22,15 +22,12 @@ export default function SignUp() {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10">
-      <h2 className="text-2xl font-bold mb-5 text-center text-text2 m-3">
-        Buyer Sign Up
-      </h2>
+    <div className="max-w-md mx-auto mt-4">
       <p className="mb-3 text-sm text-left text-text2">
-        Sign up as a buyer to explore and bid on items, track your bids, and
-        manage your purchases. Provide accurate information to verify your
-        identity and protect your account. Use a strong, unique password for
-        security. Happy bidding on Chereta!
+        Sign up as a <span className="text-primary"> buyer </span> to explore
+        and bid on items, track your bids, and manage your purchases. Provide
+        accurate information to verify your identity and protect your account.
+        Use a strong, unique password for security. Happy bidding on Chereta!
       </p>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">

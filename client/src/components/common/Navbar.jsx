@@ -41,7 +41,7 @@ export default function Navbar() {
           <img src=" /chereta_logo.svg" className="bg-transparent h-12 w-12" />
         </Link>
         <ul
-          className={`bg-transparent md:flex md:mx-auto md:items-center md:w-auto md:space-x-7 ${
+          className={`bg-transparent lg:flex lg:mx-auto lg:items-center lg:w-auto lg:space-x-7 ${
             isMenuOpen ? "block" : "hidden"
           } absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2`}
         >
@@ -73,11 +73,11 @@ export default function Navbar() {
           <li className="bg-transparent">
             <Link
               to={"/categories"}
-              className={`text-md  bg-transparent ${
+              className={`text-md  bg-transparent hover:text-accent ${
                 location.pathname === "/categories" &&
                 "text-primary font-bold underline underline-offset-4"
               }
-                  hover:text-accent"  `}
+                  "  `}
             >
               Categories
             </Link>
@@ -102,7 +102,7 @@ export default function Navbar() {
           </li>
         </ul>
         {isLoggedIn ? (
-          <div className="md:flex gap-3 hidden justify-center items-center">
+          <div className="lg:flex gap-3 hidden justify-center items-center">
             <Link
               to={"/my-bids"}
               className="flex hover:text-accent hover:scale-105 transition-transform duration-300 cursor-pointer"
@@ -141,7 +141,7 @@ export default function Navbar() {
           </Link>
         )}
 
-        <div className="md:hidden mr-10">
+        <div className="lg:hidden mr-10">
           <Hamburger />
         </div>
       </nav>

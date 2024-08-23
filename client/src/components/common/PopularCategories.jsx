@@ -40,12 +40,12 @@ export default function PopularCategories() {
             Here are the most popular categories chosen by our buyers and
             sellers
           </p>
-          <div className="grid gap-8 md:grid-cols-3 grid-cols-1 px-20 p-5 bg-transparent m">
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 grid-cols-1 px-20 p-5 bg-transparent place-items-center">
             {items.map((item) => (
               <Link
                 to={`/categories/${item.id}`}
                 key={item.id}
-                className="bg-accent shadow-lg rounded-lg transform hover:scale-105 transition-transform duration-300 m-4 overflow-hidden"
+                className="bg-primary shadow-lg rounded-lg transform hover:scale-105 transition-transform duration-300 m-4 overflow-hidden"
               >
                 <div className="h-64 w-full overflow-hidden">
                   <img

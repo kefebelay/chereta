@@ -2,16 +2,6 @@ import { useEffect, useState } from "react";
 import Footer from "../../components/common/Footer";
 import Navbar from "../../components/common/Navbar";
 
-// Helper function to generate random price, time left, and image URL
-const generateRandomBidData = (bid) => ({
-  ...bid,
-  price: (Math.random() * 1000).toFixed(2), // Mock price between 0 and 1000
-  timeLeft: `${Math.floor(Math.random() * 24)}h ${Math.floor(
-    Math.random() * 60
-  )}m`, // Mock time left
-  imageUrl: `https://via.placeholder.com/150?text=Item+${bid.id}`, // Mock image URL
-});
-
 export default function MyBids() {
   const [bids, setBids] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -19,15 +9,33 @@ export default function MyBids() {
   // Replace with your actual API endpoint later
   const apiEndpoint = "https://jsonplaceholder.typicode.com/posts";
 
+  // Unsplash API configuration
+  const unsplashAccessKey = "YOUR_UNSPLASH_ACCESS_KEY"; // Replace with your Unsplash API key
+  const unsplashApiUrl = `https://api.unsplash.com/photos/random?query=auction&count=1&client_id=${unsplashAccessKey}`;
+
   useEffect(() => {
     // Fetch the live bids
     fetch(apiEndpoint)
       .then((response) => response.json())
       .then((data) => {
-        // Generate mock data for price, time left, and image
-        const mockBids = data.slice(0, 10).map(generateRandomBidData);
-        setBids(mockBids);
-        setLoading(false);
+        // Fetch images from Unsplash API
+        const fetchImages = data.slice(0, 10).map(async (bid) => {
+          const imageResponse = await fetch(unsplashApiUrl);
+          const imageData = await imageResponse.json();
+          return {
+            ...bid,
+            price: (Math.random() * 1000).toFixed(2), // Mock price between 0 and 1000
+            timeLeft: `${Math.floor(Math.random() * 24)}h ${Math.floor(
+              Math.random() * 60
+            )}m`, // Mock time left
+            imageUrl: imageData[0].urls.small, // Use the small size image from Unsplash
+          };
+        });
+
+        Promise.all(fetchImages).then((bidsWithImages) => {
+          setBids(bidsWithImages);
+          setLoading(false);
+        });
       })
       .catch((error) => {
         console.error("Error fetching bids:", error);

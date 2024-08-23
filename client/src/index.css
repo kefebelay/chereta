@@ -16,7 +16,7 @@
   :root {
     --text: #050316;
     --text2: #747386;
-    --background: #e8e8e8;
+    --background: #f3f4f6;
     --primary: #096BF4;
     --secondary: #a7a4e2;
     --accent: rgb(107, 130, 193);
@@ -101,10 +101,10 @@
   transform: translateY(0);
 }
 
-button {
+/* button {
   transition: all 0.3s ease;
 }
 
 button:hover {
   transform: scale(1.05);
-}
+} */

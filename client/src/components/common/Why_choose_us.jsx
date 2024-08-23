@@ -8,14 +8,14 @@ export default function Why_choose_us() {
         Chereta is an easy to use and navigate, simple to use and a very
         interactive and practical Online Bidding Website{" "}
       </h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 mx-36">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8 mx-36">
         <div className="rounded-lg p-6">
           <h3 className="text-lg text-center pb-3 font-extrabold text-primary">
             Seamless User Experience
           </h3>
           <div className="flex justify-center m-3 rounded-full p-3">
             <img
-              src="/assets/img/seamless_ui.jfif"
+              src="/assets/img/seamless_vector.svg"
               alt="Seamless UI vector"
               className="rounded-full"
             />
@@ -32,7 +32,7 @@ export default function Why_choose_us() {
           </h3>
           <div className="flex justify-center m-3 rounded-full border border-secondary p-3">
             <img
-              src="/assets/img/variety_ui.png"
+              src="/assets/img/variety_vector.svg"
               alt="variety of products vector"
               className=""
             />
@@ -50,7 +50,7 @@ export default function Why_choose_us() {
           <div className="flex justify-center m-3 rounded-full">
             {" "}
             <img
-              src="/assets/img/global.png"
+              src="/assets/img/global_vector.svg"
               alt="Global reach vector"
               className="rounded-full size-3/4"
             />

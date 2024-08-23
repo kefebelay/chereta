@@ -81,13 +81,15 @@ export default function Items() {
                   <div className="px-6 pt-4">
                     <h2 className="font-bold text-xl mb-2">{item.title}</h2>
                   </div>
+                  <div className="flex justify-between p-4 bg-transparent">
+                    <p className="text-birr text-base">
+                      Birr: {item.price * 74}
+                    </p>
+                    <button className="btn py-2 px-4 rounded-xl bg-primary w-20 text-center text-white">
+                      Detail
+                    </button>
+                  </div>
                 </Link>
-                <div className="flex justify-between p-4 bg-transparent">
-                  <p className="text-birr text-base">Birr: {item.price * 74}</p>
-                  <button className="btn py-2 px-4 rounded-xl bg-primary w-20 text-center text-white">
-                    Bid
-                  </button>
-                </div>
               </div>
             ))}
           </div>

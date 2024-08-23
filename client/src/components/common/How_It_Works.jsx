@@ -7,7 +7,7 @@ export default function How_It_Works() {
       <h2 className="text-center text-text2 text-lg bg-transparent">
         Below are the steps you need to know to use your online bidding platform
       </h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 bg-transparent p-3 pb-10 px-32">
+      <div className="grid grid-cols-1 md:grid-cols-2 place-items-center lg:grid-cols-3 gap-6 mt-8 bg-transparent p-3 pb-10 px-32">
         <div className="bg-transparent">
           <h3 className="text-lg text-center pb-3 font-extrabold text-primary bg-transparent">
             Step 1: Choose a Product
@@ -16,7 +16,7 @@ export default function How_It_Works() {
             <img
               src="/assets/img/choose_item_vector.svg"
               alt="How to auction vector"
-              className="bg-transparent"
+              className="bg-transparent h-3/5 w-3/5"
             />
           </div>
 
@@ -35,7 +35,7 @@ export default function How_It_Works() {
             <img
               src="/assets/img/bid.svg"
               alt="Select amount vector"
-              className=" h-3/5 w-3/5 bg-transparent mb-5"
+              className=" h-3/5 w-3/5 bg-transparent"
             />
           </div>
           <p className="text-text2 text-center bg-transparent">
