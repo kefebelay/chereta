@@ -8,6 +8,9 @@ export default function SignUp() {
     password: "",
     location: "",
     role: "buyer",
+    username: "",
+    gender: "",
+    age: "",
   });
 
   const handleChange = (e) => {
@@ -18,6 +21,18 @@ export default function SignUp() {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle form submission
+    if (
+      !formData.name ||
+      !formData.phone_number ||
+      !formData.email ||
+      !formData.password ||
+      !formData.username ||
+      !formData.gender ||
+      !formData.age
+    ) {
+      alert("Please fill in all required fields.");
+      return;
+    }
     console.log("Buyer form submitted:", formData);
   };
 
@@ -41,6 +56,16 @@ export default function SignUp() {
           />
         </div>
         <div className="mb-4">
+          <label className="block mb-2">Username</label>
+          <input
+            type="text"
+            name="username"
+            className="w-full p-2 border border-gray-300 rounded"
+            value={formData.username}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="mb-4">
           <label className="block mb-2">Email</label>
           <input
             type="email"
@@ -60,9 +85,43 @@ export default function SignUp() {
             onChange={handleChange}
           />
         </div>
+        <div className="mb-4">
+          <label className="block mb-2">Phone Number</label>
+          <input
+            type="text"
+            name="phone_number"
+            className="w-full p-2 border border-gray-300 rounded"
+            value={formData.phone_number}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block mb-2">Gender</label>
+          <select
+            name="gender"
+            className="w-full p-2 border border-gray-300 rounded"
+            value={formData.gender}
+            onChange={handleChange}
+          >
+            <option value="">Select Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
+        </div>
+        <div className="mb-4">
+          <label className="block mb-2">Age</label>
+          <input
+            type="number"
+            name="age"
+            className="w-full p-2 border border-gray-300 rounded"
+            value={formData.age}
+            onChange={handleChange}
+          />
+        </div>
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white p-2 rounded"
+          className="w-full bg-blue-500 text-white p-2 rounded btn"
         >
           Sign Up
         </button>
