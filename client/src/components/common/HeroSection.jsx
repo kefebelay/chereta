@@ -38,7 +38,7 @@ export default function HeroSection() {
             How does it work?{" "}
           </Link>
           <Link
-            to={"/signup"}
+            to={"/products"}
             className="btn bg-primary shadow-lg md:w-full md:mr-20 text-white text-center"
           >
             <h1 className="bg-transparent font-bold md:text-xl text-white">

@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { Link, useLocation } from "react-router-dom";
 import ThemeSwitcher from "../common/ThemeSwitcherBtn";
-import Notification from "../common/Notification";
+import Notification from "../common/Notification_count";
 import { useState } from "react";
 
 export default function SellerDashboard({ isOpen, setIsOpen }) {
@@ -63,7 +63,7 @@ export default function SellerDashboard({ isOpen, setIsOpen }) {
               setCount(0);
             }}
           >
-            <Notification Count={Count} />
+            <p>3</p>
           </Link>
           <ThemeSwitcher />
         </div>

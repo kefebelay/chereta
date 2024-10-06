@@ -1,38 +1,45 @@
-import { useState } from "react";
-import Axios from "axios";
+import { useContext, useState } from "react";
+import Api from "./Axios";
+import Cookies from "js-cookie";
 import { Link, useNavigate } from "react-router-dom";
+import { UsersContext } from "../../hooks/Users_Hook";
+import { toast } from "react-toastify";
 
 export default function LoginPage() {
-  const [user, setUser] = useState({
-    email: "",
-    password: "",
-  });
-  const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
+  const [userForm, setUserForm] = useState({ email: "", password: "" });
+  const [Message, setMessage] = useState("");
+  const { setToken } = useContext(UsersContext);
   const navigate = useNavigate();
-
   function setInput(e) {
     const { name, value } = e.target;
-    setUser((prev) => ({ ...prev, [name]: value }));
+    setUserForm((prev) => ({ ...prev, [name]: value }));
   }
 
   async function submitBtn(e) {
     e.preventDefault();
-    navigate("/");
+
+    if (!userForm.email || !userForm.password) {
+      setMessage("Please enter your email and password");
+      return;
+    }
+
+    try {
+      const csrf = Cookies.get("XSRF-TOKEN");
+      const res = await Api.post("/login", userForm, {
+        headers: { "X-XSRF-TOKEN": csrf },
+      });
+      localStorage.setItem("token", res.data.token);
+      setToken(localStorage.getItem("token"));
+      toast.success("Logged in successfully");
+      navigate("/");
+    } catch (err) {
+      setMessage("Please enter correct email and password.");
+      toast.error("incorrect email or password");
+    } finally {
+      setUserForm({ email: "", password: "" });
+    }
   }
-  //   try {
-  //     const res = await Axios.post(
-  //       "https://api.escuelajs.co/api/v1/auth/login",
-  //       user
-  //     );
-  //     setSuccessMessage("Login successful");
-  //     navigate("/" + 1);
-  //     console.log(res);
-  //   } catch (err) {
-  //     setErrorMessage("An error occurred");
-  //     console.log(err);
-  //   }
-  // }
+
   return (
     <div>
       <h1 className="text-center text-5xl font-extrabold m- text-primary">
@@ -54,7 +61,7 @@ export default function LoginPage() {
                 type="email"
                 placeholder="Enter Email"
                 className="border border-text2 p-3 rounded-lg m-3 "
-                value={user.email}
+                value={userForm.email}
               />
               <input
                 onChange={setInput}
@@ -62,7 +69,7 @@ export default function LoginPage() {
                 type="password"
                 placeholder="Password"
                 className="border border-text2 p-3 rounded-lg m-3 "
-                value={user.password}
+                value={userForm.password}
               />
               <button
                 onClick={submitBtn}
@@ -72,15 +79,12 @@ export default function LoginPage() {
               </button>
 
               <div className="text-center text-red-500 p-3 bg-transparent">
-                {errorMessage}
-              </div>
-              <div className="text-center text-green-500 p bg-transparent">
-                {successMessage}
+                {Message}
               </div>
 
               <p className="text-center text-text2 bg-transparent p-3">
                 Dont have an account?{" "}
-                <Link to={"/register"} className="text-primary bg-transparent">
+                <Link to="/register" className="text-primary bg-transparent">
                   Register
                 </Link>
               </p>

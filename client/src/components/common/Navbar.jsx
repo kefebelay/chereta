@@ -1,25 +1,45 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
+import Cookies from "js-cookie";
 import Hamburger from "./HamburgerMenu";
 import ThemeSwitcher from "./ThemeSwitcherBtn";
 import Popup from "./Popup";
+import Api from "../../pages/Auth/Axios";
+import { toast } from "react-toastify";
+import { UsersContext } from "../../hooks/Users_Hook";
 
 export default function Navbar() {
   const [popup, setPopup] = useState(false);
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const { user } = useContext(UsersContext);
 
   function handleClick() {
     const aboutSection = document.getElementById("About");
     if (aboutSection) {
       aboutSection.scrollIntoView({ behavior: "smooth" });
-    } else {
-      console.error('Element with id "About" not found');
     }
   }
 
-  function onLogout() {
-    setIsLoggedIn(false);
+  async function onLogout() {
+    try {
+      const csrf = Cookies.get("XSRF-TOKEN");
+      await Api.post(
+        "/api/logout",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "X-XSRF-TOKEN": csrf,
+          },
+        }
+      );
+      toast.success("logged out successfully");
+      localStorage.removeItem("token");
+      localStorage.setItem("token", null);
+    } catch (err) {
+      toast.error("unable to logout");
+    }
     setPopup(false);
   }
 
@@ -33,7 +53,7 @@ export default function Navbar() {
           message="Are you sure you want to logout?"
         />
       )}
-      <nav className=" px-4 py-2 flex justify-between items-center shadow-md shadow-nav-bg">
+      <nav className=" px-4 py-4 flex justify-between items-center shadow-md shadow-nav-bg">
         <Link
           className="text-3xl font-bold leading-none md:ml-28 ml-3 bg-transparent"
           to={"/"}
@@ -101,7 +121,7 @@ export default function Navbar() {
             <ThemeSwitcher />
           </li>
         </ul>
-        {isLoggedIn ? (
+        {user ? (
           <div className="lg:flex gap-3 hidden justify-center items-center">
             <Link
               to={"/my-bids"}
@@ -118,6 +138,9 @@ export default function Navbar() {
                 src="https://picsum.photos/200/300"
                 alt="profile"
               />
+              <p className="bg-transparent flex justify-center items-center text-sm">
+                {user.username}
+              </p>
             </Link>
             <Link
               className="btn hidden md:inline-block md:ml-auto md:mr-3 bg-primary text-white text-md font-bold w-28 text-center"
@@ -133,9 +156,6 @@ export default function Navbar() {
           <Link
             className="btn hidden md:inline-block md:ml-auto md:mr-3 bg-primary text-white text-md font-bold w-28 text-center"
             to={"/login"}
-            onClick={() => {
-              setIsLoggedIn(true);
-            }}
           >
             Log In
           </Link>

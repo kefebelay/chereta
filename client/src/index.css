@@ -100,6 +100,12 @@
   opacity: 1;
   transform: translateY(0);
 }
+.Toastify__toast {
+  background: transparent !important;
+  box-shadow: none !important; /* Remove the box-shadow if it clashes with your theme */
+  color: inherit; /* Inherit text color from the theme */
+  border: var(--accent) 1px solid;
+}
 
 /* button {
   transition: all 0.3s ease;

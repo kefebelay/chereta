@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
@@ -6,8 +7,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -21,37 +21,35 @@ class AuthenticatedSessionController extends Controller
      * @param LoginRequest $request
      * @return JsonResponse
      */
-    public function store(LoginRequest $request)
+    public function store(LoginRequest $request): JsonResponse
     {
+        try {
+            $user = User::where('email', $request->email)->first();
 
-   $request->validate([
-       'email' => ['required', 'string', 'email',  'lowercase'],
-       'password' => ['required', 'string'],
-   ]);
-   $user = User::where('email', $request->email)->first();
+            if (!$user || !Hash::check($request->password, $user->password)) {
+                return response()->json(['message' => ['The provided credentials are incorrect.']], 401);
+            }
 
-   if (! $user || ! Hash::check($request->password, $user->password)) {
-
-           return response()->json(['email' => ['The provided credentials are incorrect.'] ], 401);
-
-   }
-
-   $token = $user->createToken('auth_token')->plainTextToken;
-   return response()->json(['token' => $token, 'message' => 'Logged in successfullyyyyy', 'user' => $user], 200);
-}
+            $token = $user->createToken('User Token');
+            return response()->json([
+                'token' => $token->plainTextToken,
+                'message' => 'Logged in successfully',
+                'user' => $user
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'An error occurred: ' . $e->getMessage()], 500);
+        }
+    }
 
     /**
      * Destroy an authenticated session.
      *
      * @param Request $request
-     * @return Response
+     * @return JsonResponse
      */
-    public function destroy(LoginRequest $request)
+    public function destroy(Request $request): JsonResponse
     {
-        if (! Auth::guard()->check()) {
-            return response()->json(['error' => 'You are not logged in'], 401);
-        }
-        $request->user()->currentAccessToken()->delete();
+        $request->user()->tokens()->delete();
         return response()->json(['message' => 'Logged out successfully'], 200);
     }
 }

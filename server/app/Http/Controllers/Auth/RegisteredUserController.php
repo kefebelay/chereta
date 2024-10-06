@@ -40,14 +40,18 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        Auth::login($user);
+        $token = $user->createToken($request->name);
 
-        return response()->json(["message" => "Registration Successfully"]);
+        return response()->json([
+        "message" => "Registration Successfully",
+         'access_token' => $token->plainTextToken,
+          'user' => $user]);
     }
     catch(Exception $e)
     {
-
-        return response()->json(array('error' => 'something went wrong'));
+        return response()->json(array(
+        'error' => 'something went wrong',
+        'error_message' => $e->getMessage()));
     }
 
     }
