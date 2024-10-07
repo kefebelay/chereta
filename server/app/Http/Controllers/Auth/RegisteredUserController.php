@@ -26,7 +26,7 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'username' => ['required', 'string', 'max:255'],
             'phone_number' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', Rules\Password::defaults()],
         ]);
 
@@ -37,6 +37,8 @@ class RegisteredUserController extends Controller
             'phone_number' => $request->phone_number,
             'password' => Hash::make($request->string('password')),
         ]);
+
+        $user->assignRole('buyer');
 
         event(new Registered($user));
 

@@ -1,7 +1,7 @@
 The following is what is going to be used for the online bidding system project
 
 server(Laravel)
-	
+	spatie for permission and roles in the database
 
 client(React)
 	-UseState and useEffect: for managing the data on the front-end without reloading the page
@@ -9,3 +9,5 @@ client(React)
 	-React-Router-DOM: for routing between pages
 	-Tailwind Css: for easier Web page design 
 	-react-chartjs-2 and chart.js: for chart ui
+	-js-cookie for getting the csrf token from the cookies
+	-react-toastify for the toast notification
