@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('individual_sellers', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('address');
+            $table->string('age');
+            $table->string('gender');
             $table->timestamps();
         });
     }

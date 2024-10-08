@@ -30,11 +30,23 @@ export default function LoginPage() {
       });
       localStorage.setItem("token", res.data.token);
       setToken(localStorage.getItem("token"));
-      toast.success("Logged in successfully");
-      navigate("/");
+      if (res.data.user.role === "admin") {
+        navigate("/admin/dashboard");
+      } else if (res.data.user.roles.name === "buyer") {
+        navigate("/");
+      } else if (res.data.user.roles.name === "individual_seller") {
+        navigate("/seller/dashboard");
+      } else if (res.data.user.roles.name === "company_seller") {
+        navigate("/seller/dashboard");
+      } else if (res.data.user.roles.name === "delivery_person") {
+        navigate("/delivery/dashboard");
+      }
+      if (res.status === 200) {
+        navigate("/");
+        toast.success("Logged in successfully");
+      }
     } catch (err) {
-      setMessage("Please enter correct email and password.");
-      toast.error("incorrect email or password");
+      setMessage(err.response.data.message);
     } finally {
       setUserForm({ email: "", password: "" });
     }
@@ -60,7 +72,7 @@ export default function LoginPage() {
                 name="email"
                 type="email"
                 placeholder="Enter Email"
-                className="border border-text2 p-3 rounded-lg m-3 "
+                className="border focus:ring-blue-500 border-text2 p-3 rounded-lg m-3 "
                 value={userForm.email}
               />
               <input
@@ -68,7 +80,7 @@ export default function LoginPage() {
                 name="password"
                 type="password"
                 placeholder="Password"
-                className="border border-text2 p-3 rounded-lg m-3 "
+                className="border focus:ring-blue-500 border-text2 p-3 rounded-lg m-3 "
                 value={userForm.password}
               />
               <button

@@ -14,7 +14,7 @@ export default function UsersProvider({ children }) {
         Authorization: `Bearer ${token}`,
       },
     });
-    setUser(res.data);
+    setUser(res.data.user);
   }
   useEffect(() => {
     if (token) {

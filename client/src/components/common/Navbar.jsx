@@ -12,7 +12,7 @@ export default function Navbar() {
   const [popup, setPopup] = useState(false);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { user } = useContext(UsersContext);
+  const { user, setuser, token } = useContext(UsersContext);
 
   function handleClick() {
     const aboutSection = document.getElementById("About");
@@ -29,14 +29,14 @@ export default function Navbar() {
         {},
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${token}`,
             "X-XSRF-TOKEN": csrf,
           },
         }
       );
-      toast.success("logged out successfully");
       localStorage.removeItem("token");
-      localStorage.setItem("token", null);
+      setuser(null);
+      toast.success("logged out successfully");
     } catch (err) {
       toast.error("unable to logout");
     }

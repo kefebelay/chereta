@@ -28,7 +28,7 @@ import UserManagement from "./pages/Admin/UserManagement";
 import Analytics from "./pages/Admin/Analytics";
 import Reports from "./pages/Admin/Reports";
 import DeliveryPersonnel from "./pages/Admin/DeliveryPersonnel";
-import Profile from "./pages/shared/Profile";
+import Profile from "./pages/Buyer/Profile";
 import Category from "./pages/Admin/Categories";
 
 export default function App() {
@@ -39,7 +39,6 @@ export default function App() {
         <Route exact path="/" element={<MainPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/profile" element={<Profile />} />
         <Route path="/categories" element={<Categories />} />
         <Route path="/categories/:id" element={<CategoryItems />} />
         <Route path="/products" element={<Products />} />
@@ -48,6 +47,7 @@ export default function App() {
 
         {/* Buyer routes */}
         <Route path="/my-bids" element={<MyBids />} />
+        <Route path="/profile" element={<Profile />} />
 
         {/* Seller routes */}
         <Route path="/seller/info/:id" element={<SellerInfo />} />

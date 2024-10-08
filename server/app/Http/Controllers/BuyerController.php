@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Buyer;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -47,34 +48,39 @@ class BuyerController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
-    {
-        try{
-            $request->validate([
-                'name' => ['required', 'string', 'max:255'],
-                'username' => ['required', 'string', 'max:255'],
-                'phone_number' => ['required', 'string', 'max:255'],
-                'password' => ['required', Rules\Password::defaults()],
-                'address' => ['required', 'string', 'max:255']
-            ]);
+{
+    try {
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'string', 'max:255', 'unique:'.User::class],
+            'phone_number' => ['required', 'string', 'max:15'],
+            'address' => ['required', 'string', 'max:255'],
+        ]);
 
-            $user = User::where('id', $id)->update([
-                'name' => $request->name,
-                'username' => $request->username,
-                'phone_number' => $request->phone_number,
-                'password' => Hash::make($request->string('password')),
-                'address' => $request->address,
-            ]);
-            return response()->json([
+        User::where('id', $id)->update([
+            'name' => $request->name,
+            'username' => $request->username,
+            'phone_number' => $request->phone_number,
+        ]);
+
+        Buyer::where('user_id', $id)->update([
+            'address' => $request->address,
+        ]);
+
+        $user = User::find($id);
+
+        return response()->json([
             "message" => "Updated Successfully",
-              'user' => $user], 200);
-        }
-        catch(Exception $e)
-        {
-            return response()->json([
-            'error_message' => $e->getMessage()], 500);
-        }
+            'user' => $user
+        ], 200);
+    } catch (Exception $e) {
 
+        return response()->json([
+            'message' => $e->getMessage()
+        ], 500);
     }
+}
+
 
     /**
      * Remove the specified resource from storage.

@@ -37,6 +37,9 @@ class IndividualSellerController extends Controller
             'phone_number' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', Rules\Password::defaults()],
+            'address'=>['required', 'string', 'max:255'],
+            'age'=>['required', 'string', 'max:3'],
+            'gender'=>['required','string', 'max:6'],
         ]);
         $user = User::create([
             'name' => $request->name,
@@ -44,6 +47,9 @@ class IndividualSellerController extends Controller
             'username' => $request->username,
             'phone_number' => $request->phone_number,
             'password' => Hash::make($request->string('password')),
+            'address' => $request->address,
+            'age' => $request->age,
+            'gender' => $request->gender
 
         ] );
 
@@ -70,6 +76,7 @@ class IndividualSellerController extends Controller
                 'username' => ['required', 'string', 'max:255'],
                 'phone_number' => ['required', 'string', 'max:255'],
                 'password' => ['required', Rules\Password::defaults()],
+                'address' => ['required', 'string', 'max:255'],
             ]);
 
             $user = User::where('id', $id)->update([
@@ -77,6 +84,7 @@ class IndividualSellerController extends Controller
                 'username' => $request->username,
                 'phone_number' => $request->phone_number,
                 'password' => Hash::make($request->string('password')),
+                'address' => $request->address
             ]);
             return response()->json([
             "message" => "Updated Successfully",

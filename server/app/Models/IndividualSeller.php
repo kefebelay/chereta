@@ -11,6 +11,12 @@ class IndividualSeller extends Model
 
     protected $fillable = [
         'user_id',
+        'address',
+        'age',
+        'gender',
     ];
+    public function user(){
+        return  $this->BelongsTo(User::class);
+     }
 
 }

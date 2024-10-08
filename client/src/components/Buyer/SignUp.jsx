@@ -1,40 +1,47 @@
 import { useState } from "react";
+import Api from "../../pages/Auth/Axios";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function SignUp() {
+  const [message, setMessage] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     phone_number: "",
     email: "",
     password: "",
     location: "",
-    role: "buyer",
     username: "",
     gender: "",
     age: "",
+    address: "",
   });
+  const csrf = Cookies.get("XSRF-TOKEN");
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  async function handleSubmit(e) {
     e.preventDefault();
-    // Handle form submission
-    if (
-      !formData.name ||
-      !formData.phone_number ||
-      !formData.email ||
-      !formData.password ||
-      !formData.username ||
-      !formData.gender ||
-      !formData.age
-    ) {
-      alert("Please fill in all required fields.");
-      return;
+    try {
+      const response = await Api.post(
+        "http://localhost:8000/api/buyer",
+        formData,
+        { headers: { "X-XSRF-TOKEN": csrf } }
+      );
+      toast.success(response.data.message);
+
+      if (response.status === 200) {
+        navigate("/login");
+      }
+    } catch (err) {
+      setMessage(err.response.data.message);
     }
-    console.log("Buyer form submitted:", formData);
-  };
+  }
 
   return (
     <div className="max-w-md mx-auto mt-4">
@@ -50,7 +57,7 @@ export default function SignUp() {
           <input
             type="text"
             name="name"
-            className="w-full p-2 border border-gray-300 rounded"
+            className="w-full p-2 border rounded focus:ring-blue-500 border-text2"
             value={formData.name}
             onChange={handleChange}
           />
@@ -60,7 +67,7 @@ export default function SignUp() {
           <input
             type="text"
             name="username"
-            className="w-full p-2 border border-gray-300 rounded"
+            className="w-full p-2 border focus:ring-blue-500 border-text2 rounded"
             value={formData.username}
             onChange={handleChange}
           />
@@ -70,7 +77,7 @@ export default function SignUp() {
           <input
             type="email"
             name="email"
-            className="w-full p-2 border border-gray-300 rounded"
+            className="w-full p-2 border focus:ring-blue-500 border-text2 rounded"
             value={formData.email}
             onChange={handleChange}
           />
@@ -80,7 +87,7 @@ export default function SignUp() {
           <input
             type="password"
             name="password"
-            className="w-full p-2 border border-gray-300 rounded"
+            className="w-full p-2 border focus:ring-blue-500 border-text2 rounded"
             value={formData.password}
             onChange={handleChange}
           />
@@ -90,7 +97,7 @@ export default function SignUp() {
           <input
             type="text"
             name="phone_number"
-            className="w-full p-2 border border-gray-300 rounded"
+            className="w-full p-2 border focus:ring-blue-500 border-text2 rounded"
             value={formData.phone_number}
             onChange={handleChange}
           />
@@ -100,7 +107,7 @@ export default function SignUp() {
           <label className="block mb-2">Gender</label>
           <select
             name="gender"
-            className="w-full p-2 border border-gray-300 rounded"
+            className="w-full p-2 border focus:ring-blue-500 border-text2 rounded"
             value={formData.gender}
             onChange={handleChange}
           >
@@ -114,11 +121,23 @@ export default function SignUp() {
           <input
             type="number"
             name="age"
-            className="w-full p-2 border border-gray-300 rounded"
+            className="w-full p-2 border focus:ring-blue-500 border-text2 rounded"
             value={formData.age}
             onChange={handleChange}
           />
         </div>
+        <div className="mb-1">
+          <label className="block mb-2">Address</label>
+          <textarea
+            type="text"
+            name="address"
+            placeholder="Please enter full description of address"
+            className="w-full p-2 border border-gray-300 rounded"
+            value={formData.address}
+            onChange={handleChange}
+          />
+        </div>
+        <p className="text-red-500 text-center mb-2">{message}</p>
         <button
           type="submit"
           className="w-full bg-blue-500 text-white p-2 rounded btn"

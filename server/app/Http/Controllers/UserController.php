@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin;
+use App\Models\Buyer;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -30,10 +32,18 @@ class UserController extends Controller
         }
     }
 
-    public function getLoggedinUser(Request $request){
-        $user = $request->user();
-        return response()->json(["user"=>$user], 200);
-    }
+    public function getLoggedinUser(Request $request)
+{
+    $user = $request->user();
+
+    // Convert the user to an array and include related data
+    $userArray = $user->toArray();
+
+    return response()->json(["user" => $userArray], 200);
+}
+
+
+
 
 
     /**

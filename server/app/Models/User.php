@@ -1,8 +1,6 @@
 <?php
-
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -13,23 +11,18 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasApiTokens, HasRoles;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $with = ['roles'];
+    protected $appends = ['actor'];
+
     protected $fillable = [
         'name',
         'email',
         'password',
         'phone_number',
         'username',
-
     ];
 
     // Define relationships
-
     public function buyer()
     {
         return $this->hasOne(Buyer::class);
@@ -55,26 +48,36 @@ class User extends Authenticatable
         return $this->hasOne(DeliveryPerson::class);
     }
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
+        'buyer',
+        'individualSeller',
+        'companySeller',
+        'admin',
+        'deliveryPerson',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
+
+
+    public function getActorAttribute()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        if ($this->hasRole('buyer')) {
+            return $this->buyer;
+        } elseif ($this->hasRole('admin')) {
+            return $this->admin;
+        } elseif ($this->hasRole('individual seller')) {
+            return $this->individualSeller;
+        } elseif ($this->hasRole('company seller')) {
+            return $this->companySeller;
+        } elseif ($this->hasRole('delivery person')) {
+            return $this->deliveryPerson;
+        }
+
+        return null;
     }
 }

@@ -3,8 +3,13 @@ import { useState } from "react";
 export default function IndividualSellerSignUpForm() {
   const [formData, setFormData] = useState({
     name: "",
+    phone_number: "",
     email: "",
     password: "",
+    location: "",
+    username: "",
+    gender: "",
+    age: "",
   });
 
   const handleChange = (e) => {
@@ -40,6 +45,16 @@ export default function IndividualSellerSignUpForm() {
           />
         </div>
         <div className="mb-4">
+          <label className="block mb-2">Username</label>
+          <input
+            type="text"
+            name="username"
+            className="w-full p-2 border border-gray-300 rounded"
+            value={formData.username}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="mb-4">
           <label className="block mb-2">Email</label>
           <input
             type="email"
@@ -59,9 +74,43 @@ export default function IndividualSellerSignUpForm() {
             onChange={handleChange}
           />
         </div>
+        <div className="mb-4">
+          <label className="block mb-2">Phone Number</label>
+          <input
+            type="text"
+            name="phone_number"
+            className="w-full p-2 border border-gray-300 rounded"
+            value={formData.phone_number}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block mb-2">Gender</label>
+          <select
+            name="gender"
+            className="w-full p-2 border border-gray-300 rounded"
+            value={formData.gender}
+            onChange={handleChange}
+          >
+            <option value="">Select Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
+        </div>
+        <div className="mb-4">
+          <label className="block mb-2">Age</label>
+          <input
+            type="number"
+            name="age"
+            className="w-full p-2 border border-gray-300 rounded"
+            value={formData.age}
+            onChange={handleChange}
+          />
+        </div>
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white p-2 rounded"
+          className="w-full bg-blue-500 text-white p-2 rounded btn"
         >
           Sign Up
         </button>

@@ -13,23 +13,33 @@ use Illuminate\Validation\Rules;
 class AdminController extends Controller
 {
     public function assignRole(Request $request)
-    {
-        try {
-            $request->validate([
-                'role' => 'required|string|exists:roles,name',
-            ]);
-            $user = Auth::user();
+{
+    try {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'role' => 'required|string|exists:roles,name',
+        ]);
 
-            if ($user instanceof \App\Models\User) {
-                $user->syncRoles($request->role);
-                return response()->json(['message' => 'Role assigned successfully', 'role' => $request->role], 200);
-            } else {
-                return response()->json(['message' => 'An error occurred'], 400);
-            }
-        } catch (Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+
+        $admin = Auth::user();
+
+        $user = \App\Models\User::find($request->user_id);
+
+        if ($user) {
+            $user->syncRoles($request->role);
+
+            return response()->json([
+                'message' => 'Role assigned successfully',
+                'role' => $request->role
+            ], 200);
+        } else {
+            return response()->json(['message' => 'User not found'], 404);
         }
+    } catch (Exception $e) {
+        return response()->json(['error' => $e->getMessage()], 500);
     }
+}
+
 
     /**
      * Display a listing of the resource.
