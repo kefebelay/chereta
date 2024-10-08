@@ -3,38 +3,58 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
-
-use Illuminate\Http\Request;
+use App\Http\Controllers\BuyerController;
+use App\Http\Controllers\CompanySellerController;
+use App\Http\Controllers\DeliveryPersonController;
+use App\Http\Controllers\IndividualSellerController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 
 
-//                        General routes
+//                        common routes
 
 Route::post('/login', [AuthenticatedSessionController::class, 'store']);
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->middleware(['auth:sanctum']);
-Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-
+Route::get('/user', [UserController::class, 'getLoggedinUser'])->middleware('auth:sanctum');
+Route::delete('/user/{id}', [UserController::class, 'destroy'])->middleware('auth:sanctm');
 
 //                        Admin routes
 
+Route::post('/admin', [AdminController::class, 'store'])->middleware(['auth:sanctum', 'role:admin']);
+Route::patch('/admin/{id}',[AdminController::class,'update'])->middleware(['auth:sancturm', 'role:admin']);
+Route::get('/admins', [AdminController::class, 'index'])->middleware(['auth:sanctum', 'role:admin']);
+
+Route::get('/users', [UserController::class, 'index'])->middleware(['auth:sanctum', 'role:admin']);
+Route::get('/user/{id}', [UserController::class, 'show'])->middleware(['auth:sanctum', 'role:admin']);
+Route::get('/roles-count', [UserController::class, 'getRolesCount'])->middleware(['auth:sanctum', 'role:admin']);
+
+//modify assign-role
 Route::post('/assign-role', [AdminController::class, 'assignRole'])->middleware(['auth:sanctum', 'role:admin']);
-Route::get('/users', [AdminController::class, 'index'])->middleware(['auth:sanctum', 'role:admin']);
-Route::post('/create-admin', [AdminController::class, 'store'])->middleware(['auth:sanctum', 'role:admin']);
+
+Route::get('/buyers', [BuyerController::class, 'index'])->middleware(['auth:sanctum', 'role:admin']);
+Route::get('/delivery_persons', [DeliveryPersonController::class, 'index'])->middleware(['auth:sanctum', 'role:admin']);
+Route::get('/individual_sellers', [IndividualSellerController::class, 'index'])->middleware(['auth:sanctum', 'role:admin']);
+Route::get('/company_sellers', [CompanySellerController::class, 'index'])->middleware(['auth:sanctum', 'role:admin']);
 
 
 //                        Buyer routes
-Route::post('/register-buyer', [RegisteredUserController::class, 'store']);
+
+Route::post('/buyer', [RegisteredUserController::class, 'store']);
+Route::patch('/buyer/{id}', [BuyerController::class, 'update'])->middleware(['auth:sanctum', 'role:buyer']);
 
 //                        Individual seller routes
 
+Route::post('/individual-seller', [IndividualSellerController::class, 'store']);
+Route::patch('/individual-seller/{id}', [IndividualSellerController::class, 'update'])->middleware(['auth:sanctum', 'role:individual-seller']);
 
 //                        Company seller routes
 
-
+Route::post('/company-seller', [CompanySellerController::class, 'store']);
+Route::patch('/company-seller/{id}', [CompanySellerController::class, 'update'])->middleware(['auth:sanctum', 'role:company-seller']);
 
 
 //                        Delivery person routes
+
+Route::post('/delivery-person', [DeliveryPersonController::class, 'store']);
+Route::patch('/delivery-person/{id}', [DeliveryPersonController::class, 'update'])->middleware(['auth:sanctum', 'role:delivery-person']);
