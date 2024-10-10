@@ -21,6 +21,7 @@ import SellerAnalytics from "./pages/Seller/Analytics";
 import SellerProducts from "./pages/Seller/Products";
 import Orders from "./pages/Seller/Orders";
 import Comments from "./pages/Seller/Comments";
+import CompanyProfile from "./pages/Seller/CompanyProfile";
 
 // Admin routes
 import AdminDashboard from "./pages/Admin/AdminDashboardPage";
@@ -44,13 +45,13 @@ export default function App() {
         <Route path="/products" element={<Products />} />
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/notifications" element={<Notification />} />
+        <Route path="/seller/info/:id" element={<SellerInfo />} />
 
         {/* Buyer routes */}
         <Route path="/my-bids" element={<MyBids />} />
         <Route path="/profile" element={<Profile />} />
 
         {/* Seller routes */}
-        <Route path="/seller/info/:id" element={<SellerInfo />} />
         <Route path="/seller/dashboard" element={<SellerDashboard />} />
         <Route
           path="/seller/dashboard/analytics"
@@ -59,6 +60,7 @@ export default function App() {
         <Route path="/seller/dashboard/products" element={<SellerProducts />} />
         <Route path="/seller/dashboard/orders" element={<Orders />} />
         <Route path="/seller/dashboard/comments" element={<Comments />} />
+        <Route path="/seller/company/profile" element={<CompanyProfile />} />
 
         {/* Admin routes */}
         <Route path="/admin/dashboard" element={<AdminDashboard />} />

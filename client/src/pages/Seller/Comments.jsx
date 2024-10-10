@@ -14,6 +14,7 @@ const dummyComments = Array.from({ length: 50 }, (_, i) => ({
 const PAGE_SIZE = 7;
 
 export default function Comments() {
+  const [isOpen, setIsOpen] = useState(true);
   const [replyText, setReplyText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -40,7 +41,7 @@ export default function Comments() {
 
   return (
     <div>
-      <SellerDashboard isOpen={true} setIsOpen={() => {}} />
+      <SellerDashboard isOpen={isOpen} setIsOpen={setIsOpen} />
       <div className="flex-1 px-10 ml-64 transition-margin duration-300 p-7">
         <h1 className="text-3xl font-bold text-center text-primary p-3">
           Comments

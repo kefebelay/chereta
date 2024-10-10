@@ -28,7 +28,7 @@ export default function SignUp() {
     e.preventDefault();
     try {
       const response = await Api.post(
-        "http://localhost:8000/api/buyer/register",
+        "http://localhost:8000/api/delivery-person/register",
         formData,
         { headers: { "X-XSRF-TOKEN": csrf } }
       );

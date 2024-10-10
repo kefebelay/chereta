@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CompanySeller;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -38,6 +39,9 @@ class CompanySellerController extends Controller
             'phone_number' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', Rules\Password::defaults()],
+            'address' => [ 'nullable', 'string', 'max:255'],
+            'description' => ['nullable', 'string', 'max:255'],
+
         ]);
         $user = User::create([
             'name' => $request->name,
@@ -46,10 +50,16 @@ class CompanySellerController extends Controller
             'phone_number' => $request->phone_number,
             'password' => Hash::make($request->string('password')),
 
-        ] );
+        ]);
+
+        CompanySeller::create([
+            'user_id'=>$user->id,
+            'address' => $request->company_address,
+            'description' => $request->company_description
+        ]);
 
         $user->assignRole('company_seller');
-        return response()->json(["Admin"=>$user, "message"=>"Admin created successfully"]);
+        return response()->json(["Admin"=>$user, "message"=>"Company Seller Account created successfully"]);
     }
 
     /**
@@ -69,19 +79,20 @@ class CompanySellerController extends Controller
             $request->validate([
                 'name' => ['required', 'string', 'max:255'],
                 'username' => ['required', 'string', 'max:255'],
-                'phone_number' => ['required', 'string', 'max:255'],
-                'password' => ['required', Rules\Password::defaults()],
-                'company_name' => ['required', 'string', 'max:255'],
-                'company_address'=>['required', 'string', 'max-255'],
+                'phone_number' => ['required', 'string', 'max:15'],
+                'address'=>['string', 'max:255'],
+                'description' => ['string', 'max:255'],
             ]);
 
             $user = User::where('id', $id)->update([
                 'name' => $request->name,
                 'username' => $request->username,
                 'phone_number' => $request->phone_number,
-                'password' => Hash::make($request->string('password')),
-                'company_name'=>$request->company_name,
-                'company_address'=>$request->company_address,
+
+            ]);
+            CompanySeller::where('user_id', $id)->update([
+                'address'=>$request->company_address,
+                'description'=>$request->company_description
             ]);
             return response()->json([
             "message" => "Updated Successfully",
@@ -90,7 +101,7 @@ class CompanySellerController extends Controller
         catch(Exception $e)
         {
             return response()->json([
-            'error_message' => $e->getMessage()], 500);
+            'message' => $e->getMessage()], 500);
         }
 
     }

@@ -22,28 +22,31 @@ export default function LoginPage() {
       setMessage("Please enter your email and password");
       return;
     }
-
     try {
       const csrf = Cookies.get("XSRF-TOKEN");
       const res = await Api.post("/login", userForm, {
         headers: { "X-XSRF-TOKEN": csrf },
       });
+      console.log(res);
       localStorage.setItem("token", res.data.token);
       setToken(localStorage.getItem("token"));
-      if (res.data.user.role === "admin") {
-        navigate("/admin/dashboard");
-      } else if (res.data.user.roles.name === "buyer") {
-        navigate("/");
-      } else if (res.data.user.roles.name === "individual_seller") {
-        navigate("/seller/dashboard");
-      } else if (res.data.user.roles.name === "company_seller") {
-        navigate("/seller/dashboard");
-      } else if (res.data.user.roles.name === "delivery_person") {
-        navigate("/delivery/dashboard");
-      }
       if (res.status === 200) {
-        navigate("/");
-        toast.success("Logged in successfully");
+        if (res.data.user.roles[0].name === "admin") {
+          toast.success("Logged in as admin");
+          navigate("/admin/dashboard");
+        } else if (res.data.user.roles[0].name === "buyer") {
+          toast.success("Successfuly logged in");
+          navigate("/");
+        } else if (res.data.user.roles[0].name === "individual_seller") {
+          toast.success("Logged in as seller");
+          navigate("/seller/dashboard");
+        } else if (res.data.user.roles[0].name === "company_seller") {
+          toast.success("Logged in as company seller");
+          navigate("/seller/dashboard");
+        } else if (res.data.user.roles[0].name === "delivery_person") {
+          toast.success("Successfuly logged in");
+          navigate("/delivery/dashboard");
+        }
       }
     } catch (err) {
       setMessage(err.response.data.message);

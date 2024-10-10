@@ -1,12 +1,13 @@
 import PropTypes from "prop-types";
 import { Link, useLocation } from "react-router-dom";
 import ThemeSwitcher from "../common/ThemeSwitcherBtn";
-import Notification from "../common/Notification_count";
-import { useState } from "react";
+import { useContext } from "react";
+import { UsersContext } from "../../hooks/Users_Hook";
+import Logout from "../../pages/Auth/Logout";
 
 export default function SellerDashboard({ isOpen, setIsOpen }) {
   const location = useLocation();
-  const [Count, setCount] = useState(9);
+  const { user } = useContext(UsersContext);
   const breadCrumbs = location.pathname.split("/").filter((segment) => segment);
 
   const toggleSidebar = () => {
@@ -15,14 +16,14 @@ export default function SellerDashboard({ isOpen, setIsOpen }) {
 
   return (
     <div>
-      <div className="bg-background fixed w-full h-14 p-3 pl-9 pr-9 flex justify-between border-b border-slate-500">
+      <div className="bg-background fixed w-full h-14 pt-3 pl-9 pr-9 flex justify-between border-b border-slate-500">
         <div className="flex">
           {!isOpen ? (
-            <div className="flex flex-row-reverse gap-6">
+            <div className="flex flex-row-reverse gap-10">
               <button onClick={toggleSidebar}>
                 <i className="fa-solid fa-bars-staggered text-primary text-3xl bg-transparent"></i>
               </button>
-
+              <ThemeSwitcher />
               <img
                 className="h-8  bg-transparent"
                 src="../../../public/chereta_logo.svg"
@@ -50,22 +51,29 @@ export default function SellerDashboard({ isOpen, setIsOpen }) {
           </div>
         </div>
         <div className="flex gap-5">
-          <Link to="/profile">
-            <img
-              className="h-8  bg-transparent"
-              src="../../../public/chereta_logo.svg"
-              alt="logo"
-            />
-          </Link>
-          <Link
-            to={"/notifications"}
-            onClick={() => {
-              setCount(0);
-            }}
-          >
-            <p>3</p>
-          </Link>
-          <ThemeSwitcher />
+          <div className="mr-3">
+            <p>
+              Welcome, <span className="text-primary">{user?.username}</span>
+            </p>
+          </div>
+          {user && (
+            <div className="flex gap-5">
+              <Link
+                to={
+                  user.roles[0].name === "company_seller"
+                    ? "/seller/company/profile"
+                    : "/seller/profile"
+                }
+                className="bg-transparent"
+              >
+                <i className="fa-regular fa-user text-3xl"></i>
+              </Link>
+              <Link to={"/notifications"}>
+                <p>3</p>
+              </Link>
+              <Logout />
+            </div>
+          )}
         </div>
       </div>
       <div className="flex ">

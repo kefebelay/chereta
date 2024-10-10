@@ -7,12 +7,11 @@ import Popup from "./Popup";
 import Api from "../../pages/Auth/Axios";
 import { toast } from "react-toastify";
 import { UsersContext } from "../../hooks/Users_Hook";
+import Logout from "../../pages/Auth/Logout";
 
 export default function Navbar() {
-  const [popup, setPopup] = useState(false);
-
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { user, setuser, token } = useContext(UsersContext);
+  const { user } = useContext(UsersContext);
 
   function handleClick() {
     const aboutSection = document.getElementById("About");
@@ -21,38 +20,8 @@ export default function Navbar() {
     }
   }
 
-  async function onLogout() {
-    try {
-      const csrf = Cookies.get("XSRF-TOKEN");
-      await Api.post(
-        "/api/logout",
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "X-XSRF-TOKEN": csrf,
-          },
-        }
-      );
-      localStorage.removeItem("token");
-      setuser(null);
-      toast.success("logged out successfully");
-    } catch (err) {
-      toast.error("unable to logout");
-    }
-    setPopup(false);
-  }
-
   return (
     <div className="navbar ">
-      {popup && (
-        <Popup
-          onYes={onLogout}
-          popup={popup}
-          setPopup={setPopup}
-          message="Are you sure you want to logout?"
-        />
-      )}
       <nav className=" px-4 py-4 flex justify-between items-center shadow-md shadow-nav-bg">
         <Link
           className="text-3xl font-bold leading-none md:ml-28 ml-3 bg-transparent"
@@ -142,15 +111,7 @@ export default function Navbar() {
                 {user.username}
               </p>
             </Link>
-            <Link
-              className="btn hidden md:inline-block md:ml-auto md:mr-3 bg-primary text-white text-md font-bold w-28 text-center"
-              to={"/"}
-              onClick={() => {
-                setPopup(true);
-              }}
-            >
-              Logout
-            </Link>
+            <Logout />
           </div>
         ) : (
           <Link

@@ -30,7 +30,7 @@ export default function ThemeSwitcher() {
   };
 
   return (
-    <div className="h-6 w-6 active:animate-spin cursor-pointer bg-transparent">
+    <div className="h-8 w-8 active:animate-spin cursor-pointer bg-transparent">
       <img
         src={theme === "dark" ? LightIcon : DarkIcon}
         alt={`Theme Switcher - ${theme === "dark" ? "Light" : "Dark"}`}

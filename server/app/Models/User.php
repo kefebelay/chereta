@@ -12,7 +12,6 @@ class User extends Authenticatable
     use HasFactory, Notifiable, HasApiTokens, HasRoles;
 
     protected $with = ['roles'];
-    protected $appends = ['actor'];
 
     protected $fillable = [
         'name',
@@ -51,16 +50,13 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
-        'buyer',
-        'individualSeller',
-        'companySeller',
-        'admin',
-        'deliveryPerson',
     ];
 
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'buyer', 'individual_Seller',
+        'company_Seller', 'admin', 'delivery_Person'
     ];
 
 
@@ -70,11 +66,11 @@ class User extends Authenticatable
             return $this->buyer;
         } elseif ($this->hasRole('admin')) {
             return $this->admin;
-        } elseif ($this->hasRole('individual seller')) {
+        } elseif ($this->hasRole('individual_seller')) {
             return $this->individualSeller;
-        } elseif ($this->hasRole('company seller')) {
+        } elseif ($this->hasRole('compan_seller')) {
             return $this->companySeller;
-        } elseif ($this->hasRole('delivery person')) {
+        } elseif ($this->hasRole('delivery_person')) {
             return $this->deliveryPerson;
         }
 

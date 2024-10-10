@@ -1,5 +1,4 @@
 import { useContext, useState, useEffect } from "react";
-import Navbar from "../../components/common/Navbar";
 import { UsersContext } from "../../hooks/Users_Hook";
 import Loading from "../../components/common/Loading";
 import Cookies from "js-cookie";
@@ -7,9 +6,11 @@ import Api from "../Auth/Axios";
 import { toast } from "react-toastify";
 import Popup from "../../components/common/Popup";
 import { useNavigate } from "react-router-dom";
+import SellerDashboard from "../../components/Seller/SellerDashboard";
 
-export default function ProfilePage() {
+export default function Profile() {
   const { user, token } = useContext(UsersContext);
+  const { isOpen, setIsOpen } = useState(true);
   const [message, setMessage] = useState("");
   const [popup, setPopup] = useState(false);
   const navigate = useNavigate();
@@ -17,11 +18,15 @@ export default function ProfilePage() {
   const [profilePicture, setProfilePicture] = useState(
     "https://via.placeholder.com/150"
   );
+  function open() {
+    setIsOpen(!isOpen);
+  }
   const [profile, setProfile] = useState({
     name: "",
     username: "",
     phone_number: "",
     address: "",
+    description: "",
   });
 
   useEffect(() => {
@@ -30,8 +35,10 @@ export default function ProfilePage() {
         name: user.name,
         username: user.username,
         phone_number: user.phone_number,
-        address: user.buyer.address,
+        address: user.company_seller.address,
+        description: user.company_seller.description,
       });
+
       setProfilePicture(profilePicture || "https://via.placeholder.com/150");
     }
   }, [user]);
@@ -58,24 +65,40 @@ export default function ProfilePage() {
   };
   async function onUpdate() {
     try {
-      const res = await Api.patch(`/api/buyer/${user.id}`, profile, {
+      if (!profile.name || !profile.username || !profile.phone_number) {
+        setMessage("Please fill all required fields");
+        return;
+      }
+      if (
+        profile.name === user.name &&
+        profile.username === user.username &&
+        profile.phone_number === user.phone_number &&
+        profile.address === user.company_seller.address &&
+        profile.description === user.company_seller.description
+      ) {
+        setMessage("No changes made");
+        return;
+      }
+
+      const res = await Api.patch(`/api/company-seller/${user.id}`, profile, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
           "X-XSRF-TOKEN": Cookies.get("XSRF-TOKEN"),
         },
       });
+
       if (res.status === 200) {
         toast.success("profile " + res.data.message);
-        navigate("/");
+        navigate("/seller/dashboard");
       }
     } catch (err) {
-      setMessage(err.response.data.message);
+      console.log(err);
     }
   }
 
   return (
     <div>
-      <Navbar />
+      <SellerDashboard />
       {popup && (
         <Popup
           onYes={onUpdate}
@@ -84,7 +107,7 @@ export default function ProfilePage() {
           message="Are you sure you want to update profile?"
         />
       )}
-      <div className="max-w-2xl mx-auto shadow-text2 rounded-lg shadow-sm mt-32 p-5">
+      <div className="max-w-2xl mx-auto shadow-text2 rounded-lg shadow-sm mt-20 p-5">
         <h1 className="text-3xl font-bold mb-7 text-center text-primary">
           Edit Profile
         </h1>
@@ -141,20 +164,34 @@ export default function ProfilePage() {
               />
             </div>
 
-            <div className="flex items-center mb-2 w-full">
-              <label className="w-1/4 text-left">Address</label>
-              <textarea
-                name="address"
-                value={profile.address}
-                onChange={handleChange}
-                className="border p-2 w-3/4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 border-text2"
-                placeholder="Please enter a descriptive address"
-              />
+            <div className="w-full">
+              <div className="flex items-center mb-2 w-full">
+                <label className="w-1/4 text-left">Address</label>
+                <textarea
+                  name="address"
+                  value={profile.address}
+                  onChange={handleChange}
+                  className="border p-2 w-3/4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 border-text2"
+                  placeholder="Please enter a descriptive address"
+                />
+              </div>
+              <div className="flex items-center mb-2 w-full">
+                <label className="w-1/4 text-left">descripition</label>
+                <textarea
+                  name="description"
+                  value={profile.description}
+                  onChange={handleChange}
+                  className="border p-2 w-3/4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 border-text2"
+                  placeholder="Please enter a descriptive address"
+                />
+              </div>
             </div>
             <p className="mb-2 text-red-500 text-center">{message}</p>
 
             <button
-              onClick={() => setPopup(true)}
+              onClick={() => {
+                setPopup(true);
+              }}
               className="btn bg-primary text-white py-2 px-4 rounded-lg"
             >
               Update Profile

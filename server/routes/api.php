@@ -21,7 +21,7 @@ Route::delete('/user/{id}', [UserController::class, 'destroy'])->middleware('aut
 
 //                        Admin routes
 
-Route::post('/admin', [AdminController::class, 'store'])->middleware(['auth:sanctum', 'role:admin']);
+Route::post('/admin/register', [AdminController::class, 'store'])->middleware(['auth:sanctum', 'role:admin']);
 Route::patch('/admin/{id}',[AdminController::class,'update'])->middleware(['auth:sancturm', 'role:admin']);
 Route::get('/admins', [AdminController::class, 'index'])->middleware(['auth:sanctum', 'role:admin']);
 
@@ -40,21 +40,21 @@ Route::get('/company_sellers', [CompanySellerController::class, 'index'])->middl
 
 //                        Buyer routes
 
-Route::post('/buyer', [RegisteredUserController::class, 'store']);
+Route::post('/buyer/register', [RegisteredUserController::class, 'store']);
 Route::patch('/buyer/{id}', [BuyerController::class, 'update'])->middleware(['auth:sanctum', 'role:buyer']);
 
 //                        Individual seller routes
 
-Route::post('/individual-seller', [IndividualSellerController::class, 'store']);
-Route::patch('/individual-seller/{id}', [IndividualSellerController::class, 'update'])->middleware(['auth:sanctum', 'role:individual-seller']);
+Route::post('/individual-seller/register', [IndividualSellerController::class, 'store']);
+Route::patch('/individual-seller/{id}', [IndividualSellerController::class, 'update'])->middleware(['auth:sanctum', 'role:individual_seller']);
 
 //                        Company seller routes
 
-Route::post('/company-seller', [CompanySellerController::class, 'store']);
-Route::patch('/company-seller/{id}', [CompanySellerController::class, 'update'])->middleware(['auth:sanctum', 'role:company-seller']);
+Route::post('/company-seller/register', [CompanySellerController::class, 'store']);
+Route::patch('/company-seller/{id}', [CompanySellerController::class, 'update'])->middleware(['auth:sanctum', 'role:company_seller']);
 
 
 //                        Delivery person routes
 
-Route::post('/delivery-person', [DeliveryPersonController::class, 'store']);
-Route::patch('/delivery-person/{id}', [DeliveryPersonController::class, 'update'])->middleware(['auth:sanctum', 'role:delivery-person']);
+Route::post('/delivery-person/register', [DeliveryPersonController::class, 'store']);
+Route::patch('/delivery-person/{id}', [DeliveryPersonController::class, 'update'])->middleware(['auth:sanctum', 'role:delivery_person']);

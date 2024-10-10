@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\IndividualSeller;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 
@@ -31,6 +33,7 @@ class IndividualSellerController extends Controller
      */
     public function store(Request $request)
     {
+        DB::beginTransaction();
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'username' => ['required', 'string', 'max:255'],
@@ -38,8 +41,8 @@ class IndividualSellerController extends Controller
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', Rules\Password::defaults()],
             'address'=>['required', 'string', 'max:255'],
-            'age'=>['required', 'string', 'max:3'],
-            'gender'=>['required','string', 'max:6'],
+            'age'=>['required', 'numeric', 'between:18,100'],
+            'gender'=>['required','string', 'in:male,female'],
         ]);
         $user = User::create([
             'name' => $request->name,
@@ -47,11 +50,14 @@ class IndividualSellerController extends Controller
             'username' => $request->username,
             'phone_number' => $request->phone_number,
             'password' => Hash::make($request->string('password')),
+
+        ] );
+        IndividualSeller::create([
+            'user_id'=>$user->id,
             'address' => $request->address,
             'age' => $request->age,
             'gender' => $request->gender
-
-        ] );
+        ]);
 
         $user->assignRole('individual_seller');
         return response()->json(["Admin"=>$user, "message"=>"Admin created successfully"]);
