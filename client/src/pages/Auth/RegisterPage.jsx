@@ -7,11 +7,11 @@ export default function RegisterPage() {
   const [user, setUser] = useState("buyer");
 
   return (
-    <div className="bg-transparent p-10 md:p-0">
+    <div className="bg-transparent p-10 mb-10 md:p-0">
       <h1 className="text-center text-5xl text-primary p-5 font-bold bg-transparent">
         Register
       </h1>
-      <div className="p-4 md:p-0 rounded-lg border border-text2 md:py-3 md:w-[500px] mx-auto bg-transparent">
+      <div className="p-4 md:p-0 rounded-lg border border-text2 md:py-3 md:mx-10 mx-auto bg-transparent">
         <div className="flex gap-3 bg-transparent justify-center w-auto">
           <button
             className={`border border-transparent  duration-300 ${
@@ -46,7 +46,7 @@ export default function RegisterPage() {
             Company Seller
           </button>
         </div>
-        <div className="form-container m-3">
+        <div className=" m-3">
           {user === "buyer" && <SignUp />}
           {user === "individual seller" && <IndividualSellerSignUpForm />}
           {user === "Company seller" && <CompanySellerSignup />}

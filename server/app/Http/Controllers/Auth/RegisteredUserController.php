@@ -47,14 +47,13 @@ class RegisteredUserController extends Controller
         ]);
 
         $user->assignRole('buyer');
-        $buyer = new Buyer([
+
+        Buyer::create([
+            'user_id' => $user->id,
             'gender' => $request->gender,
             'age' => $request->age,
             'address' =>$request->address
         ]);
-
-        $buyer->user_id = $user->id;
-        $buyer->save();
 
         DB::commit();
 

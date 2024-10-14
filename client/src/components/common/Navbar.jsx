@@ -1,17 +1,14 @@
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
-import Cookies from "js-cookie";
 import Hamburger from "./HamburgerMenu";
 import ThemeSwitcher from "./ThemeSwitcherBtn";
-import Popup from "./Popup";
-import Api from "../../pages/Auth/Axios";
-import { toast } from "react-toastify";
 import { UsersContext } from "../../hooks/Users_Hook";
 import Logout from "../../pages/Auth/Logout";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user } = useContext(UsersContext);
+  const [hamburgerOpen, setHamburgerOpen] = useState(false);
 
   function handleClick() {
     const aboutSection = document.getElementById("About");
@@ -21,7 +18,7 @@ export default function Navbar() {
   }
 
   return (
-    <div className="navbar ">
+    <div className={`navbar ${!hamburgerOpen ? "w-screen" : "w-10px"}`}>
       <nav className=" px-4 py-4 flex justify-between items-center shadow-md shadow-nav-bg">
         <Link
           className="text-3xl font-bold leading-none md:ml-28 ml-3 bg-transparent"
@@ -91,7 +88,7 @@ export default function Navbar() {
           </li>
         </ul>
         {user ? (
-          <div className="lg:flex gap-3 hidden justify-center items-center">
+          <div className="lg:flex gap-x-3 hidden justify-center items-center mr-5">
             <Link
               to={"/my-bids"}
               className="flex hover:text-accent hover:scale-105 transition-transform duration-300 cursor-pointer"
@@ -101,17 +98,18 @@ export default function Navbar() {
                 3
               </span>
             </Link>
-            <Link to={"/profile"} className="rounded-full bg-black h-10 w-10">
-              <img
-                className="w-full h-full rounded-full"
-                src="https://picsum.photos/200/300"
-                alt="profile"
-              />
-              <p className="bg-transparent flex justify-center items-center text-sm">
-                {user.username}
-              </p>
-            </Link>
-            <Logout />
+            <div className="bg-transparent h-10 w-10 mx-5 ">
+              <Link to={"/profile"} className="rounded-full h-10 w-10">
+                <img
+                  className="w-full h-full rounded-full"
+                  src="https://picsum.photos/200/300"
+                  alt="profile"
+                />
+                <p className="bg-transparent flex justify-center items-center text-sm">
+                  {user.username}
+                </p>
+              </Link>
+            </div>
           </div>
         ) : (
           <Link
@@ -122,7 +120,10 @@ export default function Navbar() {
           </Link>
         )}
 
-        <div className="lg:hidden mr-10">
+        <div
+          className="lg:hidden mr-8 bg-transparent"
+          onClick={() => setHamburgerOpen(!hamburgerOpen)}
+        >
           <Hamburger />
         </div>
       </nav>

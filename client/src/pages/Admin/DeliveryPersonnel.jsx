@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Dashboard from "../../components/Admin/Dashboard";
 import Axios from "axios";
 import usePagination from "../../hooks/usePagination";
@@ -12,6 +12,9 @@ export default function DeliveryPersonnel() {
     name: "",
     email: "",
     phone_number: "",
+    password: "",
+    age: "",
+    gender: "",
     vehicleType: "",
   });
 

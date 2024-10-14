@@ -8,19 +8,19 @@ export default function Popup({ popup, setPopup, onYes, message }) {
         >
           <div className="p-10 rounded-lg">
             <h1 className="text-lg p-3">{message}</h1>
-            <div className="flex gap-3 justify-between p-3 px-10">
+            <div className="flex gap-x-9 justify-between p-3 px-10">
               <button
                 onClick={() => {
                   onYes();
                   setPopup(!popup);
                 }}
-                className="btn bg-primary"
+                className="btn bg-primary w-full"
               >
                 Yes
               </button>
               <button
                 onClick={() => setPopup(!popup)}
-                className="btn bg-secondary"
+                className="btn bg-secondary w-full"
               >
                 No
               </button>

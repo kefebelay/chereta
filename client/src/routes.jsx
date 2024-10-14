@@ -22,6 +22,7 @@ import SellerProducts from "./pages/Seller/Products";
 import Orders from "./pages/Seller/Orders";
 import Comments from "./pages/Seller/Comments";
 import CompanyProfile from "./pages/Seller/CompanyProfile";
+import IndividualProfile from "./pages/Seller/IndividualProfile";
 
 // Admin routes
 import AdminDashboard from "./pages/Admin/AdminDashboardPage";
@@ -61,6 +62,7 @@ export default function App() {
         <Route path="/seller/dashboard/orders" element={<Orders />} />
         <Route path="/seller/dashboard/comments" element={<Comments />} />
         <Route path="/seller/company/profile" element={<CompanyProfile />} />
+        <Route path="/seller/profile" element={<IndividualProfile />} />
 
         {/* Admin routes */}
         <Route path="/admin/dashboard" element={<AdminDashboard />} />

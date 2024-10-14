@@ -8,7 +8,6 @@ import Logout from "../../pages/Auth/Logout";
 export default function SellerDashboard({ isOpen, setIsOpen }) {
   const location = useLocation();
   const { user } = useContext(UsersContext);
-  const breadCrumbs = location.pathname.split("/").filter((segment) => segment);
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -16,65 +15,35 @@ export default function SellerDashboard({ isOpen, setIsOpen }) {
 
   return (
     <div>
-      <div className="bg-background fixed w-full h-14 pt-3 pl-9 pr-9 flex justify-between border-b border-slate-500">
-        <div className="flex">
-          {!isOpen ? (
-            <div className="flex flex-row-reverse gap-10">
-              <button onClick={toggleSidebar}>
-                <i className="fa-solid fa-bars-staggered text-primary text-3xl bg-transparent"></i>
-              </button>
-              <ThemeSwitcher />
-              <img
-                className="h-8  bg-transparent"
-                src="../../../public/chereta_logo.svg"
-                alt="logo"
-              />
-            </div>
-          ) : (
-            <h1 className=""></h1>
-          )}
-          <div
+      <div className="bg-background fixed w-full h-20 p-3 pl-9 pr-9 flex justify-between border-b border-slate-500">
+        {!isOpen ? (
+          <button onClick={toggleSidebar} className="bg-transparent ">
+            <i className="fa-solid fa-bars-staggered text-primary text-4xl bg-transparent "></i>
+          </button>
+        ) : (
+          <h1 className=""></h1>
+        )}
+        {/* <div
             className={`${
               isOpen ? "ml-72" : "ml-3"
             } transition-margin duration-200 text-text2 font-bold p-4`}
           >
-            <div className="hidden md:block">
-              {breadCrumbs.map((crumb, index) => (
-                <span className="text-text2 text-xs" key={index}>
-                  <span className="text-text2">{crumb}</span>
-                  {index !== breadCrumbs.length - 1 && (
-                    <span className="text-text2"> &gt;&gt; </span>
-                  )}
-                </span>
-              ))}
-            </div>
+            hi
+          </div> */}
+        {user && (
+          <div className="flex gap-5 mt-2">
+            <Link
+              to={
+                user.roles[0].name === "company_seller"
+                  ? "/seller/company/profile"
+                  : "/seller/profile"
+              }
+              className="bg-transparent"
+            >
+              <i className="fa-regular fa-user text-3xl"></i>
+            </Link>
           </div>
-        </div>
-        <div className="flex gap-5">
-          <div className="mr-3">
-            <p>
-              Welcome, <span className="text-primary">{user?.username}</span>
-            </p>
-          </div>
-          {user && (
-            <div className="flex gap-5">
-              <Link
-                to={
-                  user.roles[0].name === "company_seller"
-                    ? "/seller/company/profile"
-                    : "/seller/profile"
-                }
-                className="bg-transparent"
-              >
-                <i className="fa-regular fa-user text-3xl"></i>
-              </Link>
-              <Link to={"/notifications"}>
-                <p>3</p>
-              </Link>
-              <Logout />
-            </div>
-          )}
-        </div>
+        )}
       </div>
       <div className="flex ">
         <div
@@ -82,120 +51,128 @@ export default function SellerDashboard({ isOpen, setIsOpen }) {
             isOpen ? "w-64 p-5" : "w-0"
           } transition-width duration-300 overflow-hidden z-10`}
         >
-          <div className="flex justify-between mt-12">
-            <img
-              className="h-8  bg-transparent"
-              src="../../../public/chereta_logo.svg"
-              alt="logo"
-            />
-            <button onClick={toggleSidebar} className="  bg-transparent ">
-              {isOpen && (
-                <i className="fa-solid text-primary fa-square-xmark text-3xl bg-transparentmt-3"></i>
-              )}
-            </button>
-          </div>
-          <ul
-            className={`${
-              isOpen ? "block" : "hidden"
-            } mt-10 bg-transparent flex flex-col gap-3`}
-          >
-            <li className="mb-2">
-              <Link
-                to="/seller/dashboard/"
-                className={`py-2 px-4 rounded bg-background2 border border-text2 shadow-sm shadow-text2 flex gap-3 ${
-                  location.pathname === "/seller/dashboard/"
-                    ? "bg-primary font-bold text-white"
-                    : "hover:text-white hover:bg-primary"
-                }`}
+          <div className="flex flex-col justify-between h-full">
+            <div>
+              <div className="flex justify-between mt-12">
+                <img
+                  className="h-8  bg-transparent"
+                  src="../../../public/chereta_logo.svg"
+                  alt="logo"
+                />
+                <button onClick={toggleSidebar} className="  bg-transparent ">
+                  {isOpen && (
+                    <i className="fa-solid text-primary fa-square-xmark text-3xl bg-transparentmt-3"></i>
+                  )}
+                </button>
+              </div>
+              <ul
+                className={`${
+                  isOpen ? "block" : "hidden"
+                } mt-10 bg-transparent flex flex-col gap-3`}
               >
-                <i
-                  className={`fa-solid fa-table-columns bg-transparent mt-1
+                <li className="mb-2">
+                  <Link
+                    to="/seller/dashboard/"
+                    className={`py-2 px-4 rounded bg-background2 border border-text2 shadow-sm shadow-text2 flex gap-3 ${
+                      location.pathname === "/seller/dashboard/"
+                        ? "bg-primary font-bold text-white"
+                        : "hover:text-white hover:bg-primary"
+                    }`}
+                  >
+                    <i
+                      className={`fa-solid fa-table-columns bg-transparent mt-1
                 ${
                   location.pathname === "/seller/dashboard/" &&
                   "bg-primary font-bold text-white"
                 }`}
-                ></i>
-                Overview
-              </Link>
-            </li>
-            <li className="mb-2">
-              <Link
-                to="/seller/dashboard/analytics"
-                className={`py-2 px-4 rounded bg-background2 border border-text2 shadow-sm shadow-text2 flex gap-3 ${
-                  location.pathname === "/seller/dashboard/analytics"
-                    ? "bg-primary font-bold text-white"
-                    : "hover:text-white hover:bg-primary"
-                }`}
-              >
-                <i
-                  className={`fa-solid fa-chart-line bg-transparent mt-1
+                    ></i>
+                    Overview
+                  </Link>
+                </li>
+                <li className="mb-2">
+                  <Link
+                    to="/seller/dashboard/analytics"
+                    className={`py-2 px-4 rounded bg-background2 border border-text2 shadow-sm shadow-text2 flex gap-3 ${
+                      location.pathname === "/seller/dashboard/analytics"
+                        ? "bg-primary font-bold text-white"
+                        : "hover:text-white hover:bg-primary"
+                    }`}
+                  >
+                    <i
+                      className={`fa-solid fa-chart-line bg-transparent mt-1
                 ${
                   location.pathname === "/seller/dashboard/analytics" &&
                   "bg-primary font-bold text-white"
                 }`}
-                ></i>
-                Analytics
-              </Link>
-            </li>
-            <li className="mb-2">
-              <Link
-                to="/seller/dashboard/products"
-                className={`flex gap-3 py-2 px-4 rounded bg-background2 border border-text2 ${
-                  location.pathname === "/seller/dashboard/products"
-                    ? "bg-primary font-bold text-white"
-                    : "hover:bg-primary hover:text-white"
-                }`}
-              >
-                <i
-                  className={`fa-solid fa-boxes-stacked bg-transparent mt-1
+                    ></i>
+                    Analytics
+                  </Link>
+                </li>
+                <li className="mb-2">
+                  <Link
+                    to="/seller/dashboard/products"
+                    className={`flex gap-3 py-2 px-4 rounded bg-background2 border border-text2 ${
+                      location.pathname === "/seller/dashboard/products"
+                        ? "bg-primary font-bold text-white"
+                        : "hover:bg-primary hover:text-white"
+                    }`}
+                  >
+                    <i
+                      className={`fa-solid fa-boxes-stacked bg-transparent mt-1
                 ${
                   location.pathname === "/seller/dashboard/products"
                     ? "bg-primary font-bold text-white"
                     : "hover:bg-primary hover:text-white"
                 }`}
-                ></i>
-                Products
-              </Link>
-            </li>
-            <li className="mb-2">
-              <Link
-                to="/seller/dashboard/orders"
-                className={`py-2 px-4 rounded bg-background2 border border-text2 flex gap-3 shadow-md ${
-                  location.pathname === "/seller/dashboard/orders"
-                    ? "bg-primary font-bold text-white"
-                    : "hover:bg-primary hover:text-white"
-                }`}
-              >
-                <i
-                  className={`fa-solid fa-receipt bg-transparent mt-1
+                    ></i>
+                    Products
+                  </Link>
+                </li>
+                <li className="mb-2">
+                  <Link
+                    to="/seller/dashboard/orders"
+                    className={`py-2 px-4 rounded bg-background2 border border-text2 flex gap-3 shadow-md ${
+                      location.pathname === "/seller/dashboard/orders"
+                        ? "bg-primary font-bold text-white"
+                        : "hover:bg-primary hover:text-white"
+                    }`}
+                  >
+                    <i
+                      className={`fa-solid fa-receipt bg-transparent mt-1
                 ${
                   location.pathname === "/seller/dashboard/orders" &&
                   "bg-primary font-bold text-white"
                 }`}
-                ></i>
-                Orders
-              </Link>
-            </li>
-            <li className="mb-2">
-              <Link
-                to="/seller/dashboard/comments"
-                className={`flex gap-3 py-2 px-4 rounded bg-background2 border border-text2 ${
-                  location.pathname === "/seller/dashboard/comments"
-                    ? "bg-primary font-bold text-white"
-                    : "hover:bg-primary hover:text-white"
-                }`}
-              >
-                <i
-                  className={`fa-solid fa-comments bg-transparent mt-1
+                    ></i>
+                    Orders
+                  </Link>
+                </li>
+                <li className="mb-2">
+                  <Link
+                    to="/seller/dashboard/comments"
+                    className={`flex gap-3 py-2 px-4 rounded bg-background2 border border-text2 ${
+                      location.pathname === "/seller/dashboard/comments"
+                        ? "bg-primary font-bold text-white"
+                        : "hover:bg-primary hover:text-white"
+                    }`}
+                  >
+                    <i
+                      className={`fa-solid fa-comments bg-transparent mt-1
                    ${
                      location.pathname === "/seller/dashboard/comments" &&
                      "bg-primary font-bold text-white"
                    }`}
-                ></i>
-                Comments
-              </Link>
-            </li>
-          </ul>
+                    ></i>
+                    Comments
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            <div className="w-full flex flex-row-reverse justify-between">
+              <Logout />
+              <ThemeSwitcher />
+            </div>
+          </div>
         </div>
       </div>
       <div

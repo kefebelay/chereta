@@ -7,7 +7,7 @@ import Popup from "../../components/common/Popup";
 import { useNavigate } from "react-router-dom";
 
 export default function Logout() {
-  const { setuser, token } = useContext(UsersContext);
+  const { setUser, token } = useContext(UsersContext);
   const [popup, setPopup] = useState(false);
   const navigate = useNavigate();
   async function onLogout() {
@@ -23,12 +23,13 @@ export default function Logout() {
           },
         }
       );
-      localStorage.removeItem("token");
-      setuser(null);
       toast.success("logged out successfully");
       navigate("/");
+      localStorage.removeItem("token");
+      setUser(null);
     } catch (err) {
       toast.error("unable to logout");
+      console.log(err);
     }
     setPopup(false);
   }
@@ -40,7 +41,14 @@ export default function Logout() {
       >
         Logout
       </button>
-      {popup && <Popup onYes={onLogout} popup={popup} setPopup={setPopup} />}
+      {popup && (
+        <Popup
+          onYes={onLogout}
+          popup={popup}
+          setPopup={setPopup}
+          message={"Are you sure you want to logout?"}
+        />
+      )}
     </div>
   );
 }

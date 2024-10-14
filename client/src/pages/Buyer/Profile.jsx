@@ -7,6 +7,7 @@ import Api from "../Auth/Axios";
 import { toast } from "react-toastify";
 import Popup from "../../components/common/Popup";
 import { useNavigate } from "react-router-dom";
+import Logout from "../Auth/Logout";
 
 export default function ProfilePage() {
   const { user, token } = useContext(UsersContext);
@@ -30,7 +31,7 @@ export default function ProfilePage() {
         name: user.name,
         username: user.username,
         phone_number: user.phone_number,
-        address: user.buyer.address,
+        address: user.actor.address,
       });
       setProfilePicture(profilePicture || "https://via.placeholder.com/150");
     }
@@ -85,7 +86,10 @@ export default function ProfilePage() {
         />
       )}
       <div className="max-w-2xl mx-auto shadow-text2 rounded-lg shadow-sm mt-32 p-5">
-        <h1 className="text-3xl font-bold mb-7 text-center text-primary">
+        <div className="float-right">
+          <Logout />
+        </div>
+        <h1 className="text-3xl font-bold mb-7 text-center text-primary ml-16">
           Edit Profile
         </h1>
         {!user ? (

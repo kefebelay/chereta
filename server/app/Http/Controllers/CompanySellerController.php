@@ -6,6 +6,7 @@ use App\Models\CompanySeller;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 
@@ -35,12 +36,12 @@ class CompanySellerController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'string', 'max:255','unique:'.User::class],
             'phone_number' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', Rules\Password::defaults()],
-            'address' => [ 'nullable', 'string', 'max:255'],
-            'description' => ['nullable', 'string', 'max:255'],
+            'address' => [ 'string', 'max:255'],
+            'description' => [ 'string', 'max:255'],
 
         ]);
         $user = User::create([
@@ -59,7 +60,7 @@ class CompanySellerController extends Controller
         ]);
 
         $user->assignRole('company_seller');
-        return response()->json(["Admin"=>$user, "message"=>"Company Seller Account created successfully"]);
+        return response()->json(["user"=>$user, "message"=>"Company Seller Account created successfully"]);
     }
 
     /**
@@ -75,25 +76,29 @@ class CompanySellerController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        DB::beginTransaction();
         try{
             $request->validate([
-                'name' => ['required', 'string', 'max:255'],
-                'username' => ['required', 'string', 'max:255'],
-                'phone_number' => ['required', 'string', 'max:15'],
+                'name' => [ 'string', 'max:255'],
+                'username' => [ 'string', 'max:255', 'unique:'.User::class],
+                'phone_number' => [ 'string', 'max:15'],
                 'address'=>['string', 'max:255'],
                 'description' => ['string', 'max:255'],
             ]);
 
-            $user = User::where('id', $id)->update([
+            User::where('id', $id)->update([
                 'name' => $request->name,
                 'username' => $request->username,
                 'phone_number' => $request->phone_number,
 
             ]);
             CompanySeller::where('user_id', $id)->update([
-                'address'=>$request->company_address,
-                'description'=>$request->company_description
+                'address'=>$request->address,
+                'description'=>$request->description
             ]);
+            $user = User::find($id);
+            $user = $user->load('companySeller');
+            DB::commit();
             return response()->json([
             "message" => "Updated Successfully",
               'user' => $user], 200);

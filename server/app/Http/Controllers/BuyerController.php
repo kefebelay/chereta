@@ -51,10 +51,10 @@ class BuyerController extends Controller
 {
     try {
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'max:255', 'unique:'.User::class],
-            'phone_number' => ['required', 'string', 'max:15'],
-            'address' => ['required', 'string', 'max:255'],
+            'name' => ['string', 'max:255'],
+            'username' => [ 'string', 'max:255', 'unique:'.User::class],
+            'phone_number' => [ 'string', 'max:15'],
+            'address' => [ 'string', 'max:255'],
         ]);
 
         User::where('id', $id)->update([

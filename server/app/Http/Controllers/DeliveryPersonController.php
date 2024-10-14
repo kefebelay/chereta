@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DeliveryPerson;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 
@@ -31,9 +33,11 @@ class DeliveryPersonController extends Controller
      */
     public function store(Request $request)
     {
+        DB::beginTransaction();
+        try{
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'string', 'max:255', 'unique:'.User::class],
             'phone_number' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', Rules\Password::defaults()],
@@ -46,9 +50,19 @@ class DeliveryPersonController extends Controller
             'password' => Hash::make($request->string('password')),
 
         ] );
+        DeliveryPerson::create([
+            'user_id'=>$user->id
+        ]);
 
         $user->assignRole('delivery_person');
-        return response()->json(["Admin"=>$user, "message"=>"Admin created successfully"]);
+
+        DB::commit();
+        return response()->json(["user"=>$user, "message"=>"Delivery Personnel account created successfully"]);
+        }
+        catch(Exception $e){
+            return response()->json([
+            'message' => $e->getMessage()], 500);
+        }
     }
 
     /**
@@ -77,6 +91,9 @@ class DeliveryPersonController extends Controller
                 'username' => $request->username,
                 'phone_number' => $request->phone_number,
                 'password' => Hash::make($request->string('password')),
+            ]);
+            DeliveryPerson::where('user_id', $id)->update([
+
             ]);
             return response()->json([
             "message" => "Updated Successfully",

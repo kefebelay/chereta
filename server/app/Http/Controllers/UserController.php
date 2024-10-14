@@ -38,19 +38,6 @@ class UserController extends Controller
 {
     $user = $request->user();
 
-    // Dynamically load the actor-specific relationship based on the user's role
-    if ($user->hasRole('buyer')) {
-        $user->load('buyer');
-    } elseif ($user->hasRole('admin')) {
-        $user->load('admin');
-    } elseif ($user->hasRole('individual_seller')) {
-        $user->load('individualSeller');
-    } elseif ($user->hasRole('company_seller')) {
-        $user->load('companySeller');
-    } elseif ($user->hasRole('delivery_person')) {
-        $user->load('deliveryPerson');
-    }
-
     return response()->json(["user" => $user], 200);
 }
 
@@ -65,6 +52,7 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
+
         return response()->json($users);
     }
 

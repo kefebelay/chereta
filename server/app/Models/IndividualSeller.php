@@ -14,6 +14,7 @@ class IndividualSeller extends Model
         'address',
         'age',
         'gender',
+        'description',
     ];
     public function user(){
         return  $this->BelongsTo(User::class);

@@ -70,12 +70,11 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
   z-index: 999;
 }
 .navbar-menu{
-  top: calc(100% - 40px);
-  height: calc(100vh - 50px);
+ 
+  height: 100vh;
 }
 
 /* RegisterPage */
@@ -102,8 +101,8 @@
 }
 .Toastify__toast {
   background: transparent !important;
-  box-shadow: none !important; /* Remove the box-shadow if it clashes with your theme */
-  color: inherit; /* Inherit text color from the theme */
+  box-shadow: none !important;
+  color: inherit;
   border: var(--accent) 1px solid;
 }
 

@@ -18,13 +18,13 @@ class IndividualSellerController extends Controller
     public function index()
     {
         try{
-            $individualseller = User::where('role', 'delivery_person')->get();
+            $individualseller = User::where('role', 'individual_seller')->get();
             return $individualseller;
         }
         catch(Exception $e)
         {
             return response()->json([
-            'error_message' => $e->getMessage()], 500);
+            'message' => $e->getMessage()], 500);
         }
     }
 
@@ -36,13 +36,14 @@ class IndividualSellerController extends Controller
         DB::beginTransaction();
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'string', 'max:255', 'unique:'.User::class],
             'phone_number' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', Rules\Password::defaults()],
-            'address'=>['required', 'string', 'max:255'],
+            'address'=>['nullable','string', 'max:255'],
             'age'=>['required', 'numeric', 'between:18,100'],
             'gender'=>['required','string', 'in:male,female'],
+            'description' => [ 'nullable','string', 'max:255'],
         ]);
         $user = User::create([
             'name' => $request->name,
@@ -56,11 +57,14 @@ class IndividualSellerController extends Controller
             'user_id'=>$user->id,
             'address' => $request->address,
             'age' => $request->age,
-            'gender' => $request->gender
+            'gender' => $request->gender,
+            'description' => $request->description
         ]);
 
         $user->assignRole('individual_seller');
-        return response()->json(["Admin"=>$user, "message"=>"Admin created successfully"]);
+        $user = $user->load('individualSeller');
+        DB::commit();
+        return response()->json(["user"=>$user, "message"=>"Seller Account created successfully"]);
     }
 
     /**
@@ -78,11 +82,10 @@ class IndividualSellerController extends Controller
     {
         try{
             $request->validate([
-                'name' => ['required', 'string', 'max:255'],
-                'username' => ['required', 'string', 'max:255'],
-                'phone_number' => ['required', 'string', 'max:255'],
-                'password' => ['required', Rules\Password::defaults()],
-                'address' => ['required', 'string', 'max:255'],
+                'name' => [ 'string', 'max:255'],
+                'username' => [ 'string', 'max:255', 'unique:'.User::class],
+                'phone_number' => [ 'string', 'max:255'],
+                'address' => ['string', 'max:255'],
             ]);
 
             $user = User::where('id', $id)->update([
@@ -90,7 +93,9 @@ class IndividualSellerController extends Controller
                 'username' => $request->username,
                 'phone_number' => $request->phone_number,
                 'password' => Hash::make($request->string('password')),
-                'address' => $request->address
+            ]);
+            IndividualSeller::where('user_id', $id)->update([
+                'address' => $request->address,
             ]);
             return response()->json([
             "message" => "Updated Successfully",
@@ -99,7 +104,7 @@ class IndividualSellerController extends Controller
         catch(Exception $e)
         {
             return response()->json([
-            'error_message' => $e->getMessage()], 500);
+            'message' => $e->getMessage()], 500);
         }
     }
 

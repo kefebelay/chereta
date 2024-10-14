@@ -27,7 +27,6 @@ export default function LoginPage() {
       const res = await Api.post("/login", userForm, {
         headers: { "X-XSRF-TOKEN": csrf },
       });
-      console.log(res);
       localStorage.setItem("token", res.data.token);
       setToken(localStorage.getItem("token"));
       if (res.status === 200) {
@@ -57,7 +56,7 @@ export default function LoginPage() {
 
   return (
     <div>
-      <h1 className="text-center text-5xl font-extrabold m- text-primary">
+      <h1 className="text-center text-5xl font-extrabold m- text-primary my-10">
         Login
       </h1>
       <div className="flex p-10 gap-4 md:justify-between md:flex-row justify-center bg-transparent">
