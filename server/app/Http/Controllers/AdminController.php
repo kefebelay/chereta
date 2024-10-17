@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -72,6 +73,9 @@ class AdminController extends Controller
             'password' => Hash::make($request->string('password')),
 
         ] );
+        Admin::create([
+            'user_id' => $user->id
+        ]);
 
         $user->assignRole('admin');
         return response()->json(["Admin"=>$user, "message"=>"Admin created successfully"]);
