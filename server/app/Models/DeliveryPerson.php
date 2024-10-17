@@ -8,9 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class DeliveryPerson extends Model
 {
     use HasFactory;
-
+    protected $table = 'delivery_persons';
     protected $fillable = [
-        'user_id'
+        'user_id',
+        'address',
+        'gender',
+        'age',
+        'vehicle',
     ];
     public function user(){
         return  $this->BelongsTo(User::class);

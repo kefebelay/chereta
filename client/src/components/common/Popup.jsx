@@ -14,13 +14,13 @@ export default function Popup({ popup, setPopup, onYes, message }) {
                   onYes();
                   setPopup(!popup);
                 }}
-                className="btn bg-primary w-full"
+                className="btn bg-primary w-full text-white"
               >
                 Yes
               </button>
               <button
                 onClick={() => setPopup(!popup)}
-                className="btn bg-secondary w-full"
+                className="btn bg-secondary w-full text-white"
               >
                 No
               </button>

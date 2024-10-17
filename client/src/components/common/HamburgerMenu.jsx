@@ -1,23 +1,10 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import ThemeSwitcher from "./ThemeSwitcherBtn";
 import { Link } from "react-router-dom";
-import Popup from "./Popup";
 import { UsersContext } from "../../hooks/Users_Hook";
 
-export default function Hamburger() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [popup, setPopup] = useState(false);
+export default function Hamburger({ isOpen, setIsOpen }) {
   const { user } = useContext(UsersContext);
-
-  function toggleMenu() {
-    setIsOpen(!isOpen);
-  }
-
-  function onLogout() {
-    setIsLoggedIn(false);
-    setPopup(false);
-  }
 
   function handleClick() {
     const aboutSection = document.getElementById("About");
@@ -29,15 +16,7 @@ export default function Hamburger() {
   }
 
   return (
-    <div className="lg:hidden bg-transparent">
-      {popup && (
-        <Popup
-          onYes={onLogout}
-          popup={popup}
-          setPopup={setPopup}
-          message="Are you sure you want to logout?"
-        />
-      )}
+    <div className="lg:hidden bg-transparent border-solid border-primary">
       {!isOpen && (
         <div className="flex">
           <div className="p-3">
@@ -45,8 +24,8 @@ export default function Hamburger() {
           </div>
 
           <button
-            className="navbar-burger flex items-center text-accent p-3"
-            onClick={toggleMenu}
+            className="flex items-center text-accent p-3"
+            onClick={() => setIsOpen(!isOpen)}
           >
             <svg
               className="block h-6 w-6 fill-current"
@@ -66,13 +45,16 @@ export default function Hamburger() {
               <a className="mr-auto text-3xl font-bold " href="#">
                 <img src="/public/chereta_logo.svg" className=" h-9 w-9" />
               </a>
-              <button className="bg-background" onClick={toggleMenu}>
+              <button
+                className="bg-background"
+                onClick={() => setIsOpen(false)}
+              >
                 <i className="fa-solid fa-rectangle-xmark"></i>
               </button>
             </div>
             <div>
               <ul className="grid place-items-center">
-                {!isLoggedIn ? (
+                {user ? (
                   <li className="mt-3 flex flex-col justify-center items-center">
                     <div className="bg-transparent h-10 w-10 mr-3  ">
                       <Link to={"/profile"} className="rounded-full h-10 w-10">
@@ -91,12 +73,12 @@ export default function Hamburger() {
                     </p>
                   </li>
                 ) : (
-                  <li className="mt-3">
+                  <li className="mt-3 mb-10">
                     <Link
                       className="btn  md:inline-block md:ml-auto md:mr-3 bg-primary text-white text-md font-bold w-28 text-center"
                       to={"/login"}
                     >
-                      Log In
+                      login
                     </Link>
                   </li>
                 )}

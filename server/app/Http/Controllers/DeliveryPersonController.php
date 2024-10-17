@@ -18,7 +18,7 @@ class DeliveryPersonController extends Controller
     public function index()
     {
         try{
-            $delivery_person = User::where('role', 'delivery_person')->get();
+            $delivery_person = User::role('delivery_person')->get();
             return $delivery_person;
         }
         catch(Exception $e)
@@ -41,6 +41,10 @@ class DeliveryPersonController extends Controller
             'phone_number' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', Rules\Password::defaults()],
+            'address'=>[ 'string', 'max:255'],
+            'gender'=>['required','string', 'in:male,female'],
+            'age'=>['required', 'numeric', 'between:18,100'],
+            'vehicle'=>[ 'string', 'max:20'],
         ]);
         $user = User::create([
             'name' => $request->name,
@@ -51,7 +55,11 @@ class DeliveryPersonController extends Controller
 
         ] );
         DeliveryPerson::create([
-            'user_id'=>$user->id
+            'user_id'=>$user->id,
+            'address' => $request->address,
+            'age' => $request->age,
+            'gender' => $request->gender,
+            'vehicle' => $request->vehicle
         ]);
 
         $user->assignRole('delivery_person');
@@ -80,20 +88,22 @@ class DeliveryPersonController extends Controller
     {
         try{
             $request->validate([
-                'name' => ['required', 'string', 'max:255'],
-                'username' => ['required', 'string', 'max:255'],
-                'phone_number' => ['required', 'string', 'max:255'],
-                'password' => ['required', Rules\Password::defaults()],
+                'name' => [ 'string', 'max:255'],
+                'username' => [ 'string', 'max:255', 'unique:'.User::class],
+                'phone_number' => [ 'string', 'max:255'],
+                'vehicle'=>[ 'string', 'max:20'],
+                'address'=>[ 'string', 'max:255'],
+
             ]);
 
             $user = User::where('id', $id)->update([
                 'name' => $request->name,
                 'username' => $request->username,
                 'phone_number' => $request->phone_number,
-                'password' => Hash::make($request->string('password')),
             ]);
             DeliveryPerson::where('user_id', $id)->update([
-
+                'address' => $request->address,
+                'vehicle' => $request->vehicle
             ]);
             return response()->json([
             "message" => "Updated Successfully",
