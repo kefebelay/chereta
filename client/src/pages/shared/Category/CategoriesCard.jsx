@@ -5,25 +5,24 @@ import Loading from "../../../components/common/Loading";
 import Footer from "../../../components/common/Footer";
 
 export default function CategoriesCard() {
-  const [isLoading, setisLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [items, setItems] = useState([]);
 
   useEffect(() => {
-    async function get() {
+    async function fetchCategories() {
       try {
-        setisLoading(true);
-        const items = await Axios.get(
+        setIsLoading(true);
+        const response = await Axios.get(
           "https://api.escuelajs.co/api/v1/categories"
         );
-        const filteredItems = items.data.slice(0, 6);
-        setItems(filteredItems);
-      } catch (err) {
-        console.log(err);
+        setItems(response.data.slice(0, 6)); // Limit to 6 items
+      } catch (error) {
+        console.error("Failed to fetch categories:", error);
       } finally {
-        setisLoading(false);
+        setIsLoading(false);
       }
     }
-    get();
+    fetchCategories();
   }, []);
 
   return (
@@ -33,29 +32,25 @@ export default function CategoriesCard() {
           <Loading />
         </div>
       ) : (
-        <div className="bg-transparent">
-          <div className="grid gap-8 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 mx-auto p-9 overflow-hidden place-items-center">
-            {items.map((item) => (
-              <Link
-                to={`/categories/${item.id}`}
-                key={item.id}
-                className="bg-accent shadow-lg rounded-lg transform hover:scale-105 transition-transform duration-300 m-4 overflow-hidden"
-              >
-                <div className="h-80 w-full overflow-hidden">
-                  <img
-                    src={item.image}
-                    className="w-full h-full object-cover transition-transform duration-300"
-                    alt={item.name}
-                  />
-                </div>
-                <div className="p-4 bg-primary text-center">
-                  <h1 className="text-xl font-semibold text-white bg-transparent">
-                    {item.name}
-                  </h1>
-                </div>
-              </Link>
-            ))}
-          </div>
+        <div className="grid gap-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:px-40 p-9">
+          {items.map((item) => (
+            <Link
+              to={`/categories/${item.id}`}
+              key={item.id}
+              className="relative group w-full h-60 rounded-md overflow-hidden shadow-sm"
+            >
+              <img
+                src={item.image}
+                alt={item.name}
+                className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <h1 className="text-white text-lg font-medium bg-transparent">
+                  {item.name}
+                </h1>
+              </div>
+            </Link>
+          ))}
         </div>
       )}
       <Footer />

@@ -29,7 +29,7 @@ export default function Navbar() {
   return (
     <div
       className={`navbar ${
-        !hamburgerOpen ? "w-screen" : "w-10"
+        !hamburgerOpen ? "w-screen" : "w-0 border-x-2 border-accent"
       } bg-transparent`}
     >
       <nav className=" px-4 py-4 flex justify-between items-center shadow-md shadow-nav-bg">
@@ -41,7 +41,7 @@ export default function Navbar() {
         </Link>
         <ul
           className={
-            "bg-transparent lg:flex lg:mx-auto lg:items-center lg:w-auto lg:space-x-7 hidden ml-36"
+            "bg-transparent lg:flex lg:mx-auto lg:items-center lg:w-auto lg:space-x-7 hidden lg:pl-36"
           }
         >
           <li className="bg-transparent">

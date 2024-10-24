@@ -8,7 +8,7 @@ import Why_choose_us from "../../components/common/Why_choose_us";
 
 export default function MainPage() {
   return (
-    <div className="">
+    <div className="mx-2">
       <Navbar />
       <div className=" mt-20 mb-9">
         <div id="Hero" className="mb-24 md:mb-0">

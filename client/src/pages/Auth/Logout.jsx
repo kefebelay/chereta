@@ -36,7 +36,7 @@ export default function Logout() {
   return (
     <div>
       <button
-        className="text-white hover:scale-105 bg-primary px-3 py-1.5 rounded-md transition-transform duration-300"
+        className="text-white hover:scale-105 bg-red-500 px-3 py-1.5 rounded-md transition-transform duration-300"
         onClick={() => setPopup(true)}
       >
         Logout
