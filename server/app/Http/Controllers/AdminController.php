@@ -22,7 +22,7 @@ class AdminController extends Controller
         ]);
 
 
-        $admin = Auth::user();
+        Auth::user();
 
         $user = \App\Models\User::find($request->user_id);
 
