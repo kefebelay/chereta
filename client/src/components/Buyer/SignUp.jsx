@@ -53,7 +53,7 @@ export default function SignUp() {
       <form onSubmit={handleSubmit}>
         <div className="grid md:grid-cols-2 px-3 md:px-9 py-3 gap-x-9">
           <div className="mb-4">
-            <label className="block mb-2">Name</label>
+            <label className="block mb-2">Full name</label>
             <input
               type="text"
               name="name"
@@ -61,6 +61,7 @@ export default function SignUp() {
               value={formData.name}
               onChange={handleChange}
             />
+            <p className="text-text2 text-sm p-1">* required</p>
           </div>
           <div className="mb-4">
             <label className="block mb-2">Username</label>
@@ -71,6 +72,7 @@ export default function SignUp() {
               value={formData.username}
               onChange={handleChange}
             />
+            <p className="text-text2 text-sm p-1">* required</p>
           </div>
           <div className="mb-4">
             <label className="block mb-2">Email</label>
@@ -81,6 +83,7 @@ export default function SignUp() {
               value={formData.email}
               onChange={handleChange}
             />
+            <p className="text-text2 text-sm p-1">* required</p>
           </div>
           <div className="mb-4">
             <label className="block mb-2">Password</label>
@@ -91,6 +94,7 @@ export default function SignUp() {
               value={formData.password}
               onChange={handleChange}
             />
+            <p className="text-text2 text-sm p-1">* required</p>
           </div>
           <div className="mb-4">
             <label className="block mb-2">Phone Number</label>
@@ -101,6 +105,7 @@ export default function SignUp() {
               value={formData.phone_number}
               onChange={handleChange}
             />
+            <p className="text-text2 text-sm p-1">* required</p>
           </div>
           <div className="flex gap-5">
             <div className="mb-4">
@@ -112,6 +117,7 @@ export default function SignUp() {
                 value={formData.age}
                 onChange={handleChange}
               />
+              <p className="text-text2 text-sm p-1">* required</p>
             </div>
             <div className="mb-4 w-full">
               <label className="block mb-2">Gender</label>
@@ -125,6 +131,7 @@ export default function SignUp() {
                 <option value="male">Male</option>
                 <option value="female">Female</option>
               </select>
+              <p className="text-text2 text-sm p-1">* required</p>
             </div>
           </div>
           <div className="mb-4">
@@ -136,6 +143,7 @@ export default function SignUp() {
               value={formData.address}
               onChange={handleChange}
             />
+            <p className="text-text2 text-sm p-1">* required for delivery</p>
           </div>
         </div>
         <p className="text-red-500 text-center mb-2">{message}</p>

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\BuyerController;
 use App\Http\Controllers\CompanySellerController;
@@ -16,9 +17,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/login', [AuthenticatedSessionController::class, 'store']);
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->middleware(['auth:sanctum']);
-Route::get('/user', [UserController::class, 'getLoggedinUser'])->middleware('auth:sanctum');
-Route::delete('/user/{id}', [UserController::class, 'destroy'])->middleware('auth:sanctum');
-
+Route::get('/user', [UserController::class, 'getLoggedinUser'])->middleware( 'auth:sanctum');
+Route::delete('/user/{id}', [UserController::class, 'destroy'])->middleware( 'auth:sanctum');
+Route::post('/forgot-password', [PasswordResetLinkController::class, 'store']);
+Route::post('/reset-password', [PasswordResetLinkController::class, 'update']);
 //                        Admin routes
 
 Route::post('/admin/register', [AdminController::class, 'store'])->middleware(['auth:sanctum', 'role:admin']);
@@ -36,8 +38,6 @@ Route::get('/buyers', [BuyerController::class, 'index'])->middleware(['auth:sanc
 Route::get('/delivery_persons', [DeliveryPersonController::class, 'index'])->middleware(['auth:sanctum', 'role:admin']);
 Route::get('/individual_sellers', [IndividualSellerController::class, 'index'])->middleware(['auth:sanctum', 'role:admin']);
 Route::get('/company_sellers', [CompanySellerController::class, 'index'])->middleware(['auth:sanctum', 'role:admin']);
-
-
 //                        Buyer routes
 
 Route::post('/buyer/register', [RegisteredUserController::class, 'store']);

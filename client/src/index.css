@@ -17,17 +17,16 @@
     --text: #050316;
     --text2: #747386;
     --background: #f3f4f6;
-    --primary: #096BF4;
+    --primary: #096bf4;
     --secondary: #a7a4e2;
     --accent: rgb(107, 130, 193);
     --nav-bg: #6fa3f8;
     --background2: #ffffff;
     --birr: #659bf2;
-
   }
   .dark {
     --text: #eae9fc;
-    --text2: #4d6893;
+    --text2: #5e7fb4;
     --background: #090929;
     --primary: #316bd8;
     --secondary: #211d5d;
@@ -35,7 +34,6 @@
     --nav-bg: #231b5c;
     --background2: #070737;
     --birr: #23395d;
-
   }
 }
 
@@ -73,8 +71,7 @@
   left: 0;
   z-index: 999;
 }
-.navbar-menu{
- 
+.navbar-menu {
   height: 100vh;
 }
 

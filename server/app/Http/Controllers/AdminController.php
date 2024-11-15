@@ -24,7 +24,7 @@ class AdminController extends Controller
 
         Auth::user();
 
-        $user = \App\Models\User::find($request->user_id);
+        $user = User::find($request->user_id);
 
         if ($user) {
             $user->syncRoles($request->role);
