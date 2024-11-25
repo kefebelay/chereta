@@ -62,12 +62,16 @@ class AdminController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'username' => ['required', 'string', 'max:255'],
             'phone_number' => ['required', 'string', 'max:255'],
+            'image'=>['required','image', 'mimes:jpeg,png,jpg,gif,svg', 'max:5000'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', Rules\Password::defaults()],
         ]);
+        $imageName = time().'.'.$request->image->extension();
+        $request->image->move(public_path('images'), $imageName);
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'image'=>"images/$imageName",
             'username' => $request->username,
             'phone_number' => $request->phone_number,
             'password' => Hash::make($request->string('password')),
@@ -98,6 +102,7 @@ class AdminController extends Controller
             $request->validate([
                 'name' => ['required', 'string', 'max:255'],
                 'username' => ['required', 'string', 'max:255'],
+                'image'=>[],
                 'phone_number' => ['required', 'string', 'max:255'],
                 'password' => ['required', Rules\Password::defaults()],
             ]);

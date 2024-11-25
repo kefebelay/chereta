@@ -11,9 +11,8 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasApiTokens, HasRoles;
 
-    // Automatically load roles relationship
-    protected $with = ['roles'];
 
+    protected $with = ['roles'];
     protected $fillable = [
         'name',
         'email',
@@ -22,11 +21,9 @@ class User extends Authenticatable
         'username',
     ];
 
-    // Add "actor" to JSON output
-    protected $appends = ['actor'];
 
-    // Hide sensitive fields
-    protected $hidden = [
+    protected $appends = ['actor'];
+        protected $hidden = [
         'password',
         'remember_token',
         'admin',
@@ -37,7 +34,7 @@ class User extends Authenticatable
 
     ];
 
-    // Cast fields
+
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
@@ -68,6 +65,17 @@ class User extends Authenticatable
     {
         return $this->hasOne(DeliveryPerson::class);
     }
+
+    public function bids(){
+        return $this->hasMany(Bid::class);
+    }
+
+    public function listings(){
+        return $this->hasMany(Listing::class);
+    }
+
+
+
 
     // Accessor to get the "actor" based on role
     public function getActorAttribute()

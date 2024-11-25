@@ -53,14 +53,19 @@ class BuyerController extends Controller
         $request->validate([
             'name' => ['string', 'max:255'],
             'username' => [ 'string', 'max:255', 'unique:'.User::class],
+            'image'=>['required','image', 'mimes:jpeg,png,jpg,gif,svg', 'max:5000'],
             'phone_number' => [ 'string', 'max:15'],
             'address' => [ 'string', 'max:255'],
         ]);
+
+        $imageName = time().'.'.$request->image->extension();
+        $request->image->move(public_path('images'), $imageName);
 
         User::where('id', $id)->update([
             'name' => $request->name,
             'username' => $request->username,
             'phone_number' => $request->phone_number,
+            'image'=>"images/$imageName",
         ]);
 
         Buyer::where('user_id', $id)->update([

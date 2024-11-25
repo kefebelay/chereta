@@ -5,7 +5,7 @@ export default function Categories() {
   return (
     <div>
       <Navbar />
-      <h1 className="text-3xl font-bold text-center mt-24 text-primary">
+      <h1 className="text-3xl font-bold text-center mt-28 text-primary">
         Categories
       </h1>
 

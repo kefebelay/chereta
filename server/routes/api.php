@@ -5,9 +5,11 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\BuyerController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CompanySellerController;
 use App\Http\Controllers\DeliveryPersonController;
 use App\Http\Controllers\IndividualSellerController;
+use App\Http\Controllers\ListingController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +23,14 @@ Route::get('/user', [UserController::class, 'getLoggedinUser'])->middleware( 'au
 Route::delete('/user/{id}', [UserController::class, 'destroy'])->middleware( 'auth:sanctum');
 Route::post('/forgot-password', [PasswordResetLinkController::class, 'store']);
 Route::post('/reset-password', [PasswordResetLinkController::class, 'update']);
+
+Route::get('/categories', [CategoryController::class, 'index']);
+Route::get('/category/{id}', [CategoryController::class, 'show']);
+Route::post('/listing/search', [ListingController::class, 'search']);
+Route::get('/listings', [ListingController::class, 'index']);
+
+
+
 //                        Admin routes
 
 Route::post('/admin/register', [AdminController::class, 'store'])->middleware(['auth:sanctum', 'role:admin']);
@@ -30,6 +40,10 @@ Route::get('/admins', [AdminController::class, 'index'])->middleware(['auth:sanc
 Route::get('/users', [UserController::class, 'index'])->middleware(['auth:sanctum', 'role:admin']);
 Route::get('/user/{id}', [UserController::class, 'show'])->middleware(['auth:sanctum', 'role:admin']);
 Route::get('/roles-count', [UserController::class, 'getRolesCount'])->middleware(['auth:sanctum', 'role:admin']);
+
+Route::post('/category',[CategoryController::class,'store']);
+Route::delete('/category/{id}', [CategoryController::class, 'destroy'])->middleware(['auth:sanctum', 'role:admin']);
+
 
 //modify assign-role
 Route::post('/assign-role', [AdminController::class, 'assignRole'])->middleware(['auth:sanctum', 'role:admin']);
@@ -42,6 +56,9 @@ Route::get('/company_sellers', [CompanySellerController::class, 'index'])->middl
 
 Route::post('/buyer/register', [RegisteredUserController::class, 'store']);
 Route::patch('/buyer/{id}', [BuyerController::class, 'update'])->middleware(['auth:sanctum', 'role:buyer']);
+
+//                         seller routes
+Route::post('/listing', [ListingController::class, 'store']);
 
 //                        Individual seller routes
 

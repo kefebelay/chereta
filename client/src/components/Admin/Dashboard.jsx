@@ -74,12 +74,12 @@ export default function Dashboard({ isOpen, setIsOpen }) {
             >
               <li className="mb-2">
                 <Link
-                  to="/admin/dashboard/"
+                  to="/admin/dashboard"
                   className={`py-2 px-4 rounded bg-background2 border border-text2 shadow-sm shadow-text2 flex gap-3 ${
-                    location.pathname === "/admin/dashboard/"
+                    location.pathname === "/admin/dashboard"
                       ? "bg-primary font-bold text-white"
                       : "hover:text-white hover:bg-primary"
-                  }`}
+                  } `}
                 >
                   <i className="fa-solid fa-table-columns bg-transparent mt-1"></i>
                   Overview

@@ -27,11 +27,9 @@ export default function SignUp() {
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      const response = await Api.post(
-        "http://localhost:8000/api/buyer/register",
-        formData,
-        { headers: { "X-XSRF-TOKEN": csrf } }
-      );
+      const response = await Api.post("/api/buyer/register", formData, {
+        headers: { "X-XSRF-TOKEN": csrf },
+      });
       toast.success(response.data.message);
 
       if (response.status === 200) {

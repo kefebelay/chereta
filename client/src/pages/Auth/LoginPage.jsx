@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 export default function LoginPage() {
   const [tries, setTries] = useState(0);
   const [userForm, setUserForm] = useState({ email: "", password: "" });
+  const [submitting, setSubmitting] = useState(false);
   const [Message, setMessage] = useState("");
   const { setToken } = useContext(UsersContext);
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ export default function LoginPage() {
 
   async function submitBtn(e) {
     e.preventDefault();
+    setMessage("");
     if (!userForm.email || !userForm.password) {
       setMessage("Please enter your email and password");
       return;
@@ -26,6 +28,8 @@ export default function LoginPage() {
       return;
     }
     try {
+      setSubmitting(true);
+
       const csrf = Cookies.get("XSRF-TOKEN");
       const res = await Api.post("/login", userForm, {
         headers: { "X-XSRF-TOKEN": csrf },
@@ -35,10 +39,10 @@ export default function LoginPage() {
       if (res.status === 200) {
         if (res.data.user.roles[0].name === "admin") {
           toast.success("Logged in as admin");
-          navigate("/admin/dashboard");
+          navigate("/admin/dashboard", { replace: true });
         } else if (res.data.user.roles[0].name === "buyer") {
           toast.success("Successfuly logged in");
-          navigate("/");
+          navigate("/", { replace: true });
         } else if (res.data.user.roles[0].name === "individual_seller") {
           toast.success("Logged in as seller");
           navigate("/seller/dashboard");
@@ -61,6 +65,7 @@ export default function LoginPage() {
     } finally {
       setUserForm({ email: "", password: "" });
       setTries(tries + 1);
+      setSubmitting(false);
     }
   }
 
@@ -109,8 +114,9 @@ export default function LoginPage() {
               <button
                 onClick={submitBtn}
                 className="btn bg-primary text-center mt-4 mx-9 text-text font-bold"
+                disabled={submitting}
               >
-                Login
+                {submitting ? "Logging in..." : "Login"}
               </button>
 
               <div className="text-center text-sm text-red-500 p-3 bg-transparent">
