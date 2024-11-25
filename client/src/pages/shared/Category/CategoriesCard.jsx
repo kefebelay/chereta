@@ -16,6 +16,7 @@ export default function CategoriesCard() {
         setIsLoading(true);
         const response = await Api.get("/api/categories");
         setItems(response.data);
+        console.log(response.data);
       } catch (error) {
         console.error("Failed to fetch categories:", error);
       } finally {
@@ -35,7 +36,7 @@ export default function CategoriesCard() {
         <div className="grid gap-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:px-10 p-9">
           {items.map((item) => (
             <Link
-              to={`/categories/${item.id}`}
+              to={`/category/${item.id}/products`}
               key={item.id}
               className="relative group w-full h-60 rounded-md overflow-hidden shadow-sm"
             >

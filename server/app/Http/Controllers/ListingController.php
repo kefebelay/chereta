@@ -74,14 +74,14 @@ class ListingController extends Controller
      * Display the specified resource.
      */
     public function show(string $id)
-    {
-        try {
-            $listing = Listing::with('category', 'user', 'bids.user')->findOrFail($id);
-            return response()->json($listing);
-        } catch (\Exception $e) {
-            return response()->json(["message" => "Listing not found"], 404);
-        }
+{
+    try {
+        $listing = Listing::with('category', 'user')->where('id', $id)->firstOrFail();
+        return response()->json($listing);
+    } catch (\Exception $e) {
+        return response()->json(["message" => "Listing not found"], 404);
     }
+}
 
     /**
      * Update the specified resource in storage.
@@ -92,7 +92,7 @@ class ListingController extends Controller
             $listing = Listing::findOrFail($id);
 
             $request->validate([
-                'category_id' => ['sometimes', 'exists:categories,id'],
+
                 'title' => ['sometimes', 'string', 'max:255'],
                 'description' => ['sometimes', 'string'],
                 'starting_price' => ['sometimes', 'numeric', 'min:0'],

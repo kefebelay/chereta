@@ -5,7 +5,6 @@ import Api from "../Auth/Axios";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import { UsersContext } from "../../hooks/Users_Hook";
-// import img from '../../../../server/public/';
 
 export default function Categories() {
   const [Open, isOpen] = useState(true);

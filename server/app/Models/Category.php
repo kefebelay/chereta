@@ -19,7 +19,7 @@ class Category extends Model
         return $this->belongsTo(Admin::class);
     }
 
-    public function listing()
+    public function listings()
     {
         return $this->hasMany(Listing::class);
     }

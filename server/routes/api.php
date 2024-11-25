@@ -26,8 +26,10 @@ Route::post('/reset-password', [PasswordResetLinkController::class, 'update']);
 
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/category/{id}', [CategoryController::class, 'show']);
+Route::get('/category/{id}/listings', [CategoryController::class, 'getCategoryListings']);
 Route::post('/listing/search', [ListingController::class, 'search']);
 Route::get('/listings', [ListingController::class, 'index']);
+Route::get('/listing/{id}', [ListingController::class, 'show']);
 
 
 

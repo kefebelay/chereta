@@ -43,7 +43,7 @@ export default function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/categories" element={<Categories />} />
-        <Route path="/categories/:id" element={<CategoryItems />} />
+        <Route path="/category/:id/products" element={<CategoryItems />} />
         <Route path="/products" element={<Products />} />
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/notifications" element={<Notification />} />

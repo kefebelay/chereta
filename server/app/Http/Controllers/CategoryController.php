@@ -3,10 +3,30 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Listing;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+
+
+    public function getCategoryListings(string $id)
+{
+    try {
+        $category = Category::findOrFail($id);
+
+        $items = Listing::with('user')->where('category_id', $id, )->get();
+
+        return response()->json([
+            'category' => $category->name,
+            'listings' => $items,
+        ], 200);
+    } catch (\Exception $e) {
+        return response()->json([
+            "message" => $e->getMessage()
+        ]);
+    }
+}
     /**
      * Display a listing of the resource.
      */
