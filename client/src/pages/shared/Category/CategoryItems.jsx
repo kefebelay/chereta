@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import Navbar from "../../../components/common/Navbar";
 import { Link, useParams } from "react-router-dom";
-import Axios from "axios";
 import Loading from "../../../components/common/Loading";
 import Footer from "../../../components/common/Footer";
 import Api from "../../Auth/Axios";
@@ -20,12 +19,9 @@ export default function CategoryItems() {
     async function fetchData() {
       try {
         setIsLoading(true);
-
-        // Fetch category name
         const Response = await Api.get(`/api/category/${id}/listings`);
         setCategory(Response.data.category);
         setItems(Response.data.listings);
-        console.log(Response.data.listings);
       } catch (err) {
         console.error(err);
       } finally {
@@ -60,7 +56,7 @@ export default function CategoryItems() {
                     key={item.id}
                     className=" p-6 rounded-lg shadow-sm shadow-text2 hover:shadow-xl transition-shadow duration-300"
                   >
-                    <Link to={`/seller/info/${items.user_id}`}>
+                    <Link to={`/seller/info/${item.user.id}`}>
                       <SellerProfile seller={item.user} />
                     </Link>
 

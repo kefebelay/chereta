@@ -1,10 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import CoolerRemainingTime from "../../../components/common/CoolerRemaining-time";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Loading from "../../../components/common/Loading";
 import Navbar from "../../../components/common/Navbar";
 import Footer from "../../../components/common/Footer";
 import Api from "../../Auth/Axios";
+import { toast } from "react-toastify";
 import { UsersContext } from "../../../hooks/Users_Hook";
 
 export default function Item() {
@@ -14,9 +15,16 @@ export default function Item() {
   const [bid, setBid] = useState(0);
   const [showBidPopup, setShowBidPopup] = useState(false);
   const [isLoading, setisLoading] = useState(true);
-  const { url } = useContext(UsersContext);
+  const { url, user } = useContext(UsersContext);
+
+  const navigate = useNavigate();
 
   function onBid() {
+    if (user === null) {
+      navigate("/login");
+      toast.info("please login to place a bid");
+      return;
+    }
     setShowBidPopup(true);
   }
 
@@ -96,10 +104,10 @@ export default function Item() {
               <h1 className="text-center font-extrabold lg:text-4xl text-2xl text-primary md:hidden block">
                 {item.title}
               </h1>
-              <div className=" h-auto md:flex-1 flex justify-center p-4">
+              <div className="max-h-[30rem] md:flex-1 flex justify-center p-4">
                 <img
                   src={url + item.image}
-                  className="h-fit w-full  rounded-lg hover:scale-105 transition-transform duration-300 "
+                  className="max-h-full max-w-full h-auto w-auto rounded-lg hover:scale-105 transition-transform duration-300 object-contain"
                 />
               </div>
             </div>

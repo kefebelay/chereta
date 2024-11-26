@@ -40,11 +40,19 @@ class UserController extends Controller
 
     return response()->json(["user" => $user], 200);
 }
-
-
-
-
-
+    public function getSellerProfile(string $id){
+        try {
+            $seller = User::with('listings')->where('id', $id)->first();
+            return response()->json([
+                "seller"=>$seller
+            ]);
+        }
+        catch (Exception $e) {
+            return response()->json([
+                'error_message' => $e->getMessage()
+            ], 500);
+        }
+    }
 
     /**
      * Display a listing of the resource.

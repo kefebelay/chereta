@@ -30,6 +30,7 @@ Route::get('/category/{id}/listings', [CategoryController::class, 'getCategoryLi
 Route::post('/listing/search', [ListingController::class, 'search']);
 Route::get('/listings', [ListingController::class, 'index']);
 Route::get('/listing/{id}', [ListingController::class, 'show']);
+Route::get('/seller/profile/{id}', [UserController::class, 'getSellerProfile']);
 
 
 

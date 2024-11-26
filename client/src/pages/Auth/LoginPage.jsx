@@ -113,7 +113,7 @@ export default function LoginPage() {
               )}
               <button
                 onClick={submitBtn}
-                className="btn bg-primary text-center mt-4 mx-9 text-text font-bold"
+                className="btn bg-primary text-center mt-4 mx-9 text-white font-bold"
                 disabled={submitting}
               >
                 {submitting ? "Logging in..." : "Login"}

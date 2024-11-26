@@ -54,7 +54,7 @@ export default function Items() {
                     className="max-w-sm rounded-md overflow-hidden shadow-sm shadow-text2
                  hover:-translate-y-1 transition-transform duration-700 p-2"
                   >
-                    <Link to={`/seller/info/${item.id}`}>
+                    <Link to={`/seller/info/${item.user.id}`}>
                       <SellerProfile seller={item.user} />
                     </Link>
                     <Link
