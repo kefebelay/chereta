@@ -11,22 +11,24 @@ export default function HeroSection() {
   }
   return (
     <div className="md:flex md:flex-row-reverse md:ml-28 sm:mb-20 md:mb-20 md:pt-7 ">
-      <div className="md:w-5/6 ml-14 flex justify-center ">
+      <div className="container md:grid place-items-center hidden mr-3">
         <img
           src="/assets/img/hero-section-img.svg"
           alt="Online Bidding vector image"
-          className="heroImage pl-6 mt-10 ml-9 size-1/3 md:size-auto md:ml-0 lg:p-4"
+          className="heroImage size-auto md:ml-0 lg:p-4"
         />
       </div>
-      <div className=" md:mt-10 md:mb-20 w-fit">
-        <h1 className=" lg:text-5xl md:text-4xl text-2xl md:p-4 font-extrabold text-center">
+      <div className=" md:mt-10 md:mb-20 w-fit mt-36">
+        <h1 className=" lg:text-5xl md:text-4xl text-2xl md:p-4 font-extrabold text-center m-2">
+          Welcome to{" "}
+          <span className="text-primary bg-transparent">Chereta</span>.
           Ethiopias Thriving Online{" "}
-          <span className="text-primary m-3 bg-transparent">Marketplace </span>{" "}
-          for Everything Bid High, Win Big
+          <span className="text-primary m-2 bg-transparent">Marketplace</span>,
+          Bid High. Win Big
         </h1>
-        <p className="p-3 text-center text-text2">
-          Welcome to Chereta, Discover a world of possibilities. Buy and sell
-          anything from electronics to antiques, from clothing to artwork.
+        <p className="p-3 text-center text-text2 text-sm md:text-lg">
+          Discover a world of possibilities. Buy and sell anything from
+          electronics to antiques, from clothing to artwork.
         </p>
         <div className="mt-6 mx-11 md:mx-0 md:flex md:gap-4 justify-center flex flex-col">
           <Link

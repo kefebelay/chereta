@@ -1,13 +1,17 @@
 // src/pages/SellerInfo.jsx
 import Axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Loading from "../../components/common/Loading";
 import Navbar from "../../components/common/Navbar";
 import VerifiedBadge from "../../components/Seller/VerifiedBadge";
+import Api from "../Auth/Axios";
+import { UsersContext } from "../../hooks/Users_Hook";
+import RemainingTime from "../../components/common/Remaining_time";
 
 export default function SellerInfo() {
   const { id } = useParams();
+  const { url } = useContext(UsersContext);
 
   const [isLoading, setIsLoading] = useState(false);
   const [profile, setProfile] = useState(null);
@@ -18,16 +22,10 @@ export default function SellerInfo() {
       try {
         setIsLoading(true);
 
-        const profileResponse = await Axios.get(
-          `https://randomuser.me/api/?id=${id}`
-        );
-        setProfile(profileResponse.data.results[0]);
-
-        const itemsResponse = await Axios.get(
-          "https://api.escuelajs.co/api/v1/products"
-        );
-        const fewItems = itemsResponse.data.slice(0, 4);
-        setItems(fewItems);
+        const profileResponse = await Api.get(`/api/seller/profile/${id}`);
+        console.log(profileResponse);
+        setProfile(profileResponse.data.seller);
+        setItems(profileResponse.data.seller.listings);
       } catch (err) {
         console.log(err);
       } finally {
@@ -39,61 +37,70 @@ export default function SellerInfo() {
 
   if (isLoading) {
     return (
-      <div className="grid h-screen place-items-center">
-        <Loading />
+      <div>
+        <Navbar />
+        <div className="grid h-screen place-items-center">
+          <Loading />
+        </div>
       </div>
     );
   }
 
   if (!profile) {
+    <Navbar />;
+
     return <div>No profile found</div>;
   }
-
-  const description =
-    "Experienced individual seller specializing in high-quality products. Dedicated to providing excellent customer service and competitive prices.";
-
   return (
     <div>
       <Navbar />
       <div className="container mx-auto mt-10 p-4">
-        <div className="shadow-text2 shadow-md rounded-lg p-8 text-center">
+        <div className="shadow-text2 shadow-md rounded-lg md:p-8 text-center">
           <img
             className="w-40 mx-auto rounded-full border-4 shadow-primary"
-            src={profile.picture.large}
+            src={profile.image || "/assets/icons/profile.svg"}
             alt="Seller"
           />
           <div className="flex justify-center">
-            <h2 className="text-3xl font-bold mt-4">
-              {profile.name.first} {profile.name.last}
-            </h2>{" "}
-            <VerifiedBadge isVerified={profile.registered.age > 1} />
+            <h2 className="text-3xl font-bold mt-4">{profile.name}</h2>{" "}
+            <VerifiedBadge isVerified={profile.actor.age > 1} />
           </div>
           <p className="text-text2">{profile.email}</p>
           <p className="text-text p-6 bg-transparent text-start">
-            {description}
+            {profile.actor.description}
           </p>
           <div className="flex justify-center items-center mt-2"></div>
           <div className="mt-8">
             <h3 className="text-xl font-semibold mb-4">Ongoing Auctions</h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid md:grid-cols-3 lg:grid-cols-4 grid-cols-1 gap-4">
               {items.map((item) => (
-                <Link
-                  to={`/product/${item.id}`}
+                <div
                   key={item.id}
-                  className="bg-transparent shadow-text2 p-4 rounded-lg shadow hover:shadow-lg transition-shadow duration-300 hover:scale-105 hover:duration-700"
+                  className="bg-transparent shadow-text2 p-4 rounded-lg shadow hover:shadow-lg 
+                  duration-500 hover:scale-105 transition-transform hover:duration-700"
                 >
-                  <img
-                    className="w-full h-40 object-cover rounded-lg mb-4"
-                    src={item.images[0]}
-                    alt="Product"
-                  />
-                  <h4 className="text-lg font-bold text-text2 mb-2">
-                    {item.title}
-                  </h4>
-                  <p className="text-birr font-semibold">
-                    Birr: {item.price * 74}
-                  </p>
-                </Link>
+                  {item.status === "active" && (
+                    <Link key={item.id} to={`/product/${item.id}`} className="">
+                      <img
+                        className="w-auto h-auto object-cover rounded-lg mb-4"
+                        src={url + item.image}
+                        alt="Product"
+                      />
+                      <h4 className="text-lg font-bold text-text2 mb-2">
+                        {item.title}
+                      </h4>
+                      <p className="text-birr font-semibold">
+                        Birr: {item.starting_price}
+                      </p>
+                      <p className="text-sm ">
+                        <RemainingTime
+                          bidEndTime={item.bid_end_time}
+                          createdAt={item.createdAt}
+                        />
+                      </p>
+                    </Link>
+                  )}
+                </div>
               ))}
             </div>
           </div>

@@ -1,6 +1,6 @@
 export default function Why_choose_us() {
   return (
-    <div>
+    <div className="container mx-auto">
       <h1 className="text-center text-5xl font-extrabold m-9 text-primary">
         Why Choose Us?
       </h1>
@@ -8,7 +8,7 @@ export default function Why_choose_us() {
         Chereta is an easy to use and navigate, simple to use and a very
         interactive and practical Online Bidding Website{" "}
       </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8 mx-36">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8 mx-4">
         <div className="rounded-lg p-6">
           <h3 className="text-lg text-center pb-3 font-extrabold text-primary">
             Seamless User Experience
@@ -26,14 +26,14 @@ export default function Why_choose_us() {
           </p>
         </div>
 
-        <div className=" rounded-lg p-6">
+        <div className="rounded-lg p-6">
           <h3 className="text-lg text-center pb-3 text-primary font-extrabold">
-            variety of products
+            Variety of Products
           </h3>
           <div className="flex justify-center m-3 rounded-full border border-secondary p-3">
             <img
               src="/assets/img/variety_vector.svg"
-              alt="variety of products vector"
+              alt="Variety of products vector"
               className=""
             />
           </div>
@@ -43,7 +43,7 @@ export default function Why_choose_us() {
           </p>
         </div>
 
-        <div className=" rounded-lg p-6">
+        <div className="rounded-lg p-6">
           <h3 className="text-lg text-center pb-3 text-primary font-extrabold">
             Global Reach with Local Expertise
           </h3>

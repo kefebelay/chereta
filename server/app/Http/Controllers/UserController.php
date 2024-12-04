@@ -40,11 +40,19 @@ class UserController extends Controller
 
     return response()->json(["user" => $user], 200);
 }
-
-
-
-
-
+    public function getSellerProfile(string $id){
+        try {
+            $seller = User::with('listings')->where('id', $id)->first();
+            return response()->json([
+                "seller"=>$seller
+            ]);
+        }
+        catch (Exception $e) {
+            return response()->json([
+                'error_message' => $e->getMessage()
+            ], 500);
+        }
+    }
 
     /**
      * Display a listing of the resource.
@@ -68,17 +76,35 @@ class UserController extends Controller
      * Display the specified resource.
      */
     public function show(string $id)
-    {
-        try{
-            $user = User::where('id', $id)->get();
-            return [$user, 200];
-        }
-        catch(Exception $e)
-        {
-            return response()->json([
-            'error_message' => $e->getMessage()], 500);
-        }
+{
+    try {
+        // Fetch the user with roles and actor dynamically loaded
+        $user = User::with(['roles'])->findOrFail($id);
+
+        return response()->json([
+            'id' => $user->id,
+            'name' => $user->name,
+            'phone_number' => $user->phone_number,
+            'username' => $user->username,
+            'email' => $user->email,
+            'image' => $user->image,
+            'email_verified_at' => $user->email_verified_at,
+            'created_at' => $user->created_at,
+            'updated_at' => $user->updated_at,
+            'actor' => $user->actor,
+            'roles' => $user->roles->pluck('name'),
+        ], 200);
+    } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        return response()->json([
+            'error_message' => 'User not found.',
+        ], 404);
+    } catch (Exception $e) {
+        return response()->json([
+            'error_message' => $e->getMessage(),
+        ], 500);
     }
+}
+
 
     /**
      * Update the specified resource in storage.

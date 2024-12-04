@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -21,9 +22,9 @@ class AdminController extends Controller
         ]);
 
 
-        $admin = Auth::user();
+        Auth::user();
 
-        $user = \App\Models\User::find($request->user_id);
+        $user = User::find($request->user_id);
 
         if ($user) {
             $user->syncRoles($request->role);
@@ -61,17 +62,24 @@ class AdminController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'username' => ['required', 'string', 'max:255'],
             'phone_number' => ['required', 'string', 'max:255'],
+            'image'=>['required','image', 'mimes:jpeg,png,jpg,gif,svg', 'max:5000'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', Rules\Password::defaults()],
         ]);
+        $imageName = time().'.'.$request->image->extension();
+        $request->image->move(public_path('images'), $imageName);
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'image'=>"images/$imageName",
             'username' => $request->username,
             'phone_number' => $request->phone_number,
             'password' => Hash::make($request->string('password')),
 
         ] );
+        Admin::create([
+            'user_id' => $user->id
+        ]);
 
         $user->assignRole('admin');
         return response()->json(["Admin"=>$user, "message"=>"Admin created successfully"]);
@@ -94,6 +102,7 @@ class AdminController extends Controller
             $request->validate([
                 'name' => ['required', 'string', 'max:255'],
                 'username' => ['required', 'string', 'max:255'],
+                'image'=>[],
                 'phone_number' => ['required', 'string', 'max:255'],
                 'password' => ['required', Rules\Password::defaults()],
             ]);

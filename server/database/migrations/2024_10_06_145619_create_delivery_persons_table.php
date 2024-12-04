@@ -14,6 +14,10 @@ return new class extends Migration
         Schema::create('delivery_persons', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('address');
+            $table->string('gender');
+            $table->string('age');
+            $table->string('vehicle');
             $table->timestamps();
         });
     }

@@ -1,12 +1,10 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Hamburger from "./HamburgerMenu";
 import ThemeSwitcher from "./ThemeSwitcherBtn";
 import { UsersContext } from "../../hooks/Users_Hook";
-import Logout from "../../pages/Auth/Logout";
 
 export default function Navbar() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user } = useContext(UsersContext);
   const [hamburgerOpen, setHamburgerOpen] = useState(false);
 
@@ -16,9 +14,24 @@ export default function Navbar() {
       aboutSection.scrollIntoView({ behavior: "smooth" });
     }
   }
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 992) {
+        setHamburgerOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
-    <div className={`navbar ${!hamburgerOpen ? "w-screen" : "w-10px"}`}>
+    <div
+      className={`navbar ${
+        !hamburgerOpen ? "w-screen" : "w-0 border-x-2 border-accent"
+      } bg-transparent`}
+    >
       <nav className=" px-4 py-4 flex justify-between items-center shadow-md shadow-nav-bg">
         <Link
           className="text-3xl font-bold leading-none md:ml-28 ml-3 bg-transparent"
@@ -27,9 +40,9 @@ export default function Navbar() {
           <img src=" /chereta_logo.svg" className="bg-transparent h-12 w-12" />
         </Link>
         <ul
-          className={`bg-transparent lg:flex lg:mx-auto lg:items-center lg:w-auto lg:space-x-7 ${
-            isMenuOpen ? "block" : "hidden"
-          } absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2`}
+          className={
+            "bg-transparent lg:flex lg:mx-auto lg:items-center lg:w-auto lg:space-x-7 hidden lg:pl-36"
+          }
         >
           <li className="bg-transparent">
             <Link
@@ -113,18 +126,15 @@ export default function Navbar() {
           </div>
         ) : (
           <Link
-            className="btn hidden md:inline-block md:ml-auto md:mr-3 bg-primary text-white text-md font-bold w-28 text-center"
+            className="btn hidden lg:inline-block lg:ml-auto md:mr-3 bg-primary text-white text-md font-bold w-28 text-center"
             to={"/login"}
           >
             Log In
           </Link>
         )}
 
-        <div
-          className="lg:hidden mr-8 bg-transparent"
-          onClick={() => setHamburgerOpen(!hamburgerOpen)}
-        >
-          <Hamburger />
+        <div className="lg:hidden mr-8 bg-transparent">
+          <Hamburger isOpen={hamburgerOpen} setIsOpen={setHamburgerOpen} />
         </div>
       </nav>
     </div>

@@ -37,6 +37,7 @@ class CompanySellerController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'username' => ['required', 'string', 'max:255','unique:'.User::class],
+            'image'=>['required','image', 'mimes:jpeg,png,jpg,gif,svg', 'max:5000'],
             'phone_number' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', Rules\Password::defaults()],
@@ -44,9 +45,14 @@ class CompanySellerController extends Controller
             'description' => [ 'string', 'max:255'],
 
         ]);
+
+        $imageName = time().'.'.$request->image->extension();
+        $request->image->move(public_path('images'), $imageName);
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'image' => "images/$imageName",
             'username' => $request->username,
             'phone_number' => $request->phone_number,
             'password' => Hash::make($request->string('password')),

@@ -6,10 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Buyer;
 use App\Models\User;
 use Exception;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
@@ -31,15 +28,19 @@ class RegisteredUserController extends Controller
             'username' => ['required', 'string', 'max:255', 'unique:'.User::class],
             'phone_number' => ['required', 'string', 'max:15'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
+            'image'=>['required','image', 'mimes:jpeg,png,jpg,gif,svg', 'max:5000'],
             'password' => ['required', Rules\Password::defaults()],
             'address' => ['required', 'string', 'max:255'],
             'age'=>['required', 'numeric', 'between:18,100'],
             'gender'=>['required','string', 'in:male,female'],
         ]);
+        $imageName = time().'.'.$request->image->extension();
+        $request->image->move(public_path('images'), $imageName);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'image' => "images/$imageName",
             'username' => $request->username,
             'phone_number' => $request->phone_number,
             'password' => Hash::make($request->string('password')),

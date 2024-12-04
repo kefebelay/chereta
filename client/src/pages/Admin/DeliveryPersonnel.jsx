@@ -1,56 +1,63 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Dashboard from "../../components/Admin/Dashboard";
-import Axios from "axios";
+import Api from "../Auth/Axios";
 import usePagination from "../../hooks/usePagination";
 import Pagination from "../../components/common/Pagination";
+import Popup from "../../components/common/Popup";
+import SignUp from "../../components/DeliveryPersonnel/SignUp";
+import Cookies from "js-cookie";
+import { toast } from "react-toastify";
 
 export default function DeliveryPersonnel() {
-  const [popup, setPopup] = useState(false);
+  const [ispopup, setPopup] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
   const [personnel, setPersonnel] = useState([]);
-  const [newPersonnel, setNewPersonnel] = useState({
-    name: "",
-    email: "",
-    phone_number: "",
-    password: "",
-    age: "",
-    gender: "",
-    vehicleType: "",
-  });
+  const [selectedID, setSelectedID] = useState();
+  const [userChanged, setUserChanged] = useState(1);
+  const [infoClick, setInfoClick] = useState(false);
 
   const ITEMS_PER_PAGE = 8;
   const { currentPage, totalPages, currentItems, handlePageChange } =
     usePagination(personnel, ITEMS_PER_PAGE);
-  function handleDelete(id) {
-    setPopup(!popup);
-    console.log("deleted" + { id });
+  async function handleDelete() {
+    const res = await Api.delete(`/api/user/${selectedID}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "x-xsrf-token": Cookies.get("XSRF-TOKEN"),
+      },
+    });
+    if (res.status === 200) {
+      toast.success(res.data.message);
+      setUserChanged(userChanged + 1);
+    } else {
+      toast.error(res.data.message);
+    }
   }
 
   useEffect(() => {
     async function getPersonnel() {
-      const res = await Axios.get("https://jsonplaceholder.typicode.com/users");
+      const res = await Api.get("/api/delivery_persons", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
       setPersonnel(res.data);
     }
     getPersonnel();
-  }, []);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewPersonnel({ ...newPersonnel, [name]: value });
-  };
-
-  const handleAddPersonnel = async () => {
-    const res = await Axios.post(
-      "https://jsonplaceholder.typicode.com/users",
-      newPersonnel
-    );
-    setPersonnel([...personnel, res.data]);
-    setNewPersonnel({ name: "", email: "", vehicleType: "" });
-  };
+  }, [userChanged]);
 
   return (
     <div>
       <Dashboard isOpen={isOpen} setIsOpen={setIsOpen} />
+      {ispopup && (
+        <Popup
+          message={"Are you sure you want to delete this user?"}
+          popup={ispopup}
+          setPopup={setPopup}
+          onYes={handleDelete}
+        />
+      )}
       <div
         className={`flex-1 px-10 ${
           isOpen ? "ml-64" : "ml-0"
@@ -59,27 +66,7 @@ export default function DeliveryPersonnel() {
         <h1 className="text-3xl mt-12 text-center font-bold text-primary">
           Delivery Personnel
         </h1>
-        {popup && (
-          <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-35">
-            <div className="bg-background p-6 rounded-lg">
-              <h2 className="text-2xl font-semibold mb-4 bg-transparent">
-                Are you sure you want to delete this user?
-              </h2>
-              <button
-                onClick={() => setPopup(!popup)}
-                className="bg-primary text-white px-4 py-2 rounded-lg"
-              >
-                Yes
-              </button>
-              <button
-                onClick={() => setPopup(!popup)}
-                className="bg-gray-500 text-white px-4 py-2 rounded-lg ml-4"
-              >
-                No
-              </button>
-            </div>
-          </div>
-        )}
+
         <div className="mt-8">
           <h2 className="text-2xl font-semibold mb-4">
             Current Delivery Personnel
@@ -96,25 +83,64 @@ export default function DeliveryPersonnel() {
             </thead>
             <tbody>
               {currentItems.map((person) => (
-                <tr
-                  key={person.id}
-                  className=" hover-m-2 hover:border hover:border-text2 transition-transform duration-500 cursor-pointer mb-2"
-                >
-                  <td className="py-2 px-4">{person.name}</td>
-                  <td className="py-2 px-4">{person.email}</td>
-                  <td className="py-2 px-4">{person.phone}</td>
-                  <td className="py-2 px-4">{person.vehicleType || "N/A"}</td>
-                  <td className="py-2 px-4">
-                    <button
-                      onClick={() => {
-                        handleDelete(person.id);
-                      }}
-                      className="btn bg-primary text-white"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
+                <React.Fragment key={person.id}>
+                  <tr
+                    key={person.id}
+                    onClick={() => setInfoClick(!infoClick)}
+                    className=" hover-m-2 hover:border hover:border-text2 transition-transform duration-500 cursor-pointer mb-2"
+                  >
+                    <td className="py-2 px-4">{person.username}</td>
+                    <td className="py-2 px-4">{person.email}</td>
+                    <td className="py-2 px-4">{person.phone_number}</td>
+                    <td className="py-2 px-4">
+                      {person.actor.vehicle || "N/A"}
+                    </td>
+                    <td className="py-2 px-4">
+                      <button
+                        onClick={() => {
+                          setSelectedID(person.actor.user_id);
+                          console.log(person.actor.user_id);
+                          setPopup(true);
+                        }}
+                        className="btn bg-primary text-white"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                  {infoClick && (
+                    <tr className="bg-gray-50">
+                      <td colSpan="5" className="pb-4 px-4">
+                        <div className="p-4 rounded">
+                          <h2 className="text-xl font-bold mb-2">
+                            User Details
+                          </h2>
+                          <p>
+                            <strong>Name:</strong> {person.name}
+                          </p>
+                          {person.actor !== null && (
+                            <div>
+                              {person.actor.age && (
+                                <p>
+                                  <strong>Age:</strong> {person.actor.age}
+                                </p>
+                              )}
+                              {person.actor.gender && (
+                                <p>
+                                  <strong>Gender:</strong> {person.actor.gender}
+                                </p>
+                              )}
+
+                              <p>
+                                <strong>Address:</strong> {person.actor.address}
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </React.Fragment>
               ))}
             </tbody>
           </table>
@@ -125,73 +151,12 @@ export default function DeliveryPersonnel() {
           />
         </div>
         <div className="mt-8">
-          <h2 className="text-2xl font-semibold mb-4">
-            Add New Delivery Personnel
-          </h2>
-          <div className="bg-transparent border-text2 p-6 rounded shadow-lg">
-            <div className="mb-4">
-              <label className="block  text-sm font-bold mb-2">Name</label>
-              <input
-                type="text"
-                name="name"
-                value={newPersonnel.name}
-                onChange={handleInputChange}
-                className="shadow appearance-none border rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline"
-                id="name"
-                placeholder="Enter name"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-sm font-bold mb-2">Email</label>
-              <input
-                type="email"
-                name="email"
-                value={newPersonnel.email}
-                onChange={handleInputChange}
-                className="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
-                placeholder="Enter email"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-sm font-bold mb-2">
-                Phone Number
-              </label>
-              <input
-                type="text"
-                name="phone_number"
-                value={newPersonnel.phone_number}
-                onChange={handleInputChange}
-                className="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
-                placeholder="Enter Phone Number"
-              />
-            </div>
-            <div className="mb-4">
-              <label
-                className="block text-sm font-bold mb-2"
-                htmlFor="vehicleType"
-              >
-                Vehicle Type
-              </label>
-              <select
-                name="vehicleType"
-                value={newPersonnel.vehicleType}
-                onChange={handleInputChange}
-                className="shadow appearance-none border rounded w-full py-2 px-3 leading-tight "
-              >
-                <option value="">Select vehicle type</option>
-                <option value="Car">Car</option>
-                <option value="Motorbike">Motorbike</option>
-                <option value="Bicycle">Bicycle</option>
-                <option value="Moving Truck">Moving Truck</option>
-              </select>
-            </div>
-            <button
-              onClick={handleAddPersonnel}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            >
-              Add Personnel
-            </button>
+          <div>
+            <h2 className="text-2xl font-semibold mb-4">
+              Add New Delivery Personnel
+            </h2>
           </div>
+          <SignUp />
         </div>
       </div>
     </div>

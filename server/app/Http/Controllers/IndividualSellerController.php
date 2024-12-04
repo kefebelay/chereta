@@ -39,15 +39,21 @@ class IndividualSellerController extends Controller
             'username' => ['required', 'string', 'max:255', 'unique:'.User::class],
             'phone_number' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
+            'image'=>['required','image', 'mimes:jpeg,png,jpg,gif,svg', 'max:5000'],
             'password' => ['required', Rules\Password::defaults()],
             'address'=>['nullable','string', 'max:255'],
             'age'=>['required', 'numeric', 'between:18,100'],
             'gender'=>['required','string', 'in:male,female'],
             'description' => [ 'nullable','string', 'max:255'],
         ]);
+
+        $imageName = time().'.'.$request->image->extension();
+        $request->image->move(public_path('images'), $imageName);
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'image'=>"images/$imageName",
             'username' => $request->username,
             'phone_number' => $request->phone_number,
             'password' => Hash::make($request->string('password')),

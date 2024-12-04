@@ -38,6 +38,7 @@ import Reports from "./pages/Admin/Reports";
 import DeliveryPersonnel from "./pages/Admin/DeliveryPersonnel";
 import Profile from "./pages/Buyer/Profile";
 import Category from "./pages/Admin/Categories";
+import ForgotPassword from "./pages/Auth/ForgotPassword";
 
 
 export default function App() {
@@ -49,11 +50,12 @@ export default function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/categories" element={<Categories />} />
-        <Route path="/categories/:id" element={<CategoryItems />} />
+        <Route path="/category/:id/products" element={<CategoryItems />} />
         <Route path="/products" element={<Products />} />
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/notifications" element={<Notification />} />
         <Route path="/seller/info/:id" element={<SellerInfo />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
 
         {/* Buyer routes */}
         <Route path="/my-bids" element={<MyBids />} />

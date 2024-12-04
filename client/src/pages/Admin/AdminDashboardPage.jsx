@@ -1,10 +1,24 @@
 import { useEffect, useState } from "react";
 import Dashboard from "../../components/Admin/Dashboard";
 import Api from "../Auth/Axios";
+import { useNavigate } from "react-router-dom";
 
 export default function AdminDashboardPage() {
   const [open, isOpen] = useState(true);
   const [usersCount, setusersCount] = useState({} || null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    window.history.pushState(null, null, window.location.href);
+    const handlePopState = () => {
+      window.history.pushState(null, null, window.location.href);
+    };
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, []);
 
   useEffect(() => {
     async function getRolesCount() {
@@ -35,7 +49,12 @@ export default function AdminDashboardPage() {
             <h2 className="text-3xl font-bold mb-6 text-center m-4 mt-12 text-primary">
               Dashboard Overview
             </h2>
-            <div className="bg-primary p-6 rounded-lg shadow-md mb-8">
+            <div
+              onClick={() => {
+                navigate("/admin/dashboard/user-management");
+              }}
+              className="bg-primary p-6 rounded-lg shadow-md mb-8 hover:scale-105 cursor-pointer transition-transform duration-300"
+            >
               {" "}
               <h3 className="text-xl text-white font-bold mb-2 bg-transparent text-center">
                 Total Users{" "}

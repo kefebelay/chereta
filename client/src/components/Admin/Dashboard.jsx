@@ -1,7 +1,7 @@
-import PropTypes from "prop-types";
 import { Link, useLocation } from "react-router-dom";
 import Logout from "../../pages/Auth/Logout";
 import ThemeSwitcher from "../common/ThemeSwitcherBtn";
+import Logout from "../../pages/Auth/Logout";
 
 export default function Dashboard({ isOpen, setIsOpen }) {
   const location = useLocation();
@@ -67,113 +67,114 @@ export default function Dashboard({ isOpen, setIsOpen }) {
               )}
             </button>
           </div>
-          <ul
-            className={`${
-              isOpen ? "block" : "hidden"
-            } mt-10 bg-transparent flex flex-col gap-3`}
-          >
-            <li className="mb-2">
-              <Link
-                to="/admin/dashboard/"
-                className={`py-2 px-4 rounded bg-background2 border border-text2 shadow-sm shadow-text2 flex gap-3 ${
-                  location.pathname === "/admin/dashboard/"
-                    ? "bg-primary font-bold text-white"
-                    : "hover:text-white hover:bg-primary"
-                }`}
-              >
-                <i className="fa-solid fa-table-columns bg-transparent mt-1"></i>
-                Overview
-              </Link>
-            </li>
-            <li className="mb-2">
-              <Link
-                to="/admin/dashboard/analytics"
-                className={`py-2 px-4 rounded bg-background2 border border-gray-500 
+          <div className="flex flex-col justify-between h-full">
+            <ul
+              className={`${
+                isOpen ? "block" : "hidden"
+              } mt-10 bg-transparent flex flex-col gap-3`}
+            >
+              <li className="mb-2">
+                <Link
+                  to="/admin/dashboard"
+                  className={`py-2 px-4 rounded bg-background2 border border-text2 shadow-sm shadow-text2 flex gap-3 ${
+                    location.pathname === "/admin/dashboard"
+                      ? "bg-primary font-bold text-white"
+                      : "hover:text-white hover:bg-primary"
+                  } `}
+                >
+                  <i className="fa-solid fa-table-columns bg-transparent mt-1"></i>
+                  Overview
+                </Link>
+              </li>
+              <li className="mb-2">
+                <Link
+                  to="/admin/dashboard/analytics"
+                  className={`py-2 px-4 rounded bg-background2 border border-gray-500 
                 shadow-sm shadow-text2 flex gap-3 ${
                   location.pathname === "/admin/dashboard/analytics"
                     ? "bg-primary font-bold text-white"
                     : " hover:text-white hover:bg-primary"
                 }`}
-              >
-                <i
-                  className={`fa-solid fa-chart-line bg-transparent mt-1
+                >
+                  <i
+                    className={`fa-solid fa-chart-line bg-transparent mt-1
                 ${
                   location.pathname === "/admin/dashboard/analytics" &&
                   "text-white"
                 } `}
-                ></i>
-                Analytics
-              </Link>
-            </li>
-            <li className="mb-2">
-              <Link
-                to="/admin/dashboard/category"
-                className={`py-2 px-4 rounded bg-background2 border border-gray-500 
+                  ></i>
+                  Analytics
+                </Link>
+              </li>
+              <li className="mb-2">
+                <Link
+                  to="/admin/dashboard/category"
+                  className={`py-2 px-4 rounded bg-background2 border border-gray-500 
                 shadow-sm shadow-text2 flex gap-3 ${
                   location.pathname === "/admin/dashboard/category"
                     ? "bg-primary font-bold text-white"
                     : " hover:text-white hover:bg-primary"
                 }`}
-              >
-                <i
-                  className={`fa-solid fa-list bg-transparent mt-1
+                >
+                  <i
+                    className={`fa-solid fa-list bg-transparent mt-1
                 ${
                   location.pathname === "/admin/dashboard/category" &&
                   "text-white"
                 } `}
-                ></i>
-                Category
-              </Link>
-            </li>
-            <li className="mb-2">
-              <Link
-                to="/admin/dashboard/user-management"
-                className={`flex gap-3 py-2 px-4 rounded bg-background2 border border-text2 ${
-                  location.pathname === "/admin/dashboard/user-management"
-                    ? "bg-primary font-bold text-white"
-                    : "hover:bg-primary hover:text-white"
-                }`}
-              >
-                <i
-                  className={`fa-solid fa-users-gear bg-transparent mt-1
+                  ></i>
+                  Category
+                </Link>
+              </li>
+              <li className="mb-2">
+                <Link
+                  to="/admin/dashboard/user-management"
+                  className={`flex gap-3 py-2 px-4 rounded bg-background2 border border-text2 ${
+                    location.pathname === "/admin/dashboard/user-management"
+                      ? "bg-primary font-bold text-white"
+                      : "hover:bg-primary hover:text-white"
+                  }`}
+                >
+                  <i
+                    className={`fa-solid fa-users-gear bg-transparent mt-1
                  ${
                    location.pathname === "/admin/dashboard/user-management" &&
                    "text-white"
                  } `}
-                ></i>
-                User Management
-              </Link>
-            </li>
-            <li className="mb-2">
-              <Link
-                to="/admin/dashboard/reports"
-                className={`py-2 px-4 rounded bg-background2 border border-text2 flex gap-3 shadow-md ${
-                  location.pathname === "/admin/dashboard/reports"
-                    ? "bg-primary font-bold text-white"
-                    : "hover:bg-primary hover:text-white"
-                }`}
-              >
-                <i
-                  className={`fa-regular fa-flag bg-transparent mt-1
+                  ></i>
+                  User Management
+                </Link>
+              </li>
+              <li className="mb-2">
+                <Link
+                  to="/admin/dashboard/reports"
+                  className={`py-2 px-4 rounded bg-background2 border border-text2 flex gap-3 shadow-md ${
+                    location.pathname === "/admin/dashboard/reports"
+                      ? "bg-primary font-bold text-white"
+                      : "hover:bg-primary hover:text-white"
+                  }`}
+                >
+                  <i
+                    className={`fa-regular fa-flag bg-transparent mt-1
                  ${
                    location.pathname === "/admin/dashboard/reports" &&
                    "text-white"
                  } `}
-                ></i>
-                Reports
-              </Link>
-            </li>
-            <li className="mb-2">
-              <Link
-                to="/admin/dashboard/delivery-personnel"
-                className={`flex gap-3 py-2 px-4 rounded bg-background2 border border-text2 ${
-                  location.pathname === "/admin/dashboard/delivery-personnel"
-                    ? "bg-primary font-bold text-white"
-                    : "hover:bg-primary hover:text-white"
-                }`}
-              >
-                <i
-                  className={`fa-regular fa-id-card  bg-transparent mt-1
+                  ></i>
+                  Reports
+                </Link>
+              </li>
+              <li className="mb-2">
+                <Link
+                  to="/admin/dashboard/delivery-personnel"
+                  className={`flex gap-3 py-2 px-4 rounded bg-background2 border border-text2 ${
+                    location.pathname === "/admin/dashboard/delivery-personnel"
+                      ? "bg-primary font-bold text-white"
+                      : "hover:bg-primary hover:text-white"
+                  }`}
+                >
+                  <i
+                    className={`fa-regular fa-id-card  bg-transparent mt-1
                  ${
                    location.pathname ===
                      "/admin/dashboard/delivery-personnel" && "text-white"
@@ -183,12 +184,8 @@ export default function Dashboard({ isOpen, setIsOpen }) {
               </Link>
             </li>
           </ul>
-<Logout />
         </div>
       </div>
     </div>
   );
 }
-Dashboard.propTypes = {
-  open: PropTypes.bool.isRequired,
-};

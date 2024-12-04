@@ -1,23 +1,10 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import ThemeSwitcher from "./ThemeSwitcherBtn";
 import { Link } from "react-router-dom";
-import Popup from "./Popup";
 import { UsersContext } from "../../hooks/Users_Hook";
 
-export default function Hamburger() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [popup, setPopup] = useState(false);
+export default function Hamburger({ isOpen, setIsOpen }) {
   const { user } = useContext(UsersContext);
-
-  function toggleMenu() {
-    setIsOpen(!isOpen);
-  }
-
-  function onLogout() {
-    setIsLoggedIn(false);
-    setPopup(false);
-  }
 
   function handleClick() {
     const aboutSection = document.getElementById("About");
@@ -29,15 +16,7 @@ export default function Hamburger() {
   }
 
   return (
-    <div className="lg:hidden bg-transparent">
-      {popup && (
-        <Popup
-          onYes={onLogout}
-          popup={popup}
-          setPopup={setPopup}
-          message="Are you sure you want to logout?"
-        />
-      )}
+    <div className="lg:hidden bg-transparent border-solid border-primary">
       {!isOpen && (
         <div className="flex">
           <div className="p-3">
@@ -45,8 +24,8 @@ export default function Hamburger() {
           </div>
 
           <button
-            className="navbar-burger flex items-center text-accent p-3"
-            onClick={toggleMenu}
+            className="flex items-center text-accent p-3"
+            onClick={() => setIsOpen(!isOpen)}
           >
             <svg
               className="block h-6 w-6 fill-current"
@@ -60,89 +39,102 @@ export default function Hamburger() {
       )}
 
       {isOpen && (
-        <div className="navbar-menu bg-transparent z-10">
-          <nav className="fixed inset-0 flex flex-col w-48 max-w-sm py-6 px-6  shadow-md overflow-y-auto">
-            <div className="flex items-center mb-8">
-              <a className="mr-auto text-3xl font-bold " href="#">
-                <img src="/public/chereta_logo.svg" className=" h-9 w-9" />
-              </a>
-              <button className="bg-background" onClick={toggleMenu}>
-                <i className="fa-solid fa-rectangle-xmark"></i>
-              </button>
-            </div>
-            <div>
-              <ul className="grid place-items-center">
-                {!isLoggedIn ? (
-                  <li className="mt-3 flex flex-col justify-center items-center">
-                    <div className="bg-transparent h-10 w-10 mr-3  ">
-                      <Link to={"/profile"} className="rounded-full h-10 w-10">
-                        <img
-                          className="w-full h-full rounded-full"
-                          src="https://picsum.photos/200/300"
-                          alt="profile"
-                        />
-                        <p className="bg-transparent flex justify-center items-center text-sm">
-                          {user.username}
-                        </p>
+        <div
+          className="bg-transparent flex justify-center w-screen"
+          onClick={() => setIsOpen(false)}
+        >
+          <div className="navbar-menu bg-transparent z-10">
+            <nav className="fixed inset-0 flex flex-col w-48 max-w-sm py-6 px-6 shadow-sm shadow-text2 overflow-y-auto">
+              <div className="flex items-center mb-8">
+                <a className="mr-auto text-3xl font-bold " href="#">
+                  <img src="/public/chereta_logo.svg" className=" h-9 w-9" />
+                </a>
+                <button
+                  className="bg-background"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <span className="text-lg font-extrabold">X</span>
+                </button>
+              </div>
+              <div>
+                <ul className="grid place-items-center">
+                  {user ? (
+                    <li className="mt-3 flex flex-col justify-center items-center">
+                      <div className="bg-transparent h-10 w-10 mr-3  ">
+                        <Link
+                          to={"/profile"}
+                          className="rounded-full h-10 w-10"
+                        >
+                          <img
+                            className="w-full h-full rounded-full"
+                            src="https://picsum.photos/200/300"
+                            alt="profile"
+                          />
+                          <p className="bg-transparent flex justify-center items-center text-sm">
+                            {user.username}
+                          </p>
+                        </Link>
+                      </div>
+                      <p className=" w-full text-accent bg-transparent mb-5 mt-3 text-center ">
+                        _______________
+                      </p>
+                    </li>
+                  ) : (
+                    <li className="mt-3 mb-10">
+                      <Link
+                        className="btn  md:inline-block md:ml-auto md:mr-3 bg-primary text-white text-md font-bold w-28 text-center"
+                        to={"/login"}
+                      >
+                        login
                       </Link>
-                    </div>
-                    <p className=" w-full text-accent bg-transparent mb-5 mt-3 text-center ">
-                      _______________
-                    </p>
-                  </li>
-                ) : (
-                  <li className="mt-3">
+                    </li>
+                  )}
+                  <li className="mb-1">
                     <Link
-                      className="btn  md:inline-block md:ml-auto md:mr-3 bg-primary text-white text-md font-bold w-28 text-center"
-                      to={"/login"}
+                      to={"/"}
+                      className={`text-md  hover:text-primary  bg-transparent ${
+                        location.pathname === "/"
+                          ? "text-primary font-bold "
+                          : ""
+                      }`}
                     >
-                      Log In
+                      Home
                     </Link>
                   </li>
-                )}
-                <li className="mb-1">
-                  <Link
-                    to={"/"}
-                    className={`text-md  hover:text-primary  bg-transparent ${
-                      location.pathname === "/" ? "text-primary font-bold " : ""
-                    }`}
-                  >
-                    Home
-                  </Link>
-                </li>
-                <li className="mb-1">
-                  <Link
-                    className="text-md hover:text-accent bg-none bg-transparent"
-                    to={"/#About"}
-                    onClick={handleClick}
-                  >
-                    About
-                  </Link>
-                </li>
-                <li className="mb-1">
-                  <Link
-                    to={"/categories"}
-                    className={`text-md ${
-                      location.pathname === "/categories"
-                        ? "text-accent font-bold "
-                        : ""
-                    }
+                  <li className="mb-1">
+                    <Link
+                      className="text-md hover:text-accent bg-none bg-transparent"
+                      to={"/#About"}
+                      onClick={handleClick}
+                    >
+                      About
+                    </Link>
+                  </li>
+                  <li className="mb-1">
+                    <Link
+                      to={"/categories"}
+                      className={`text-md ${
+                        location.pathname === "/categories"
+                          ? "text-accent font-bold "
+                          : ""
+                      }
                   hover:text-accent bg-transparent" to={"/categories"} `}
-                  >
-                    Categories
-                  </Link>
-                </li>
-                <li className="mb-1">
-                  <Link
-                    className="text-md  hover:text-accent bg-transparent"
-                    to={"/products"}
-                  >
-                    Products
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </nav>
+                    >
+                      Categories
+                    </Link>
+                  </li>
+                  <li className="mb-1">
+                    <Link
+                      className="text-md  hover:text-accent bg-transparent"
+                      to={"/products"}
+                    >
+                      Products
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            </nav>
+          </div>
         </div>
       )}
     </div>

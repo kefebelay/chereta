@@ -1,23 +1,34 @@
-import Axios from "axios";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import CoolerRemainingTime from "../../../components/common/CoolerRemaining-time";
+import { useNavigate, useParams } from "react-router-dom";
 import Loading from "../../../components/common/Loading";
 import Navbar from "../../../components/common/Navbar";
 import Footer from "../../../components/common/Footer";
+import Api from "../../Auth/Axios";
+import { toast } from "react-toastify";
+import { UsersContext } from "../../../hooks/Users_Hook";
 
 export default function Item() {
   const { id } = useParams();
   const [item, setItem] = useState([]);
+  const [tab, setTab] = useState("description");
   const [bid, setBid] = useState(0);
   const [showBidPopup, setShowBidPopup] = useState(false);
   const [isLoading, setisLoading] = useState(true);
+  const { url, user } = useContext(UsersContext);
+
+  const navigate = useNavigate();
 
   function onBid() {
+    if (user === null) {
+      navigate("/login");
+      toast.info("please login to place a bid");
+      return;
+    }
     setShowBidPopup(true);
   }
 
   function placeBid() {
-    // Call API to place bid
     console.log("Bid placed: ", bid);
     setShowBidPopup(false);
   }
@@ -26,9 +37,8 @@ export default function Item() {
     async function getItems() {
       try {
         setisLoading(true);
-        const items = await Axios.get(
-          `https://api.escuelajs.co/api/v1/products/${id}`
-        );
+        const items = await Api.get(`api/listing/${id}`);
+        console.log(items);
         setItem(items.data);
       } catch (err) {
         console.log(err);
@@ -47,52 +57,104 @@ export default function Item() {
           <Loading />
         </div>
       ) : (
-        <div className="flex md:flex-row-reverse flex-col-reverse px-10 mt-20 gap-3">
-          <div className="text-center md:flex-1">
-            <div className="w-auto">
-              <h1 className="m-5 font-extrabold lg:text-4xl text-2xl text-primary hidden md:block">
+        <div>
+          <div className="flex md:flex-row-reverse flex-col-reverse px-10 mt-20 gap-3">
+            <div className="text-left md:flex-1">
+              <div className="w-auto">
+                <h1 className="my-5 mt-7 font-extrabold lg:text-4xl text-2xl text-primary hidden md:block">
+                  {item.title}
+                </h1>
+                <div className="  p-2  mb-4">
+                  <p className="font-bold bg-transparent text-gray-800">
+                    Starting price :
+                    <span className="text-birr  bg-transparent">
+                      {" "}
+                      Birr {item.starting_price}
+                    </span>
+                  </p>
+                </div>
+                <div>
+                  <h1 className="text-left font-extrabold lg:text-lg text-primary">
+                    Remaining time
+                  </h1>
+                  <CoolerRemainingTime
+                    bidEndTime={item.bid_end_time}
+                    createdAt={item.created_at}
+                  />
+                </div>
+
+                <div className=" bg-accent brightness-90 p-2">
+                  <p className=" font-bold bg-transparent text-white">
+                    Highest bid:
+                    <span className=" text-white text-xl bg-transparent">
+                      {" "}
+                      Birr {item.winning_bid_amount || 0}
+                    </span>
+                  </p>
+                </div>
+                <button
+                  onClick={onBid}
+                  className="btn bg-primary w-32 text-center mt-4 text-white font-bold"
+                >
+                  Bid
+                </button>
+              </div>
+            </div>
+            <div>
+              <h1 className="text-center font-extrabold lg:text-4xl text-2xl text-primary md:hidden block">
                 {item.title}
               </h1>
-              <p className="py-6 mb-4 text-text2 text-left">
-                {item.description}
-              </p>
-              <div className=" bg-background2  p-2  mb-4">
-                <p className=" font-bold bg-transparent">
-                  Starting price:
-                  <span className=" text-birr text-xl bg-transparent">
-                    {" "}
-                    Birr {item.price * 74}
-                  </span>
-                </p>
+              <div className="max-h-[30rem] md:flex-1 flex justify-center p-4">
+                <img
+                  src={url + item.image}
+                  className="max-h-full max-w-full h-auto w-auto rounded-lg hover:scale-105 transition-transform duration-300 object-contain"
+                />
               </div>
-              <div className=" bg-accent brightness-90  p-2">
-                <p className=" font-bold bg-transparent text-white">
-                  Highest bid:
-                  <span className=" text-white text-xl bg-transparent">
-                    {" "}
-                    Birr {item.price * 74}
-                  </span>
-                </p>
-              </div>
-              <button
-                onClick={onBid}
-                className="btn bg-primary w-32 text-center mt-4 text-white font-bold"
-              >
-                Bid
-              </button>
             </div>
           </div>
           <div>
-            <h1 className="text-center font-extrabold lg:text-4xl text-2xl text-primary md:hidden block">
-              {item.title}
-            </h1>
+            <ul className="flex gap-10 m-3 text-center justify-center items-center">
+              <li
+                onClick={() => setTab("description")}
+                className={`font-bold text-lg text-primary border border-primary p-3 rounded-md
+                ${tab === "description" ? "bg-primary text-white" : ""}
+                hover:bg-primary hover:text-white cursor-pointer`}
+              >
+                Description
+              </li>
+              <li
+                onClick={() => setTab("bids")}
+                className={`font-bold text-lg text-primary border border-primary p-3 rounded-md
+                ${tab === "bids" ? "bg-primary text-white" : ""}
+                hover:bg-primary hover:text-white cursor-pointer`}
+              >
+                Bids
+              </li>
+              <li
+                onClick={() => setTab("comments")}
+                className={`font-bold text-lg text-primary border border-primary p-3 rounded-md
+                 ${tab === "comments" ? "bg-primary text-white" : ""}
+                 hover:bg-primary hover:text-white cursor-pointer`}
+              >
+                Comments
+              </li>
+            </ul>
+            {tab === "description" && (
+              <div className="p-5">
+                <p className="text-lg font-bold">{item.description}</p>
+              </div>
+            )}
 
-            <div className=" md:h-[35rem] md:flex-1 flex justify-center p-4">
-              <img
-                src={item.images}
-                className="h-full w-full pb-1 rounded-lg hover:scale-105 transition-transform duration-300 "
-              />
-            </div>
+            {tab === "bids" && (
+              <div className="p-5">
+                <p className="text-lg font-bold">No bids yet</p>
+              </div>
+            )}
+            {tab === "comments" && (
+              <div className="p-5">
+                <p className="text-lg font-bold">No comments yet</p>
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -102,7 +164,7 @@ export default function Item() {
             <h2 className="text-lg font-bold mb-2">Place your bid</h2>
             <input
               type="number"
-              value={item.price * 74}
+              value={item.starting_price}
               onChange={(e) => setBid(e.target.value)}
               className="w-full p-2 mb-2 border border-gray-400"
             />
