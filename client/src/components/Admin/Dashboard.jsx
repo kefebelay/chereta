@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import { Link, useLocation } from "react-router-dom";
+import Logout from "../../pages/Auth/Logout";
 import ThemeSwitcher from "../common/ThemeSwitcherBtn";
 
 export default function Dashboard({ isOpen, setIsOpen }) {
@@ -182,6 +183,7 @@ export default function Dashboard({ isOpen, setIsOpen }) {
               </Link>
             </li>
           </ul>
+<Logout />
         </div>
       </div>
     </div>
