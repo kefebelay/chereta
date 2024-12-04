@@ -187,5 +187,6 @@ export default function Dashboard({ isOpen, setIsOpen }) {
         </div>
       </div>
     </div>
+    </div>
   );
 }
