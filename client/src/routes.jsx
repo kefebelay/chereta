@@ -13,6 +13,12 @@ import Notification from "./pages/shared/Notification";
 
 // Buyer routes
 import MyBids from "./pages/Buyer/MyBids";
+import BidPage from "./pages/Buyer/BidPage";
+import BuyerDashboardPage from "./pages/Buyer/BuyerDashboard";
+import WinningBids from "./pages/Buyer/WinningBids";
+import Favorites from "./pages/Buyer/Favorite";
+import DeliveryTracking from "./pages/Buyer/DeliveryTracking";
+import OngoingBids from "./pages/Buyer/OngoingBids";
 
 // Seller routes
 import SellerInfo from "./pages/Seller/SellerInfo";
@@ -33,6 +39,7 @@ import DeliveryPersonnel from "./pages/Admin/DeliveryPersonnel";
 import Profile from "./pages/Buyer/Profile";
 import Category from "./pages/Admin/Categories";
 
+
 export default function App() {
   return (
     <Router>
@@ -51,6 +58,12 @@ export default function App() {
         {/* Buyer routes */}
         <Route path="/my-bids" element={<MyBids />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/bid-page" element={<BidPage />} />
+        <Route path="/buyer/dashboard" element={<BuyerDashboardPage />} />
+        <Route path="/ongoing-bids" element={<OngoingBids />} />
+        <Route path="/winning-bids" element={<WinningBids />} />
+        <Route path="/favorites" element={<Favorites />} />
+        <Route path="/delivery-tracking" element={<DeliveryTracking />} />
 
         {/* Seller routes */}
         <Route path="/seller/dashboard" element={<SellerDashboard />} />
