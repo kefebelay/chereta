@@ -104,14 +104,12 @@ class AdminController extends Controller
                 'username' => ['required', 'string', 'max:255'],
                 'image'=>[],
                 'phone_number' => ['required', 'string', 'max:255'],
-                'password' => ['required', Rules\Password::defaults()],
             ]);
 
             $user = User::where('id', $id)->update([
                 'name' => $request->name,
                 'username' => $request->username,
                 'phone_number' => $request->phone_number,
-                'password' => Hash::make($request->string('password')),
             ]);
             return response()->json([
             "message" => "Updated Successfully",
