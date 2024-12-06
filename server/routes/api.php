@@ -44,7 +44,7 @@ Route::get('/users', [UserController::class, 'index'])->middleware(['auth:sanctu
 Route::get('/user/{id}', [UserController::class, 'show'])->middleware(['auth:sanctum', 'role:admin']);
 Route::get('/roles-count', [UserController::class, 'getRolesCount'])->middleware(['auth:sanctum', 'role:admin']);
 
-Route::post('/category',[CategoryController::class,'store']);
+Route::post('/category',[CategoryController::class,'store'])->middleware(['auth:sanctum', 'role:admin']);
 Route::delete('/category/{id}', [CategoryController::class, 'destroy'])->middleware(['auth:sanctum', 'role:admin']);
 
 
@@ -55,6 +55,7 @@ Route::get('/buyers', [BuyerController::class, 'index'])->middleware(['auth:sanc
 Route::get('/delivery_persons', [DeliveryPersonController::class, 'index'])->middleware(['auth:sanctum', 'role:admin']);
 Route::get('/individual_sellers', [IndividualSellerController::class, 'index'])->middleware(['auth:sanctum', 'role:admin']);
 Route::get('/company_sellers', [CompanySellerController::class, 'index'])->middleware(['auth:sanctum', 'role:admin']);
+
 //                        Buyer routes
 
 Route::post('/buyer/register', [RegisteredUserController::class, 'store']);

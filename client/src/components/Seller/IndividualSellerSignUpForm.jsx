@@ -16,6 +16,7 @@ export default function IndividualSellerSignUpForm() {
     age: "",
     address: "",
     description: "",
+    image: null,
   });
   const navigate = useNavigate();
 
@@ -24,15 +25,32 @@ export default function IndividualSellerSignUpForm() {
     setFormData({ ...formData, [name]: value });
   };
 
+  const handleFileChange = (e) => {
+    setFormData({ ...formData, image: e.target.files[0] });
+  };
+
   async function handleSubmit(e) {
     const csrf = Cookies.get("XSRF-TOKEN");
     e.preventDefault();
+
     try {
+      // Create FormData object
+      const formDataToSend = new FormData();
+      for (const key in formData) {
+        formDataToSend.append(key, formData[key]);
+      }
+
       const response = await Api.post(
-        "http://localhost:8000/api/individual-seller/register",
-        formData,
-        { headers: { "X-XSRF-TOKEN": csrf } }
+        "/api/individual-seller/register",
+        formDataToSend,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            "X-XSRF-TOKEN": csrf,
+          },
+        }
       );
+
       toast.success(response.data.message);
 
       if (response.status === 200) {
@@ -44,18 +62,19 @@ export default function IndividualSellerSignUpForm() {
   }
 
   return (
-    <div className=" mt-4 h-full p-3">
+    <div className="mt-4 h-full p-3">
       <p className="mb-3 text-sm text-left text-text2 px-9">
         Sign up as an <span className="text-primary">Individual seller</span>,
         and you can post items for auction, manage your listings, and track your
         sales. Ensure you provide accurate and complete information to help
-        verify your identity and protect your account. you can leave address and
-        description empty now and edit later in your profile page. Happy selling
-        on Chereta!
+        verify your identity and protect your account. You can leave the address
+        and description empty now and edit later on your profile page. Happy
+        selling on Chereta!
       </p>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} encType="multipart/form-data">
         <div className="grid md:grid-cols-2 px-3 md:px-9 py-3 gap-x-9">
+          {/* Name */}
           <div className="mb-4">
             <label className="block mb-2">Name</label>
             <input
@@ -66,6 +85,8 @@ export default function IndividualSellerSignUpForm() {
               onChange={handleChange}
             />
           </div>
+
+          {/* Username */}
           <div className="mb-4">
             <label className="block mb-2">Username</label>
             <input
@@ -76,6 +97,8 @@ export default function IndividualSellerSignUpForm() {
               onChange={handleChange}
             />
           </div>
+
+          {/* Email */}
           <div className="mb-4">
             <label className="block mb-2">Email</label>
             <input
@@ -86,6 +109,8 @@ export default function IndividualSellerSignUpForm() {
               onChange={handleChange}
             />
           </div>
+
+          {/* Password */}
           <div className="mb-4">
             <label className="block mb-2">Password</label>
             <input
@@ -96,6 +121,8 @@ export default function IndividualSellerSignUpForm() {
               onChange={handleChange}
             />
           </div>
+
+          {/* Phone Number */}
           <div className="mb-4">
             <label className="block mb-2">Phone Number</label>
             <input
@@ -106,6 +133,8 @@ export default function IndividualSellerSignUpForm() {
               onChange={handleChange}
             />
           </div>
+
+          {/* Age and Gender */}
           <div className="flex gap-x-5">
             <div className="mb-4">
               <label className="block mb-2">Age</label>
@@ -131,8 +160,8 @@ export default function IndividualSellerSignUpForm() {
               </select>
             </div>
           </div>
-        </div>
-        <div className="grid md:grid-cols-2 px-3 md:px-9 gap-x-9">
+
+          {/* Address */}
           <div className="mb-4">
             <label className="block mb-2">Address</label>
             <textarea
@@ -143,7 +172,9 @@ export default function IndividualSellerSignUpForm() {
               onChange={handleChange}
             />
           </div>
-          <div className="mb-1">
+
+          {/* Description */}
+          <div className="mb-4">
             <label className="block mb-2">Description</label>
             <textarea
               type="text"
@@ -153,8 +184,22 @@ export default function IndividualSellerSignUpForm() {
               onChange={handleChange}
             />
           </div>
+
+          {/* Image Upload */}
+          <div className="mb-4">
+            <label className="block mb-2">Profile Image</label>
+            <input
+              type="file"
+              name="image"
+              className="w-full p-2 border border-text2 rounded focus:ring-blue-500"
+              accept="image/*"
+              onChange={handleFileChange}
+            />
+          </div>
         </div>
+
         <p className="text-red-500 text-center mb-3">{message}</p>
+
         <div className="flex justify-center">
           <button
             type="submit"

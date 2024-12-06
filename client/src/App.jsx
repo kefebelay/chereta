@@ -6,7 +6,7 @@ import Api from "./pages/Auth/Axios";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-function App() {
+export default function App() {
   useEffect(() => {
     const fetchCsrfToken = async () => {
       await Api.get("/sanctum/csrf-cookie");
@@ -36,5 +36,3 @@ function App() {
     </div>
   );
 }
-
-export default App;

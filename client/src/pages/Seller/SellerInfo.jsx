@@ -1,5 +1,3 @@
-// src/pages/SellerInfo.jsx
-import Axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Loading from "../../components/common/Loading";

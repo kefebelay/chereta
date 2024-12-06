@@ -1,4 +1,3 @@
-import React from "react";
 import Footer from "../../components/common/Footer";
 import Navbar from "../../components/common/Navbar";
 import { Sidebar } from "../../components/Buyer/Sidebar";
@@ -33,7 +32,7 @@ export default function BuyerDashboardPage() {
                   <div className="shadow-s3 border border-green bg-green_100 p-8 flex items-center text-center justify-center gap-5 flex-col rounded-xl">
                     <BsFillTagsFill size={80} className="text-green" />
                     <div>
-                      <div level={1}>25</div>
+                      <div>25</div>
                       <div>Bid Placed</div>
                     </div>
                   </div>
@@ -41,7 +40,7 @@ export default function BuyerDashboardPage() {
                   <div className="shadow-s3 border border-green bg-green_100 p-8 flex items-center text-center justify-center gap-5 flex-col rounded-xl">
                     <CiMedal size={80} className="text-green" />
                     <div>
-                      <div level={1}>3</div>
+                      <div>3</div>
                       <div>Items Won</div>
                     </div>
                   </div>
@@ -49,7 +48,7 @@ export default function BuyerDashboardPage() {
                   <div className="shadow-s3 border border-green bg-green_100 p-8 flex items-center text-center justify-center gap-5 flex-col rounded-xl">
                     <IoIosHeartEmpty size={80} className="text-green" />
                     <div>
-                      <div level={1}>10</div>
+                      <div>10</div>
                       <div>Favorite Listings</div>
                     </div>
                   </div>
@@ -57,7 +56,7 @@ export default function BuyerDashboardPage() {
                   <div className="shadow-s3 border border-green bg-green_100 p-8 flex items-center text-center justify-center gap-5 flex-col rounded-xl">
                     <FaTruck size={80} className="text-green" />
                     <div>
-                      <div level={1}>2</div>
+                      <div>2</div>
                       <div>Active Deliveries</div>
                     </div>
                   </div>
@@ -65,7 +64,7 @@ export default function BuyerDashboardPage() {
                   <div className="shadow-s3 border border-green bg-green_100 p-8 flex items-center text-center justify-center gap-5 flex-col rounded-xl">
                     <MdOutlineHistory size={80} className="text-green" />
                     <div>
-                      <div level={1}>15</div>
+                      <div>15</div>
                       <div>Bidding Activity</div>
                     </div>
                   </div>
