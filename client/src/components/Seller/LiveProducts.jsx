@@ -64,7 +64,6 @@ export default function Products() {
                   {p.status}
                 </td>
                 <td className="py-2 text-center text-primary"></td>{" "}
-                {/* Replace with logic for time left */}
               </tr>
             ))}
           </tbody>
