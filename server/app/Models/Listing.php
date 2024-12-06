@@ -17,6 +17,7 @@ class Listing extends Model
         'description',
         'starting_price',
         'bid_end_time',
+        'bid_start_time',
         'highest_bid',
         'status',
         'image',

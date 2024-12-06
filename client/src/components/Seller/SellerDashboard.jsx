@@ -130,6 +130,26 @@ export default function SellerDashboard({ isOpen, setIsOpen }) {
                 </li>
                 <li className="mb-2">
                   <Link
+                    to="/seller/dashboard/create-products"
+                    className={`flex gap-3 py-2 px-4 rounded bg-background2 border border-text2 ${
+                      location.pathname === "/seller/dashboard/create-products"
+                        ? "bg-primary font-bold text-white"
+                        : "hover:bg-primary hover:text-white"
+                    }`}
+                  >
+                    <i
+                      className={`fa-solid fa-boxes-stacked bg-transparent mt-1
+                ${
+                  location.pathname === "/seller/dashboard/create-products"
+                    ? "bg-primary font-bold text-white"
+                    : "hover:bg-primary hover:text-white"
+                }`}
+                    ></i>
+                    Create Products
+                  </Link>
+                </li>
+                <li className="mb-2">
+                  <Link
                     to="/seller/dashboard/orders"
                     className={`py-2 px-4 rounded bg-background2 border border-text2 flex gap-3 shadow-md ${
                       location.pathname === "/seller/dashboard/orders"
