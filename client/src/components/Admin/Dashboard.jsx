@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import ThemeSwitcher from "../common/ThemeSwitcherBtn";
+import Logout from "../../pages/Auth/Logout";
 
-// eslint-disable-next-line react/prop-types
 export default function Dashboard({ isOpen, setIsOpen }) {
   const location = useLocation();
   const breadCrumbs = location.pathname.split("/");
@@ -178,26 +178,15 @@ export default function Dashboard({ isOpen, setIsOpen }) {
                    location.pathname ===
                      "/admin/dashboard/delivery-personnel" && "text-white"
                  } `}
-<<<<<<< HEAD
                 ></i>
                 Delivery Personnel
               </Link>
             </li>
           </ul>
           <Logout />
-=======
-                  ></i>
-                  Delivery Personnel
-                </Link>
-              </li>
-            </ul>
-            <div>
-              <Logout />
-            </div>
-          </div>
->>>>>>> 80862ef2e915899bff2dbf771ab70c9fc1b342ce
         </div>
       </div>
+    </div>
     </div>
   );
 }
