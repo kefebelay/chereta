@@ -13,7 +13,7 @@ export default function BidPage() {
             startingBid: 500,
             yourBid: 700,
             highestBid: 1000,
-            status: "Winning",
+            status: "Ended",
         },
         {
             id: 2,
@@ -23,7 +23,17 @@ export default function BidPage() {
             startingBid: 800,
             yourBid: 1000,
             highestBid: 1500,
-            status: "Ongoing",
+            status: "Live",
+        },
+        {
+            id: 2,
+            image: "/path/to/image2.jpg",
+            title: "Auction Item 2",
+            listingId: "124",
+            startingBid: 800,
+            yourBid: 1000,
+            highestBid: 1500,
+            status: "Ended",
         },
     ]);
 
@@ -38,7 +48,7 @@ export default function BidPage() {
             <div className="flex  gap-5">
             <FilterSidebar />
             <div className="w-4/5 mx-auto">
-                <div className="p-5 bg-white shadow rounded">
+                <div className="p-5 m-4 shadow rounded">
                     <h2 className="font-bold text-lg mb-4">My Bids</h2>
                     <div className="relative overflow-x-auto">
                         <table className="w-full text-sm text-left text-gray-500">
@@ -77,11 +87,11 @@ export default function BidPage() {
                                             <td className="px-6 py-4">
                                                 <span
                                                     className={`px-2 py-1 text-xs font-medium rounded ${
-                                                        bid.status === "Winning"
+                                                        bid.status === "Live"
                                                             ? "bg-green-100 text-green-700"
-                                                            : bid.status === "Ongoing"
-                                                            ? "bg-yellow-100 text-yellow-700"
-                                                            : "bg-red-100 text-red-700"
+                                                            : bid.status === "Ended"
+                                                            ? "bg-yellow-100  text-red-700 "
+                                                            : "bg-red-100 text-yellow-700"
                                                     }`}
                                                 >
                                                     {bid.status}
