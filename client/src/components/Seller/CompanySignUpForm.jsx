@@ -14,6 +14,7 @@ export default function CompanySignUpForm() {
     username: "",
     description: "",
     address: "",
+    image: null,
   });
   const csrf = Cookies.get("XSRF-TOKEN");
   const navigate = useNavigate();
@@ -21,6 +22,10 @@ export default function CompanySignUpForm() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  };
+
+  const handleFileChange = (e) => {
+    setFormData({ ...formData, image: e.target.files[0] });
   };
 
   async function handleSubmit(e) {
@@ -34,25 +39,34 @@ export default function CompanySignUpForm() {
       setMessage("Please fill all the required fields");
       return;
     }
+
+    // Prepare FormData
+    const data = new FormData();
+    for (const key in formData) {
+      data.append(key, formData[key]);
+    }
+
     try {
-      const response = await Api.post(
-        "http://localhost:8000/api/company-seller/register",
-        formData,
-        { headers: { "X-XSRF-TOKEN": csrf } }
-      );
+      const response = await Api.post("/api/company-seller/register", data, {
+        headers: {
+          "X-XSRF-TOKEN": csrf,
+          "Content-Type": "multipart/form-data",
+        },
+      });
       toast.success(response.data.message);
 
       if (response.status === 200) {
         navigate("/login");
       }
     } catch (err) {
-      setMessage(err.response.data.message);
+      setMessage(err.response?.data?.message || "Something went wrong");
     }
   }
+
   return (
-    <div className=" mt-4 p-3">
+    <div className="mt-4 p-3">
       <p className="mb-3 text-sm text-left text-text2 px-9">
-        Sign up as a <span className="text-primary"> Company Seller </span>a and
+        Sign up as a <span className="text-primary">Company Seller</span> and
         you can post items for auction, manage your listings, and track your
         sales. Ensure you provide accurate and complete information to help
         verify your identity and protect your account. Remember to use a strong,
@@ -82,7 +96,7 @@ export default function CompanySignUpForm() {
             />
           </div>
           <div className="mb-4">
-            <label className="block mb-2">CompanyEmail</label>
+            <label className="block mb-2">Company Email</label>
             <input
               type="email"
               name="email"
@@ -111,24 +125,31 @@ export default function CompanySignUpForm() {
               onChange={handleChange}
             />
           </div>
-          <div className="mb-1">
+          <div className="mb-4">
             <label className="block mb-2">Company Address</label>
             <textarea
-              type="text"
               name="address"
               className="w-full p-2 border border-text2 rounded focus:ring-blue-500"
               value={formData.address}
               onChange={handleChange}
             />
           </div>
-          <div className="mb-1">
+          <div className="mb-4">
             <label className="block mb-2">Company Description</label>
             <textarea
-              type="text"
-              name="address"
+              name="description"
               className="w-full p-2 border border-text2 rounded focus:ring-blue-500"
-              value={formData.address}
+              value={formData.description}
               onChange={handleChange}
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block mb-2">Company Logo</label>
+            <input
+              type="file"
+              name="image"
+              className="w-full p-2 border rounded focus:ring-blue-500 border-text2"
+              onChange={handleFileChange}
             />
           </div>
         </div>

@@ -63,6 +63,7 @@ Route::patch('/buyer/{id}', [BuyerController::class, 'update'])->middleware(['au
 
 //                         seller routes
 Route::post('/listing', [ListingController::class, 'store']);
+Route::get('/my-listings/{id}', [ListingController::class, 'getSellerListings'])->middleware(['auth:sanctum', 'role:individual_seller|company_seller']);
 
 //                        Individual seller routes
 
