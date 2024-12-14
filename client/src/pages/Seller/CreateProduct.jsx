@@ -1,14 +1,15 @@
-import { parse, isAfter, differenceInDays } from "date-fns";
 import { useContext, useEffect, useState } from "react";
 import Api from "../../pages/Auth/Axios";
 import SellerDashboard from "../../components/Seller/SellerDashboard";
 import { UsersContext } from "../../hooks/Users_Hook";
+import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 
 export default function CreateProduct() {
   const { user } = useContext(UsersContext);
   const [isOpen, setIsOpen] = useState(true);
   const [categories, setCategories] = useState([]);
+  const [message, setMessage] = useState("");
   const [formValues, setFormValues] = useState({
     category_id: "",
     user_id: "",
@@ -18,7 +19,7 @@ export default function CreateProduct() {
     bid_end_time: "",
     bid_start_time: "",
     quantity: "",
-    image: null,
+    image: null, // Initial state for the image
   });
 
   const [dateTime, setDateTime] = useState({
@@ -27,6 +28,7 @@ export default function CreateProduct() {
     endDate: "",
     endTime: "",
   });
+
   useEffect(() => {
     if (user) {
       setFormValues((prevValues) => ({
@@ -35,9 +37,11 @@ export default function CreateProduct() {
       }));
     }
   }, [user]);
+
   useEffect(() => {
     const fetchCategories = async () => {
       try {
+        Cookies.get("XSRF-TOKEN");
         const res = await Api.get("/api/categories");
         setCategories(res.data);
       } catch (err) {
@@ -49,8 +53,13 @@ export default function CreateProduct() {
   }, []);
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormValues({ ...formValues, [name]: value });
+    const { name, value, files } = e.target;
+
+    if (name === "image") {
+      setFormValues({ ...formValues, image: files[0] });
+    } else {
+      setFormValues({ ...formValues, [name]: value });
+    }
   };
 
   const handleDateTimeChange = (e) => {
@@ -72,58 +81,38 @@ export default function CreateProduct() {
     }
   };
 
-  const validateDates = () => {
-    const { bid_start_time, bid_end_time } = formValues;
-
-    if (!bid_start_time || !bid_end_time) return false;
-
-    // Parse dates using d/m/y format
-    const startDate = parse(bid_start_time, "MM/dd/yyyy", new Date());
-    const endDate = parse(bid_end_time, "MM/dd/yyyy", new Date());
-    const today = new Date();
-
-    // Validate dates
-    // 1. Start date must be after today
-    // if (isAfter(today, startDate)) {
-    //   return false;
-    // }
-
-    // 2. End date must be after start date
-    if (isAfter(startDate, endDate)) {
-      return false;
-    }
-
-    // 3. Difference between start and end dates must be 30 days or less
-    const dateDiff = differenceInDays(endDate, startDate);
-    if (dateDiff > 30) {
-      return false;
-    }
-
-    // 4. Both dates must be within the current month
-    const currentMonth = today.getMonth();
-    if (
-      startDate.getMonth() !== currentMonth ||
-      endDate.getMonth() !== currentMonth
-    ) {
-      return false;
-    }
-
-    return true;
-  };
-
   const handleSubmit = async () => {
-    if (!validateDates()) {
-      toast.info(
-        "Please ensure the auction dates are within one month from today."
-      );
-      return;
+    // Convert data to FormData
+    const formData = new FormData();
+
+    // Append all form values
+    for (const key in formValues) {
+      formData.append(key, formValues[key]);
     }
 
     try {
-      const res = await Api.post("/api/listing", formValues);
-      console.log("Product created:", res.data);
+      const res = await Api.post("/api/listing", formData, {
+        headers: {
+          "X-XSRF-TOKEN": Cookies.get("XSRF-TOKEN"),
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      setFormValues({
+        category_id: "",
+        user_id: user?.id || "",
+        title: "",
+        description: "",
+        starting_price: "",
+        bid_end_time: "",
+        bid_start_time: "",
+        quantity: "",
+        image: null,
+      });
+      console.log(res);
+      toast.success("Product created successfully!");
     } catch (err) {
       console.error("Error creating product:", err);
+      setMessage(err.response.data.message);
     }
   };
 
@@ -268,11 +257,12 @@ export default function CreateProduct() {
                 className="border rounded-md p-2 w-full md:w-3/4 border-text2"
               />
             </div>
+            <p className="text-sm text-red-600 text-center">{message}</p>
 
             {/* Submit Button */}
             <button
               onClick={handleSubmit}
-              className="btn bg-primary text-white rounded-md p-2 mt-4 w-full md:w-1/4 self-center"
+              className="btn bg-primary text-white rounded-md p-2 w-full md:w-1/4 self-center"
             >
               Create Product
             </button>

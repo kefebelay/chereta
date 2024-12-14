@@ -14,7 +14,6 @@ class Buyer extends Model
         'address',
         'age',
         'gender',
-
     ];
     public function user(){
         return $this->belongsTo(User::class);
