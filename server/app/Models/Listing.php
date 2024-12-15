@@ -18,7 +18,7 @@ class Listing extends Model
         'starting_price',
         'bid_end_time',
         'bid_start_time',
-        'highest_bid',
+        'winning_bid_amount',
         'status',
         'image',
     ];
@@ -34,5 +34,22 @@ class Listing extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+    public function endAuction()
+    {
+
+        if (now()->greaterThanOrEqualTo($this->bid_end_time) && $this->status !== 'ended') {
+
+            $highestBid = $this->bids()->orderBy('bid_amount', 'desc')->first();
+
+            if ($highestBid) {
+
+                $this->winner_id = $highestBid->user_id;
+            }
+
+
+            $this->status = 'ended';
+            $this->save();
+        }
     }
 }

@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\BidController;
 use App\Http\Controllers\BuyerController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CompanySellerController;
@@ -60,7 +61,7 @@ Route::get('/company_sellers', [CompanySellerController::class, 'index'])->middl
 
 Route::post('/buyer/register', [RegisteredUserController::class, 'store']);
 Route::patch('/buyer/{id}', [BuyerController::class, 'update'])->middleware(['auth:sanctum', 'role:buyer']);
-
+Route::post('/bid', [BidController::class, 'store']);
 //                         seller routes
 Route::post('/listing', [ListingController::class, 'store']);
 Route::get('/my-listings/{id}', [ListingController::class, 'getSellerListings'])->middleware(['auth:sanctum', 'role:individual_seller|company_seller']);
