@@ -4,11 +4,13 @@ import Api from "../../pages/Auth/Axios";
 import SellerDashboard from "../../components/Seller/SellerDashboard";
 import { UsersContext } from "../../hooks/Users_Hook";
 import { toast } from "react-toastify";
+import Cookies from "js-cookie";
 
 export default function CreateProduct() {
   const { user } = useContext(UsersContext);
   const [isOpen, setIsOpen] = useState(true);
   const [categories, setCategories] = useState([]);
+  const [image, setImage] = useState(null);
   const [formValues, setFormValues] = useState({
     category_id: "",
     user_id: "",
@@ -53,6 +55,24 @@ export default function CreateProduct() {
     setFormValues({ ...formValues, [name]: value });
   };
 
+  function handleImageChange(e) {
+    const file = e.target.files[0];
+    setImage(file);
+    
+    if (file) {
+      setFormValues((prevValues) => ({
+        ...prevValues, 
+        image: file, 
+      }));
+    
+      // const reader = new FileReader();
+      // reader.onloadend = () => setPreview(reader.result);
+      // reader.readAsDataURL(file);
+    } else {
+      setPreview(null);
+    }
+  }
+
   const handleDateTimeChange = (e) => {
     const { name, value } = e.target;
     setDateTime({ ...dateTime, [name]: value });
@@ -88,39 +108,45 @@ export default function CreateProduct() {
     //   return false;
     // }
 
-    // 2. End date must be after start date
-    if (isAfter(startDate, endDate)) {
-      return false;
-    }
+    // // 2. End date must be after start date
+    // if (isAfter(startDate, endDate)) {
+    //   return false;
+    // }
 
-    // 3. Difference between start and end dates must be 30 days or less
-    const dateDiff = differenceInDays(endDate, startDate);
-    if (dateDiff > 30) {
-      return false;
-    }
+    // // 3. Difference between start and end dates must be 30 days or less
+    // const dateDiff = differenceInDays(endDate, startDate);
+    // if (dateDiff > 30) {
+    //   return false;
+    // }
 
-    // 4. Both dates must be within the current month
-    const currentMonth = today.getMonth();
-    if (
-      startDate.getMonth() !== currentMonth ||
-      endDate.getMonth() !== currentMonth
-    ) {
-      return false;
-    }
+    // // 4. Both dates must be within the current month
+    // const currentMonth = today.getMonth();
+    // if (
+    //   startDate.getMonth() !== currentMonth ||
+    //   endDate.getMonth() !== currentMonth
+    // ) {
+    //   return false;
+    // }
 
     return true;
   };
 
   const handleSubmit = async () => {
-    if (!validateDates()) {
-      toast.info(
-        "Please ensure the auction dates are within one month from today."
-      );
-      return;
-    }
+    // if (!validateDates()) {
+    //   toast.info(
+    //     "Please ensure the auction dates are within one month from today."
+    //   );
+    //   return;
+    // }
+    console.log(formValues);
 
     try {
-      const res = await Api.post("/api/listing", formValues);
+      const res = await Api.post("/api/listing", formValues,{
+        headers: {
+          "x-xsrf-token": Cookies.get("XSRF-TOKEN"),
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       console.log("Product created:", res.data);
     } catch (err) {
       console.error("Error creating product:", err);
@@ -218,9 +244,7 @@ export default function CreateProduct() {
               <input
                 type="file"
                 name="image"
-                onChange={(e) =>
-                  setFormValues({ ...formValues, image: e.target.files[0] })
-                }
+                onChange={handleImageChange}
                 className="border rounded-md p-2 w-full md:w-3/4 border-text2"
               />
             </div>

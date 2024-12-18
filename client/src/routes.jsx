@@ -19,6 +19,7 @@ import WinningBids from "./pages/Buyer/WinningBids";
 import Favorites from "./pages/Buyer/Favorite";
 import DeliveryTracking from "./pages/Buyer/DeliveryTracking";
 import OngoingBids from "./pages/Buyer/OngoingBids";
+import DeliveryPage from "./pages/Buyer/DeliveryPage";
 
 // Seller routes
 import SellerInfo from "./pages/Seller/SellerInfo";
@@ -40,6 +41,7 @@ import Profile from "./pages/Buyer/Profile";
 import Category from "./pages/Admin/Categories";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import CreateProduct from "./pages/Seller/CreateProduct";
+import OrderList from "./pages/Buyer/OrdersList";
 
 export default function App() {
   return (
@@ -66,6 +68,9 @@ export default function App() {
         <Route path="/winning-bids" element={<WinningBids />} />
         <Route path="/favorites" element={<Favorites />} />
         <Route path="/delivery-tracking" element={<DeliveryTracking />} />
+        <Route path="/delivery-page" element={<DeliveryPage />} />
+        <Route path="/orderlist" element={<OrderList />} />
+
 
         {/* Seller routes */}
         <Route path="/seller/dashboard" element={<SellerDashboard />} />

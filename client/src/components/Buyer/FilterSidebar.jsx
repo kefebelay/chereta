@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect  } from "react";
 import { IoFilter } from 'react-icons/io5';
-
+//import Api from "../../Auth/Axios";
+import Api from "../../pages/Auth/Axios";
 export const FilterSidebar = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [categories, setCategories] = useState([]);
   const [filters, setFilters] = useState({
     category: "",
     status: {
@@ -12,6 +15,21 @@ export const FilterSidebar = () => {
     favoriteOnly: false,
   });
 
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        setIsLoading(true);
+        const response = await Api.get("/api/categories");
+        setCategories(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error("Failed to fetch categories:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchCategories();
+  }, []);
   // Handle filter changes
   const handleCategoryChange = (e) => {
     setFilters({ ...filters, category: e.target.value });
@@ -63,10 +81,12 @@ export const FilterSidebar = () => {
           className="w-32 p-2 border rounded-lg focus:outline-none focus:ring border-primary text-sm m-2  "
         >
           <option value="">Select Category</option>
-          <option value="electronics">Electronics</option>
-          <option value="vehicles">Vehicles</option>
-          <option value="clothing">Clothing</option>
-          <option value="art">Art</option>
+          {isLoading!==true && categories.map((category, index) => (
+            <option key={index} value={category.id}>{category.name}</option>
+              
+              
+          ))}
+  
         </select>
       </div>
 
