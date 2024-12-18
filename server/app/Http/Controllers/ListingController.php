@@ -57,9 +57,9 @@ class ListingController extends Controller
                 'title' => ['required', 'string', 'max:255'],
                 'description' => ['required', 'string'],
                 'starting_price' => ['required', 'numeric', 'min:0'],
-                'bid_start_time' => ['required', 'date', 'after:now'],
-                'bid_end_time' => ['required', 'date', 'after:now'],
-                'image' => ['sometimes', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:5000'],
+                'bid_start_time' => ['required', 'date', 'after:now', 'before_or_equal:'.now()->addMonths(6)],
+                'after_or_equal:' . $request->input('bid_start_time') ? now()->parse($request->bid_start_time)->addDays(30) : now()->addDays(30),
+                'image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:5000'],
             ]);
 
 

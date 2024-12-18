@@ -20,6 +20,7 @@ class User extends Authenticatable
         'password',
         'phone_number',
         'username',
+        'image'
     ];
 
     protected $appends = ['actor'];
