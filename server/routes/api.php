@@ -62,6 +62,8 @@ Route::get('/company_sellers', [CompanySellerController::class, 'index'])->middl
 Route::post('/buyer/register', [RegisteredUserController::class, 'store']);
 Route::patch('/buyer/{id}', [BuyerController::class, 'update'])->middleware(['auth:sanctum', 'role:buyer']);
 Route::post('/bid', [BidController::class, 'store']);
+Route::get('/listing/bids/{id}', [BidController::class, 'showListingBids']);
+Route::get('/my-bids/{id}', [BidController::class, 'showUserBids']);
 //                         seller routes
 Route::post('/listing', [ListingController::class, 'store']);
 Route::get('/my-listings/{id}', [ListingController::class, 'getSellerListings'])->middleware(['auth:sanctum', 'role:individual_seller|company_seller']);
