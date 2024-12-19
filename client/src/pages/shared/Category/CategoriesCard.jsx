@@ -16,7 +16,6 @@ export default function CategoriesCard() {
         setIsLoading(true);
         const response = await Api.get("/api/categories");
         setItems(response.data);
-        console.log(response.data);
       } catch (error) {
         console.error("Failed to fetch categories:", error);
       } finally {
