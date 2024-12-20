@@ -15,20 +15,36 @@ export default function SignUp() {
     gender: "",
     age: "",
     address: "",
+    profile_image: null,
   });
   const csrf = Cookies.get("XSRF-TOKEN");
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    const { name, value, type, files } = e.target;
+    if (type === "file") {
+      setFormData({ ...formData, [name]: files[0] });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   async function handleSubmit(e) {
     e.preventDefault();
+    
+    const formDataToSend = new FormData();
+    
+    
+    for (let key in formData) {
+      formDataToSend.append(key, formData[key]);
+    }
+    
     try {
-      const response = await Api.post("/api/buyer/register", formData, {
-        headers: { "X-XSRF-TOKEN": csrf },
+      const response = await Api.post("/api/buyer/register", formDataToSend, {
+        headers: { 
+          "X-XSRF-TOKEN": csrf,
+          // "Content-Type": "multipart/form-data"
+        },
       });
       toast.success(response.data.message);
 
@@ -43,7 +59,7 @@ export default function SignUp() {
   return (
     <div className="p-3 mt-4">
       <p className="mb-3 text-sm text-left text-text2 px-9">
-        Sign up as a <span className="text-primary"> buyer </span> to explore
+        Sign up as a <span className="text-primary">buyer</span> to explore
         and bid on items, track your bids, and manage your purchases. Provide
         accurate information to verify your identity and protect your account.
         Use a strong, unique password for security. Happy bidding on Chereta!
@@ -142,6 +158,19 @@ export default function SignUp() {
               onChange={handleChange}
             />
             <p className="text-text2 text-sm p-1">* required for delivery</p>
+          </div>
+
+          
+          <div className="mb-4">
+            <label className="block mb-2">Profile Picture</label>
+            <input
+              type="file"
+              name="profile_image"
+              accept="image/*"
+              className="w-full p-2 border border-text2 rounded focus:ring-blue-500"
+              onChange={handleChange}
+            />
+            <p className="text-text2 text-sm p-1">* Optional</p>
           </div>
         </div>
         <p className="text-red-500 text-center mb-2">{message}</p>

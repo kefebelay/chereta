@@ -4,10 +4,13 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Bidcontroller;
 use App\Http\Controllers\BuyerController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\CompanySellerController;
 use App\Http\Controllers\DeliveryPersonController;
+use App\Http\Controllers\FavoriteControlle;
 use App\Http\Controllers\IndividualSellerController;
 use App\Http\Controllers\ListingController;
 use App\Http\Controllers\UserController;
@@ -31,6 +34,23 @@ Route::post('/listing/search', [ListingController::class, 'search']);
 Route::get('/listings', [ListingController::class, 'index']);
 Route::get('/listing/{id}', [ListingController::class, 'show']);
 Route::get('/seller/profile/{id}', [UserController::class, 'getSellerProfile']);
+
+Route::post('/listing/{id}/favorites', [FavoriteControlle::class, 'addFavorite'])->middleware( 'auth:sanctum');
+Route::get('/favorites', [FavoriteControlle::class, 'getFavorites'])->middleware( 'auth:sanctum','role:buyer');
+
+
+Route::post('/bid',[Bidcontroller::class,'index']);
+
+
+Route::get('/listings/{listing}/comments', [CommentController::class, 'index']);
+Route::post('/listings/{listing}/comments', [CommentController::class, 'store']);
+
+Route::put('/comments/{comment}', [CommentController::class, 'update']);
+
+Route::delete('/comments/{comment}', [CommentController::class, 'destroy']);
+
+
+
 
 
 

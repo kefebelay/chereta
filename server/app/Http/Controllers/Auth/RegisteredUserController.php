@@ -22,29 +22,33 @@ class RegisteredUserController extends Controller
     {
         DB::beginTransaction();
 
-        try{
+       try{
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'max:255', 'unique:'.User::class],
+            'username' => ['required', 'string', 'max:255', 'unique:' . User::class],
             'phone_number' => ['required', 'string', 'max:15'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
-            'image'=>['required','image', 'mimes:jpeg,png,jpg,gif,svg', 'max:5000'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:5000'],
             'password' => ['required', Rules\Password::defaults()],
             'address' => ['required', 'string', 'max:255'],
-            'age'=>['required', 'numeric', 'between:18,100'],
-            'gender'=>['required','string', 'in:male,female'],
+            'age' => ['required', 'numeric', 'between:18,100'],
+            'gender' => ['required', 'string', 'in:male,female'],
         ]);
-        $imageName = time().'.'.$request->image->extension();
-        $request->image->move(public_path('images'), $imageName);
 
+        if ($request->hasFile('image')) {
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->move(public_path('images'), $imageName);
+            $imagePath = "images/$imageName";
+        } else {
+            $imagePath = "images/profile.svg";
+        }
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'image' => "images/$imageName",
+            'image' => $imagePath,
             'username' => $request->username,
             'phone_number' => $request->phone_number,
-            'password' => Hash::make($request->string('password')),
-
+            'password' => Hash::make($request->password),
         ]);
 
         $user->assignRole('buyer');
@@ -53,9 +57,8 @@ class RegisteredUserController extends Controller
             'user_id' => $user->id,
             'gender' => $request->gender,
             'age' => $request->age,
-            'address' =>$request->address
+            'address' => $request->address
         ]);
-
         DB::commit();
 
         $token = $user->createToken($request->name);

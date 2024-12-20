@@ -19,4 +19,17 @@ class Bid extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+   public function buyer()
+    {
+        return $this->belongsTo(Buyer::class);
+    }
+
+    public function Category() {
+        return $this->belongsTo(Category::class);
+    }
+    public function favorite() {
+        return $this->belongsTo(Favorite::class);
+     }
+
 }
