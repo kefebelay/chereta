@@ -2,26 +2,54 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Bid;
+use App\Models\Listing;
 use Illuminate\Http\Request;
 
-class Bidcontroller extends Controller
+class BidController extends Controller
 {
-//
-public function index(Request $request) {
-    $bids = Bid::query();
+    public function store(Request $request)
+    {
 
-    if ($request->has('category')) {
-        $bids->where('category_id', $request->category);
+        $validated = $request->validate([
+            'listing_id' => 'required|exists:listings,id',
+            'bid_amount' => 'required|numeric|min:1',
+            'user_id' => 'required|exists:users,id',
+        ]);
+
+
+        $listing = Listing::findOrFail($validated['listing_id']);
+
+
+        if (now()->greaterThan($listing->bid_end_time)) {
+            return response()->json(['error' => 'This auction has ended.'], 403);
+        }
+
+
+        if ($validated['bid_amount'] <= $listing->starting_price) {
+            return response()->json(['error' => 'Bid amount must be higher than the current price.'], 400);
+
+        }
+        if ($validated['bid_amount'] <= $listing->winning_bid_amount) {
+            return response()->json(['error' => 'Bid amount must be higher than the current highest bid.'], 400);
+        }
+
+
+        $bid = Bid::create($validated);
+
+
+        $listing->winning_bid_amount = $bid->bid_amount;
+        $listing->save();
+
+        return response()->json(['message' => 'Bid placed successfully!', 'bid' => $bid, 'listing' => $listing->winning_bid_amount], 201);
     }
-    if ($request->has('status')) {
-        $bids->whereIn('status', $request->status);
+    public function showListingBids(string $id){
+        $bid = Bid::where('listing_id', $id)->with('user')->orderBy('created_at', 'desc')->get();
+        return response()->json(["bid" => $bid]);
     }
-    if ($request->has('favorite') && $request->favorite) {
-        $bids->whereHas('favorite');
+    public function showUserBids(string $id){
+        $bids = Bid::where('user_id', $id)->with('listing')->get();
+        return response()->json(["bids" => $bids]);
     }
 
-    return response()->json($bids->get());
-}
 }
