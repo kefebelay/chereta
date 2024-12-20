@@ -44,19 +44,11 @@ Route::post('/bid',[BidController::class,'index']);
 
 
 Route::middleware('auth:sanctum')->group(function () {
-    // Fetch all comments
+
     Route::get('/comments', [CommentController::class, 'index']);
-
-    // Create a new comment or reply
     Route::post('/comments', [CommentController::class, 'store']);
-
-    // Fetch a specific comment
     Route::get('/comments/{id}', [CommentController::class, 'show']);
-
-    // Update a specific comment
     Route::put('/comments/{id}', [CommentController::class, 'update']);
-
-    // Delete a specific comment
     Route::delete('/comments/{id}', [CommentController::class, 'destroy']);
 });
 
