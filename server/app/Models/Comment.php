@@ -12,6 +12,8 @@ class Comment extends Model
 
     protected $fillable = [
         'user_id',
+        'comment',
+        'parent_id',
         'listing_id',
     ];
 
@@ -20,5 +22,15 @@ class Comment extends Model
     }
     public function listing(){
         return $this->belongsTo(Listing::class);
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(Comment::class, 'parent_id');
+    }
+
+    public function replies()
+    {
+        return $this->hasMany(Comment::class, 'parent_id');
     }
 }

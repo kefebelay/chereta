@@ -76,6 +76,18 @@ class User extends Authenticatable
     return $this->belongsToMany(Listing::class, 'favorites','user_id','listing_id');
    }
 
+   public function order()
+   {
+    return $this->hasMany(Order::class);
+   }
+
+   public function comment()
+   {
+    return $this->hasMany(Comment::class);
+   }
+
+
+
 
     // Accessor to get the "actor" dynamically
     public function getActorAttribute()

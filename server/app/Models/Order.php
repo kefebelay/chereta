@@ -9,8 +9,10 @@ class Order extends Model
     //
     protected $fillable = [
         'order_number',
-        'item',
         'quantity',
+        'buyer_id',
+        'listing_id',
+        'delivery_person_id',
         'delivery_date',
         'status',
     ];
@@ -20,6 +22,11 @@ class Order extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function listing()
+    {
+        return $this->belongsTo(Listing::class);
+    }
+
     public function isPending()
     {
         return $this->status === 'Pending';
@@ -27,8 +34,8 @@ class Order extends Model
 
     public function delivery()
    {
-    return $this->hasOne(DeliveryPerson::class);
+    return $this->belongsTo(DeliveryPerson::class);
    }
 
-   
+
 }

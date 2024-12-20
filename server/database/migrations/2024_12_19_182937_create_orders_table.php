@@ -14,10 +14,12 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->string('order_number');
-            $table->string('item');
             $table->integer('quantity');
+            $table->foreignId('buyer_id');
+            $table->foreignId('listing_id');
+            $table->foreignId('delivery_person_id');
             $table->date('delivery_date');
-            $table->enum('status', ['Submitted', 'Pending', 'Delivered']);
+            $table->enum('status', ['submitted', 'pending', 'delivered']);
             $table->timestamps();
         });
     }

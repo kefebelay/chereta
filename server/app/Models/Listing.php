@@ -35,4 +35,18 @@ class Listing extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function favorite()
+    {
+        return $this->hasMany(Favorite::class);
+    }
+
+    public function comment()
+   {
+    return $this->hasMany(Comment::class);
+   }
+    public function order()
+    {
+        return $this->hasMany(Order::class);
+    }
 }
