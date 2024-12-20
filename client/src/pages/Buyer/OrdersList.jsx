@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; // Import navigation hook
-
+import Navbar from "../../components/common/Navbar";
 export default function OrderList() {
     const navigate = useNavigate(); // For navigating back to the previous page
 
@@ -42,14 +42,16 @@ export default function OrderList() {
     };
 
     return (
-        <div className="mt-20 p-5">
+        <div className="mt-20 ">
+            
             {/* Back Button */}
             <button
                 onClick={() => navigate(-1)} // Go back to the previous page
-                className="mb-4 bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 transition duration-300 flex items-center"
+                className="mb-4  text-primary border border-gray-700 px-4 py-2 rounded hover:bg-blue-300 transition duration-300 flex items-center"
             >
                 ← Back
             </button>
+            <Navbar />
 
             <h1 className="text-3xl font-bold text-center mb-8">Order List</h1>
             <div className="overflow-x-auto shadow-lg rounded-lg">

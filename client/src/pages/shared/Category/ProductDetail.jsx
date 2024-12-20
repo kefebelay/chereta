@@ -17,7 +17,7 @@ export default function Item() {
   const { id } = useParams();
   const [item, setItem] = useState({});
   const [tab, setTab] = useState("description");
-  const [bid, setBid] = useState(0);
+  const [bid, setBid] = useState(item.winning_bid_amount || item.starting_price || 0);
   const [isLoading, setisLoading] = useState(true);
   const { url, user } = useContext(UsersContext);
   const [isFavorite, setIsFavorite] = useState(false);
@@ -76,6 +76,7 @@ export default function Item() {
         setisLoading(true);
         const items = await Api.get(`api/listing/${id}`);
         setItem(items.data);
+        setBid(items.data.winning_bid_amount || items.data.starting_price || 0);
       } catch (err) {
         console.log(err);
       } finally {
