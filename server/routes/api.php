@@ -4,7 +4,6 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Http\Controllers\Bidcontroller;
 use App\Http\Controllers\BuyerController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\Api\CommentController;
@@ -64,7 +63,7 @@ Route::get('/users', [UserController::class, 'index'])->middleware(['auth:sanctu
 Route::get('/user/{id}', [UserController::class, 'show'])->middleware(['auth:sanctum', 'role:admin']);
 Route::get('/roles-count', [UserController::class, 'getRolesCount'])->middleware(['auth:sanctum', 'role:admin']);
 
-Route::post('/category',[CategoryController::class,'store']);
+Route::post('/category',[CategoryController::class,'store'])->middleware(['auth:sanctum', 'role:admin']);
 Route::delete('/category/{id}', [CategoryController::class, 'destroy'])->middleware(['auth:sanctum', 'role:admin']);
 
 
@@ -75,13 +74,17 @@ Route::get('/buyers', [BuyerController::class, 'index'])->middleware(['auth:sanc
 Route::get('/delivery_persons', [DeliveryPersonController::class, 'index'])->middleware(['auth:sanctum', 'role:admin']);
 Route::get('/individual_sellers', [IndividualSellerController::class, 'index'])->middleware(['auth:sanctum', 'role:admin']);
 Route::get('/company_sellers', [CompanySellerController::class, 'index'])->middleware(['auth:sanctum', 'role:admin']);
+
 //                        Buyer routes
 
 Route::post('/buyer/register', [RegisteredUserController::class, 'store']);
 Route::patch('/buyer/{id}', [BuyerController::class, 'update'])->middleware(['auth:sanctum', 'role:buyer']);
-
+Route::post('/bid', [BidController::class, 'store']);
+Route::get('/listing/bids/{id}', [BidController::class, 'showListingBids']);
+Route::get('/my-bids/{id}', [BidController::class, 'showUserBids']);
 //                         seller routes
 Route::post('/listing', [ListingController::class, 'store']);
+Route::get('/my-listings/{id}', [ListingController::class, 'getSellerListings'])->middleware(['auth:sanctum', 'role:individual_seller|company_seller']);
 
 //                        Individual seller routes
 

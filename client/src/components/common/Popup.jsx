@@ -1,3 +1,4 @@
+// eslint-disable-next-line react/prop-types
 export default function Popup({ popup, setPopup, onYes, message }) {
   return (
     <>

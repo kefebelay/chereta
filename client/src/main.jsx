@@ -6,7 +6,7 @@ import AdminProvider from "./hooks/Admin_Hooks.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <UsersProvider user={null}>
+    <UsersProvider>
       <AdminProvider>
         <App />
       </AdminProvider>

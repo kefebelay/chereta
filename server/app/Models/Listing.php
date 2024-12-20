@@ -17,7 +17,8 @@ class Listing extends Model
         'description',
         'starting_price',
         'bid_end_time',
-        'highest_bid',
+        'bid_start_time',
+        'winning_bid_amount',
         'status',
         'image',
     ];
@@ -34,15 +35,4 @@ class Listing extends Model
     {
         return $this->belongsTo(User::class);
     }
-
-    public function favoritedBy()
-   {
-    return $this->belongsToMany(User::class, 'favorites',);
-   }
-
-   public function users()
-    {
-        return $this->belongsToMany(User::class,'favorites','user_id','listing_id');
-    }
-
 }

@@ -9,6 +9,17 @@ class ListingController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function getSellerListings(String $id) {
+        try {
+
+            $listings = Listing::with('category', 'user')
+            ->where('user_id', $id)->get();
+            return response()->json($listings);
+        }
+        catch (\Exception $e) {
+            return response()->json(["message" => $e->getMessage()], 500);
+        }
+    }
 
     public function search(Request $request) {
         try {
@@ -46,8 +57,9 @@ class ListingController extends Controller
                 'title' => ['required', 'string', 'max:255'],
                 'description' => ['required', 'string'],
                 'starting_price' => ['required', 'numeric', 'min:0'],
-                'bid_end_time' => ['required', 'date', 'after:now'],
-                'image' => ['sometimes', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:5000'],
+                'bid_start_time' => ['required', 'date', 'after:now', 'before_or_equal:'.now()->addMonths(6)],
+                'after_or_equal:' . $request->input('bid_start_time') ? now()->parse($request->bid_start_time)->addDays(30) : now()->addDays(30),
+                'image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:5000'],
             ]);
 
 
@@ -61,6 +73,7 @@ class ListingController extends Controller
                 'description' => $request->description,
                 'starting_price' => $request->starting_price,
                 'bid_end_time' => $request->bid_end_time,
+                'bid_start_time' => $request->bid_start_time,
                 'image' => "images/listings/$imageName",
             ]);
 

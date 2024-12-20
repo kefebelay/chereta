@@ -1,79 +1,144 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { FaTruck } from "react-icons/fa"; // Import delivery car icon
 import Footer from "../../components/common/Footer";
 import Navbar from "../../components/common/Navbar";
+import { FilterSidebar } from "../../components/Buyer/FilterSidebar";
+// import NewNav from '../../components/common/NewNav';
+import { UsersContext } from "../../hooks/Users_Hook";
+import Api from "../Auth/Axios";
+import usePagination from "../../hooks/usePagination";
+import Pagination from "../../components/common/Pagination";
 
-export default function MyBids() {
+export default function BidPage() {
   const [bids, setBids] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  // Replace with your actual API endpoint later
-  const apiEndpoint = "https://jsonplaceholder.typicode.com/posts";
-
-  // Unsplash API configuration
-  const unsplashAccessKey = "YOUR_UNSPLASH_ACCESS_KEY"; // Replace with your Unsplash API key
-  const unsplashApiUrl = `https://api.unsplash.com/photos/random?query=auction&count=1&client_id=${unsplashAccessKey}`;
-
+  const { user, url } = useContext(UsersContext);
   useEffect(() => {
-    // Fetch the live bids
-    fetch(apiEndpoint)
-      .then((response) => response.json())
-      .then((data) => {
-        // Fetch images from Unsplash API
-        const fetchImages = data.slice(0, 10).map(async (bid) => {
-          const imageResponse = await fetch(unsplashApiUrl);
-          const imageData = await imageResponse.json();
-          return {
-            ...bid,
-            price: (Math.random() * 1000).toFixed(2), // Mock price between 0 and 1000
-            timeLeft: `${Math.floor(Math.random() * 24)}h ${Math.floor(
-              Math.random() * 60
-            )}m`, // Mock time left
-            imageUrl: imageData[0].urls.small, // Use the small size image from Unsplash
-          };
-        });
-
-        Promise.all(fetchImages).then((bidsWithImages) => {
-          setBids(bidsWithImages);
-          setLoading(false);
-        });
-      })
-      .catch((error) => {
+    const getBids = async () => {
+      try {
+        if (!user) {
+          setTimeout(() => {
+            getBids();
+          }, 3000);
+          return;
+        }
+        const response = await Api.get(
+          `http://localhost:8000/api/my-bids/${user.id}`
+        );
+        setBids(response.data.bids);
+        console.log(response.data.bids);
+      } catch (error) {
         console.error("Error fetching bids:", error);
-        setLoading(false);
-      });
+      }
+    };
+    getBids();
   }, []);
+  const navigate = useNavigate();
+  const ITEMS_PER_PAGE = 5;
+  const { currentPage, totalPages, currentItems, handlePageChange } =
+    usePagination(bids, ITEMS_PER_PAGE);
 
   return (
-    <div className="mt-20">
+    <div className="mt-20 relative">
+      {/* Delivery Car Icon Button in the Top-Right Corner */}
+      <button
+        onClick={() => navigate("/orderlist")} // Navigate to OrderList page
+        className="absolute top-5 right-5 bg-blue-500 text-white p-3 rounded-full shadow-md hover:bg-blue-600 transition duration-300"
+      >
+        <FaTruck className="text-xl" /> {/* Delivery Car Icon */}
+      </button>
+
       <Navbar />
-      <div className="container mx-auto px-4">
-        <h1 className="text-3xl text-primary font-extrabold text-center">
-          My Bids
-        </h1>
-        {loading ? (
-          <p className="text-center mt-10">Loading bids...</p>
-        ) : (
-          <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {bids.map((bid) => (
-              <div key={bid.id} className="border rounded-lg p-4 shadow">
-                <img
-                  src={bid.imageUrl}
-                  alt={`Item ${bid.id}`}
-                  className="w-full h-48 object-cover rounded-md"
-                />
-                <h2 className="text-xl font-bold mt-4">{bid.title}</h2>
-                <p className="mt-2">{bid.body}</p>
-                <p className="mt-4 text-lg text-gray-800 font-semibold">
-                  Price: ${bid.price}
-                </p>
-                <p className="mt-2 text-sm text-gray-600">
-                  Time Left: {bid.timeLeft}
-                </p>
-                <p className="mt-4 text-sm text-gray-600">Bid ID: {bid.id}</p>
-              </div>
-            ))}
+      <div className="flex gap-5">
+        <FilterSidebar />
+        <div className="w-4/5 mx-auto">
+          <div className="p-5 m-4 shadow rounded">
+            <h2 className="font-bold text-lg mb-4">My Bids</h2>
+            <div className="relative overflow-x-auto">
+              <table className="w-full text-sm text-left text-gray-500">
+                <thead className="text-xs text-gray-700 uppercase bg-gray-100">
+                  <tr>
+                    <th scope="col" className="px-6 py-3">
+                      Image
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Title
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Listing ID
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Starting Bid
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Your Bid
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Highest Bid
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Status
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {currentItems.length > 0 ? (
+                    currentItems.map((bid) => (
+                      <tr
+                        key={bid.id}
+                        className="bg-white border-b hover:bg-gray-50 text-gray-900"
+                      >
+                        <td className="px-6 py-4">
+                          <img
+                            src={url + bid.listing.image}
+                            alt={bid.listing.title}
+                            className="w-12 h-12 rounded"
+                          />
+                        </td>
+                        <td className="px-6 py-4">{bid.listing.title}</td>
+                        <td className="px-6 py-4">{bid.listing_id}</td>
+                        <td className="px-6 py-4">
+                          {bid.listing.starting_price}
+                        </td>
+                        <td className="px-6 py-4">{bid.bid_amount}</td>
+                        <td className="px-6 py-4">
+                          {bid.listing.winning_bid_amount}
+                        </td>
+                        <td className="px-6 py-4">
+                          <span
+                            className={`px-2 py-1 text-xs font-medium rounded ${
+                              bid.listing.status === "active"
+                                ? "bg-green-100 text-green-700"
+                                : bid.status === "ended"
+                                ? "bg-yellow-100  text-red-700 "
+                                : "bg-red-100 text-yellow-700"
+                            }`}
+                          >
+                            {bid.listing.status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td
+                        colSpan="7"
+                        className="text-center py-6 text-gray-500 italic"
+                      >
+                        No bids match the selected filters.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
+            </div>
           </div>
-        )}
+        </div>
       </div>
       <Footer />
     </div>

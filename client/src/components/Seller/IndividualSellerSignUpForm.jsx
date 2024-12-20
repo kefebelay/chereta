@@ -121,7 +121,6 @@ export default function IndividualSellerSignUpForm() {
               onChange={handleChange}
             />
           </div>
-          {/* Phone Number */}
           <div className="mb-4">
             <label className="block mb-2">Phone Number</label>
             <input

@@ -19,6 +19,7 @@ import WinningBids from "./pages/Buyer/WinningBids";
 import Favorites from "./pages/Buyer/Favorite";
 import DeliveryTracking from "./pages/Buyer/DeliveryTracking";
 import OngoingBids from "./pages/Buyer/OngoingBids";
+import DeliveryPage from "./pages/Buyer/DeliveryPage";
 
 // Seller routes
 import SellerInfo from "./pages/Seller/SellerInfo";
@@ -39,7 +40,8 @@ import DeliveryPersonnel from "./pages/Admin/DeliveryPersonnel";
 import Profile from "./pages/Buyer/Profile";
 import Category from "./pages/Admin/Categories";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
-
+import CreateProduct from "./pages/Seller/CreateProduct";
+import OrderList from "./pages/Buyer/OrdersList";
 
 export default function App() {
   return (
@@ -66,6 +68,9 @@ export default function App() {
         <Route path="/winning-bids" element={<WinningBids />} />
         <Route path="/favorites" element={<Favorites />} />
         <Route path="/delivery-tracking" element={<DeliveryTracking />} />
+        <Route path="/delivery-page" element={<DeliveryPage />} />
+        <Route path="/orderlist" element={<OrderList />} />
+
 
         {/* Seller routes */}
         <Route path="/seller/dashboard" element={<SellerDashboard />} />
@@ -74,6 +79,10 @@ export default function App() {
           element={<SellerAnalytics />}
         />
         <Route path="/seller/dashboard/products" element={<SellerProducts />} />
+        <Route
+          path="/seller/dashboard/create-products"
+          element={<CreateProduct />}
+        />
         <Route path="/seller/dashboard/orders" element={<Orders />} />
         <Route path="/seller/dashboard/comments" element={<Comments />} />
         <Route path="/seller/company/profile" element={<CompanyProfile />} />
