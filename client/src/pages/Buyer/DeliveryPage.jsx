@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; // For navigation
+import Navbar from "../../components/common/Navbar";
 
 const DeliveryPage = () => {
   const navigate = useNavigate(); // Navigation hook
@@ -20,7 +21,8 @@ const DeliveryPage = () => {
   };
 
   return (
-    <div className="relative min-h-screen p-10 bg-gray-50">
+    <div className="mt-20 relative min-h-screen p-10 bg-gray-50">
+      <Navbar />
       {/* Back Button */}
       <button
         onClick={() => navigate(-1)} // Go back to the previous page
@@ -28,6 +30,7 @@ const DeliveryPage = () => {
       >
         &larr; 
       </button>
+      
 
       <div className="flex flex-col md:flex-row gap-10 mt-10">
         {/* Left Section - Delivery Form */}
