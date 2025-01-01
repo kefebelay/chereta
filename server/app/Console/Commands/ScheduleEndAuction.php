@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Jobs\EndAuctionJob;
+use App\Models\Listing;
 use Illuminate\Console\Command;
 
 class ScheduleEndAuction extends Command
@@ -26,7 +27,12 @@ class ScheduleEndAuction extends Command
      */
     public function handle()
     {
-        EndAuctionJob::dispatch();
-        $this->info('Auction end job dispatched successfully.');
+        $activeListings = Listing::where('status', 'active')->where('bid_end_time', '<=', now())->get();
+
+        foreach ($activeListings as $listing) {
+            $listing->endAuction();
+        }
+
+        $this->info('Auctions ended successfully.');
     }
 }

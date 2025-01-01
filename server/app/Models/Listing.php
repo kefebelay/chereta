@@ -49,4 +49,17 @@ class Listing extends Model
     {
         return $this->hasMany(Order::class);
     }
+
+    public function endAuction()
+    {
+        $highestBid = $this->bids()->orderBy('bid_amount', 'desc')->first();
+
+        if ($highestBid) {
+            $this->winner_id = $highestBid->user_id;
+            $this->winning_bid_amount = $highestBid->bid_amount;
+        }
+
+        $this->status = 'ended';
+        $this->save();
+    }
 }

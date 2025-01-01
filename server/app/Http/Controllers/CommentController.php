@@ -17,7 +17,7 @@ class CommentController extends Controller
     public function index()
     {
         try {
-            // Fetch all top-level comments with their replies, user, and listing
+
             $comments = Comment::with(['user', 'listing', 'replies.user'])->whereNull('parent_id')->get();
             return response()->json($comments, 200);
         } catch (Exception $e) {
@@ -33,24 +33,24 @@ class CommentController extends Controller
     public function store(Request $request)
     {
         try {
-            // Validate input
+
             $validator = Validator::make($request->all(), [
                 'user_id' => 'required|exists:users,id',
                 'listing_id' => 'required|exists:listings,id',
                 'comment' => 'required|string|max:1000',
-                'parent_id' => 'nullable|exists:comments,id', // Validate parent_id if provided
+                'parent_id' => 'nullable|exists:comments,id',
             ]);
 
             if ($validator->fails()) {
                 return response()->json($validator->errors(), 400);
             }
 
-            // Create the comment or reply
+
             $comment = Comment::create([
                 'user_id' => $request->user_id,
                 'listing_id' => $request->listing_id,
                 'comment' => $request->comment,
-                'parent_id' => $request->parent_id, // Null for top-level comments
+                'parent_id' => $request->parent_id,
             ]);
 
             return response()->json(['message' => 'Comment created successfully', 'comment' => $comment], 201);
@@ -83,7 +83,7 @@ class CommentController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            // Validate input
+
             $validator = Validator::make($request->all(), [
                 'comment' => 'required|string|max:1000',
             ]);
@@ -92,7 +92,7 @@ class CommentController extends Controller
                 return response()->json($validator->errors(), 400);
             }
 
-            // Find and update the comment
+
             $comment = Comment::findOrFail($id);
             $comment->update(['comment' => $request->comment]);
 

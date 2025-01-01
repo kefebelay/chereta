@@ -12,7 +12,11 @@ return [
     | other UI elements where an application name needs to be displayed.
     |
     */
-
+    // 'providers' => [
+    //     App\Providers\ScheduleServiceProvider::class,
+    //     Illuminate\Filesystem\FilesystemServiceProvider::class,
+    //     Illuminate\Cache\CacheServiceProvider::class,
+    // ],
     'name' => env('APP_NAME', 'Laravel'),
 
     /*
