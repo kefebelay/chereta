@@ -19,4 +19,9 @@ class DeliveryPerson extends Model
     public function user(){
         return  $this->BelongsTo(User::class);
      }
+
+     public function order()
+    {
+    return $this->hasMany(Order::class);
+    }
 }

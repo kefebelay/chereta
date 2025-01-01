@@ -1,14 +1,17 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Http\Controllers\BidController;
 use App\Http\Controllers\BuyerController;
+use App\Http\Controllers\BidController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CompanySellerController;
 use App\Http\Controllers\DeliveryPersonController;
+use App\Http\Controllers\FavoriteControlle;
 use App\Http\Controllers\IndividualSellerController;
 use App\Http\Controllers\ListingController;
 use App\Http\Controllers\UserController;
@@ -32,6 +35,31 @@ Route::post('/listing/search', [ListingController::class, 'search']);
 Route::get('/listings', [ListingController::class, 'index']);
 Route::get('/listing/{id}', [ListingController::class, 'show']);
 Route::get('/seller/profile/{id}', [UserController::class, 'getSellerProfile']);
+
+Route::post('/listing/{id}/favorites', [FavoriteControlle::class, 'addFavorite'])->middleware( 'auth:sanctum');
+Route::get('/favorites', [FavoriteControlle::class, 'getFavorites'])->middleware( 'auth:sanctum','role:buyer');
+
+
+Route::post('/bid',[BidController::class,'index']);
+
+
+Route::middleware('auth:sanctum')->group(function () {
+
+    Route::get('/comments', [CommentController::class, 'index']);
+    Route::post('/comments', [CommentController::class, 'store']);
+    Route::get('/comments/{id}', [CommentController::class, 'show']);
+    Route::put('/comments/{id}', [CommentController::class, 'update']);
+    Route::delete('/comments/{id}', [CommentController::class, 'destroy']);
+});
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('orders', [OrderController::class, 'index']);
+    Route::post('orders', [OrderController::class, 'store']);
+    Route::get('orders/{id}', [OrderController::class, 'show']);
+    Route::put('orders/{id}', [OrderController::class, 'update']);
+    Route::delete('orders/{id}', [OrderController::class, 'destroy']);
+});
 
 
 

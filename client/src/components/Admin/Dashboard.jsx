@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import ThemeSwitcher from "../common/ThemeSwitcherBtn";
-import Logout from "../../pages/Auth/Logout";
+
 
 export default function Dashboard({ isOpen, setIsOpen }) {
   const location = useLocation();

@@ -35,21 +35,18 @@ class Listing extends Model
     {
         return $this->belongsTo(User::class);
     }
-    public function endAuction()
+
+    public function favorite()
     {
+        return $this->hasMany(Favorite::class);
+    }
 
-        if (now()->greaterThanOrEqualTo($this->bid_end_time) && $this->status !== 'ended') {
-
-            $highestBid = $this->bids()->orderBy('bid_amount', 'desc')->first();
-
-            if ($highestBid) {
-
-                $this->winner_id = $highestBid->user_id;
-            }
-
-
-            $this->status = 'ended';
-            $this->save();
-        }
+    public function comment()
+   {
+    return $this->hasMany(Comment::class);
+   }
+    public function order()
+    {
+        return $this->hasMany(Order::class);
     }
 }
