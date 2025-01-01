@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('listing_reports', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('listing_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('seller_id')->constrained('users')->onDelete('cascade');
+            $table->string('reason');
+            $table->text('custom_reason')->nullable();
             $table->timestamps();
         });
     }

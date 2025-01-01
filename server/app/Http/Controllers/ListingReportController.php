@@ -12,13 +12,16 @@ class ListingReportController extends Controller{
     public function report(Request $request, $listingId)
     {
         $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'seller_id' => 'required|exists:users,id',
             'reason' => 'required|string|max:255',
             'custom_reason' => 'nullable|string|max:500',
         ]);
 
         $report = ListingReport::create([
             'listing_id' => $listingId,
-            'user_id' => \Illuminate\Support\Facades\Auth::user()->id,
+            'user_id' => $request->user_id,
+            'seller_id' => $request->seller_id,
             'reason' => $request->reason,
             'custom_reason' => $request->custom_reason,
         ]);
@@ -26,15 +29,12 @@ class ListingReportController extends Controller{
         return response()->json(['message' => 'Report submitted successfully', 'report' => $report], 201);
     }
 
-
     public function index()
     {
+        $reports = ListingReport::with('listing', 'user', 'seller')->get();
 
-        $reports = ListingReport::with('listing', 'user')->get();
-
-        return view('admin.reports.index', compact('reports'));
+        return response()->json(['reports' => $reports], 200);
     }
-
 
     public function deleteListing($listingId)
     {

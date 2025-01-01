@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ListingReportController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
@@ -62,6 +63,11 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 
+Route::post('/listing/{listing}/report', [ListingReportController::class, 'report']);
+
+
+Route::get('/listings/reports', [ListingReportController::class, 'index']);
+Route::delete('/listings/{listing}', [ListingReportController::class, 'deleteListing']);
 
 //                        Admin routes
 
