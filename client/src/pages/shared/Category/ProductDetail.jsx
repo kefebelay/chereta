@@ -11,13 +11,16 @@ import { AiOutlineHeart } from "react-icons/ai";
 import Cookies from "js-cookie";
 import CommentTab from "../../../components/common/CommentTab";
 import BidsTab from "../../../components/common/BidsTab";
+import { FcAbout } from "react-icons/fc";
 
 export default function Item() {
   const [message, setMessage] = useState("");
   const { id } = useParams();
   const [item, setItem] = useState({});
   const [tab, setTab] = useState("description");
-  const [bid, setBid] = useState(item.winning_bid_amount || item.starting_price || 0);
+  const [bid, setBid] = useState(
+    item.winning_bid_amount || item.starting_price || 0
+  );
   const [isLoading, setisLoading] = useState(true);
   const { url, user } = useContext(UsersContext);
   const [isFavorite, setIsFavorite] = useState(false);
@@ -109,7 +112,10 @@ export default function Item() {
               {/* Details Section */}
               <div className="flex-1 flex flex-col justify-between">
                 <div className="mt-8">
-                  <h1 className="text-3xl font-bold mb-2">{item.title}</h1>
+                  <div className="flex justify-between  bg-transparent">
+                    <h1 className="text-3xl font-bold mb-2">{item.title}</h1>
+                    <FcAbout className="text-3xl" />
+                  </div>
                   <p className="text-2xl font-semibold mb-2 text-primary">
                     Birr: {item.starting_price}
                   </p>

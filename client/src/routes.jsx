@@ -43,6 +43,12 @@ import ForgotPassword from "./pages/Auth/ForgotPassword";
 import CreateProduct from "./pages/Seller/CreateProduct";
 import OrderList from "./pages/Buyer/OrdersList";
 
+// Delivery person routes
+import DeliveryPersonnelDashboardPage from "./pages/DeliveryPersonnel/DeliveryPersonnelDashboardPage";
+import DeliveryAnalytics from "./pages/DeliveryPersonnel/Analytics";
+import DeliveryHistory from "./pages/DeliveryPersonnel/History";
+import DeliveryOrders from "./pages/DeliveryPersonnel/Orders";
+
 export default function App() {
   return (
     <Router>
@@ -70,7 +76,6 @@ export default function App() {
         <Route path="/delivery-tracking" element={<DeliveryTracking />} />
         <Route path="/delivery-page" element={<DeliveryPage />} />
         <Route path="/orderlist" element={<OrderList />} />
-
 
         {/* Seller routes */}
         <Route path="/seller/dashboard" element={<SellerDashboard />} />
@@ -101,6 +106,21 @@ export default function App() {
           path="/admin/dashboard/delivery-personnel"
           element={<DeliveryPersonnel />}
         />
+
+        {/* delivery person routes */}
+        <Route
+          path="/delivery/dashboard"
+          element={<DeliveryPersonnelDashboardPage />}
+        />
+        <Route
+          path="/delivery/dashboard/analytics"
+          element={<DeliveryAnalytics />}
+        />
+        <Route
+          path="/delivery/dashboard/history"
+          element={<DeliveryHistory />}
+        />
+        <Route path="/delivery/dashboard/orders" element={<DeliveryOrders />} />
 
         {/* Not found route */}
         <Route path="*" element={<NotFoundPage />} />

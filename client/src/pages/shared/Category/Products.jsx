@@ -7,11 +7,12 @@ import SellerProfile from "../../../components/Seller/SellerProfile";
 import Api from "../../Auth/Axios";
 import { UsersContext } from "../../../hooks/Users_Hook";
 import RemainingTime from "../../../components/common/Remaining_time";
+import { FcAbout, FcLike } from "react-icons/fc";
 
 export default function Items() {
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [page, setPage] = useState([]);
+  // const [page, setPage] = useState([]);
   const { url } = useContext(UsersContext);
 
   useEffect(() => {
@@ -57,6 +58,11 @@ export default function Items() {
                     <Link to={`/seller/info/${item.user.id}`}>
                       <SellerProfile seller={item.user} />
                     </Link>
+                    <div className="flex justify-between p-4 bg-transparent">
+                      <FcAbout className="text-2xl" />
+
+                      <FcLike className="text-2xl" />
+                    </div>
                     <Link
                       to={`/product/${item.id}`}
                       className="block overflow-hidden"
@@ -82,6 +88,7 @@ export default function Items() {
                             />
                           </p>
                         </div>
+
                         <button className="btn py-2 px-4 rounded-xl bg-primary w-20 text-center text-white">
                           Detail
                         </button>

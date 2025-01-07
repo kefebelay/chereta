@@ -49,6 +49,10 @@ class Listing extends Model
     {
         return $this->hasMany(Order::class);
     }
+    public function listingreport()
+    {
+        return $this->hasMany(ListingReport::class);
+    }
 
     public function endAuction()
     {

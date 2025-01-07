@@ -36,7 +36,7 @@ class ListingReport extends Model
         return $this->belongsTo(User::class);
     }
 
-    // Static method for predefined reasons
+
     public static function reasons()
     {
         return [

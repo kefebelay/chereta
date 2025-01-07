@@ -3,6 +3,7 @@ import Api from "../../pages/Auth/Axios";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { UsersContext } from "../../hooks/Users_Hook";
+import Cookies from "js-cookie";
 
 // eslint-disable-next-line react/prop-types
 export default function CommentTab() {
@@ -11,11 +12,13 @@ export default function CommentTab() {
   const [reply, setReply] = useState({});
   const { id } = useParams();
   const { user } = useContext(UsersContext);
+
   useEffect(() => {
     async function fetchComments() {
       try {
         const response = await Api.get(`api/comments/${id}`);
         setComments(response.data);
+        console.log(response.data);
       } catch (error) {
         console.error("Failed to fetch comments", error);
       }
@@ -31,11 +34,19 @@ export default function CommentTab() {
     }
 
     try {
-      const response = await Api.post("api/comments", {
-        listing_id: id,
-        user_id: user.id,
-        text: newComment,
-      });
+      const response = await Api.post(
+        "api/comments",
+        {
+          listing_id: id,
+          user_id: user.id,
+          comment: newComment,
+        },
+        {
+          headers: {
+            "X-XSRF-TOKEN": Cookies.get("XSRF-TOKEN"),
+          },
+        }
+      );
 
       setComments([...comments, response.data]);
       setNewComment("");
@@ -46,17 +57,26 @@ export default function CommentTab() {
   };
 
   const handleReply = async (commentId) => {
-    if (!reply[commentId]?.trim()) {
+    if (!reply[commentId]) {
       toast.error("Reply cannot be empty.");
       return;
     }
 
     try {
-      const response = await Api.post("api/replies", {
-        comment_id: commentId,
-        user_id: user.id,
-        text: reply[commentId],
-      });
+      const response = await Api.post(
+        `api/comments/${commentId}/reply`,
+        {
+          user_id: user.id,
+          listing_id: id,
+          comment: reply[commentId],
+        },
+        {
+          headers: {
+            "X-XSRF-TOKEN": Cookies.get("XSRF-TOKEN"),
+          },
+        }
+      );
+      console.log(response);
 
       setComments((prevComments) =>
         prevComments.map((comment) =>
@@ -76,13 +96,40 @@ export default function CommentTab() {
   };
   return (
     <div className="mt-5 px-10">
+      {/* Add New Comment */}
+      <div className="mb-5">
+        <h3 className="text-lg font-semibold">Add a Comment</h3>
+        <textarea
+          className="border p-2 rounded w-full mt-2"
+          rows="3"
+          placeholder="Write your comment..."
+          value={newComment}
+          onChange={(e) => setNewComment(e.target.value)}
+        />
+        <button
+          onClick={handleAddComment}
+          className="bg-primary text-white py-2 px-4 rounded mt-2"
+        >
+          Post Comment
+        </button>
+      </div>
       {/* Display Existing Comments */}
       <div className="space-y-5">
         {comments.length > 0 ? (
           comments.map((comment) => (
             <div key={comment.id} className="border p-4 rounded-md">
-              <p className="text-lg font-semibold">{comment.user_name}</p>
-              <p className="text-gray-600">{comment.text}</p>
+              <div className="flex items-center gap-1 py-2">
+                <img
+                  src={
+                    comment.user.image ||
+                    "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"
+                  }
+                  alt={comment.user.username}
+                  className="w-10 h-10 rounded-full mr-2"
+                />
+                <p className="text-lg font-semibold">{comment.user.username}</p>
+              </div>
+              <p className="ml-5">{comment.comment}</p>
 
               {/* Reply Section */}
               <button
@@ -126,8 +173,10 @@ export default function CommentTab() {
                 <div className="mt-4 space-y-2">
                   {comment.replies.map((rep, index) => (
                     <div key={index} className="ml-4 p-2 border-l-2">
-                      <p className="text-sm font-semibold">{rep.user_name}</p>
-                      <p className="text-gray-500">{rep.text}</p>
+                      <p className="text-sm font-semibold">
+                        {rep.user.username}
+                      </p>
+                      <p className="">{rep.comment}</p>
                     </div>
                   ))}
                 </div>
@@ -137,24 +186,6 @@ export default function CommentTab() {
         ) : (
           <p className="text-center text-gray-500">No comments yet.</p>
         )}
-      </div>
-
-      {/* Add New Comment */}
-      <div className="mt-5">
-        <h3 className="text-lg font-semibold">Add a Comment</h3>
-        <textarea
-          className="border p-2 rounded w-full mt-2"
-          rows="3"
-          placeholder="Write your comment..."
-          value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
-        />
-        <button
-          onClick={handleAddComment}
-          className="bg-primary text-white py-2 px-4 rounded mt-2"
-        >
-          Post Comment
-        </button>
       </div>
     </div>
   );

@@ -44,23 +44,26 @@ Route::get('/favorites', [FavoriteControlle::class, 'getFavorites'])->middleware
 Route::post('/bid',[BidController::class,'index']);
 
 
-Route::middleware('auth:sanctum')->group(function () {
+
 
     Route::get('/comments', [CommentController::class, 'index']);
     Route::post('/comments', [CommentController::class, 'store']);
     Route::get('/comments/{id}', [CommentController::class, 'show']);
     Route::put('/comments/{id}', [CommentController::class, 'update']);
     Route::delete('/comments/{id}', [CommentController::class, 'destroy']);
-});
+
+    Route::post('/comments/{commentId}/reply', [CommentController::class, 'reply']);
+    Route::get('/seller/comments', [CommentController::class, 'sellerComments']);
+    Route::post('/seller/comments/{parentId}/reply', [CommentController::class, 'sellerReply']);
 
 
-Route::middleware('auth:sanctum')->group(function () {
+
     Route::get('orders', [OrderController::class, 'index']);
     Route::post('orders', [OrderController::class, 'store']);
     Route::get('orders/{id}', [OrderController::class, 'show']);
     Route::put('orders/{id}', [OrderController::class, 'update']);
     Route::delete('orders/{id}', [OrderController::class, 'destroy']);
-});
+
 
 
 Route::post('/listing/{listing}/report', [ListingReportController::class, 'report']);
