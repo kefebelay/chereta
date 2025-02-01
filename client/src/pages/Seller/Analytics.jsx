@@ -1,59 +1,129 @@
-import { useState, useEffect } from "react";
-import { Line } from "react-chartjs-2";
+import { useContext, useState, useEffect } from "react";
+import { Bar, Pie } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
-  PointElement,
-  LineElement,
+  BarElement,
   Title,
   Tooltip,
   Legend,
+  ArcElement,
 } from "chart.js";
 import Dashboard from "../../components/Seller/SellerDashboard";
 import Underline from "../../components/common/Underline";
+import { UsersContext } from "../../hooks/Users_Hook";
+import Api from "../Auth/Axios";
 
 ChartJS.register(
   CategoryScale,
   LinearScale,
-  PointElement,
-  LineElement,
+  BarElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  ArcElement
 );
 
 export default function Analytics() {
   const [Open, isOpen] = useState(true);
-  const [lineData, setLineData] = useState({
-    labels: [],
+  const { user } = useContext(UsersContext);
+  const [barData, setBarData] = useState({
+    labels: ["Active Items", "Total Bids", "Unique Bidders"],
     datasets: [
       {
-        label: "Sales",
+        label: "Listings",
         data: [],
-        fill: false,
-        backgroundColor: "rgba(75,192,192,0.4)",
-        borderColor: "rgba(75,192,192,1)",
+        backgroundColor: [
+          "rgba(255, 206, 86, 0.2)",
+          "rgba(54, 162, 235, 0.2)",
+          "rgba(153, 102, 255, 0.2)",
+        ],
+        borderColor: [
+          "rgba(255, 206, 86, 1)",
+          "rgba(54, 162, 235, 1)",
+          "rgba(153, 102, 255, 1)",
+        ],
+        borderWidth: 1,
       },
     ],
   });
+  const [pieData, setPieData] = useState({
+    labels: ["Total Items", "Total Items Sold"],
+    datasets: [
+      {
+        label: "Listings",
+        data: [],
+        backgroundColor: ["rgba(255, 99, 132, 0.2)", "rgba(75, 192, 192, 0.2)"],
+        borderColor: ["rgba(255, 99, 132, 1)", "rgba(75, 192, 192, 1)"],
+        borderWidth: 1,
+      },
+    ],
+  });
+  const [statistics, setStatistics] = useState([]);
+
+  const fetchStatistics = async () => {
+    try {
+      if (user.roles[0].name) {
+        if (user.roles[0].name === "individual_seller") {
+          const response = await Api.get(
+            `/api/individual-seller/${user.id}/listing-counts`,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }
+          );
+          console.log(response);
+          setStatistics(response.data);
+        } else if (user.roles[0].name === "company_seller") {
+          const response = await Api.get(
+            `/api/company-seller/${user.id}/listing-counts`
+          );
+          console.log(response);
+          setStatistics(response.data);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching statistics:", error);
+    }
+  };
 
   useEffect(() => {
-    // Generate random data
-    const generateRandomData = (numPoints) => {
-      return Array.from({ length: numPoints }, () =>
-        Math.floor(Math.random() * 40)
-      );
-    };
+    if (user) {
+      fetchStatistics();
+    }
+  }, [user]);
 
-    const labels = ["January", "February", "March", "April", "May", "June"];
-    const salesData = generateRandomData(6);
-
-    setLineData({
-      labels,
-      datasets: [{ ...lineData.datasets[0], data: salesData }],
+  useEffect(() => {
+    setBarData({
+      ...barData,
+      datasets: [
+        {
+          ...barData.datasets[0],
+          data: [
+            statistics.live_listings,
+            statistics.total_bids,
+            statistics.unique_bidders,
+          ],
+        },
+      ],
     });
-  }, []);
+
+    setPieData({
+      ...pieData,
+      datasets: [
+        {
+          ...pieData.datasets[0],
+          data: [statistics.total_listings, statistics.sold_listings],
+        },
+      ],
+    });
+  }, [statistics]);
+
+  if (!user) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="">
@@ -67,23 +137,20 @@ export default function Analytics() {
           Analytics
         </h1>
         <Underline mt={4} mb={0} />
-        <div className=" p-4">
-          <Line data={lineData} />
+        <div className="p-4">
           <div className="mt-10">
             <h1 className="text-2xl font-bold text-center text-primary">
-              {" "}
-              Sales Data{" "}
+              Listing Statistics (Bar Chart)
             </h1>
             <Underline mt={3} />
-            {lineData.labels.map((label, index) => (
-              <div key={index} className="text-lg flex items-center">
-                <span className="font-bold">{label}:</span>
-                <span key={index} className="ml-2 text-teal-600">
-                  Sales - {lineData.datasets[0].data[index]}
-                </span>
-              </div>
-            ))}
-            <h2 className="text-xl font-semibold mb-4">Sales Over Time</h2>
+            <Bar data={barData} />
+          </div>
+          <div className="mt-10">
+            <h1 className="text-2xl font-bold text-center text-primary">
+              Listing Statistics (Pie Chart)
+            </h1>
+            <Underline mt={3} />
+            <Pie data={pieData} />
           </div>
         </div>
       </div>

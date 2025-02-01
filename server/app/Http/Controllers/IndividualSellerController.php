@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\IndividualSeller;
 use App\Models\User;
 use App\Models\Listing;
+use App\Models\Bid;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -129,11 +130,15 @@ class IndividualSellerController extends Controller
             $totalListings = Listing::where('user_id', $id)->count();
             $liveListings = Listing::where('user_id', $id)->whereNull('winner_id')->count();
             $soldListings = Listing::where('user_id', $id)->whereNotNull('winner_id')->count();
+            $totalBids = Bid::whereIn('listing_id', Listing::where('user_id', $id)->pluck('id'))->count();
+            $uniqueBidders = Bid::whereIn('listing_id', Listing::where('user_id', $id)->pluck('id'))->distinct('user_id')->count('user_id');
 
             return response()->json([
                 'total_listings' => $totalListings,
                 'live_listings' => $liveListings,
-                'sold_listings' => $soldListings
+                'sold_listings' => $soldListings,
+                'total_bids' => $totalBids,
+                'unique_bidders' => $uniqueBidders
             ]);
         } catch (Exception $e) {
             return response()->json([
