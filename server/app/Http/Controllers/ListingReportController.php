@@ -31,8 +31,7 @@ class ListingReportController extends Controller{
 
     public function index()
     {
-        $reports = ListingReport::with('listing', 'user', 'seller')->get();
-
+        $reports = ListingReport::with(['listing','user'])->get();
         return response()->json(['reports' => $reports], 200);
     }
 

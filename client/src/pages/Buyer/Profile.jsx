@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import Logout from "../Auth/Logout";
 
 export default function ProfilePage() {
-  const { user, token } = useContext(UsersContext);
+  const { user, token, url } = useContext(UsersContext);
   const [message, setMessage] = useState("");
   const [popup, setPopup] = useState(false);
   const navigate = useNavigate();
@@ -99,7 +99,7 @@ export default function ProfilePage() {
         ) : (
           <div className="flex flex-col items-center">
             <img
-              src={profilePicture}
+              src={url + user.image || profilePicture}
               alt="Profile"
               className="w-32 h-32 rounded-full object-cover mb-4 border-4 border-primary"
             />

@@ -1,19 +1,43 @@
 import { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Hamburger from "./HamburgerMenu";
 import ThemeSwitcher from "./ThemeSwitcherBtn";
 import { UsersContext } from "../../hooks/Users_Hook";
 
 export default function Navbar() {
-  const { user } = useContext(UsersContext);
+  const { user, url } = useContext(UsersContext);
   const [hamburgerOpen, setHamburgerOpen] = useState(false);
+  const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
 
-  function handleClick() {
-    const aboutSection = document.getElementById("About");
-    if (aboutSection) {
-      aboutSection.scrollIntoView({ behavior: "smooth" });
+  const handleSearch = (e) => {
+    e.preventDefault();
+    navigate(`/search?query=${searchQuery}`);
+  };
+
+  const fetchSuggestions = async (query) => {
+    if (query.length > 2) {
+      try {
+        const response = await fetch(`/api/listing/search?query=${query}`);
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        setSuggestions(data);
+      } catch (error) {
+        console.error("Error fetching suggestions:", error);
+        setSuggestions([]);
+      }
+    } else {
+      setSuggestions([]);
     }
-  }
+  };
+
+  useEffect(() => {
+    fetchSuggestions(searchQuery);
+  }, [searchQuery]);
+
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 992) {
@@ -55,20 +79,6 @@ export default function Navbar() {
               Home
             </Link>
           </li>
-
-          <li className="bg-transparent">
-            <Link
-              className={`text-md  hover:text-accent  bg-transparent ${
-                location.pathname === "/#About" &&
-                "text-primary font-bold underline underline-offset-4 "
-              }`}
-              to={"/#About"}
-              onClick={handleClick}
-            >
-              About
-            </Link>
-          </li>
-
           <li className="bg-transparent">
             <Link
               to={"/categories"}
@@ -81,7 +91,6 @@ export default function Navbar() {
               Categories
             </Link>
           </li>
-
           <li className="bg-transparent">
             <Link
               className={`
@@ -95,9 +104,39 @@ export default function Navbar() {
               Products
             </Link>
           </li>
-
           <li className="bg-transparent">
             <ThemeSwitcher />
+          </li>
+          <li className="bg-transparent relative">
+            <form onSubmit={handleSearch} className="flex items-center">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search..."
+                className="bg-transparent border-b-2 border-primary focus:outline-none"
+              />
+              <button type="submit" className="bg-transparent ml-2">
+                <i className="fas fa-search text-primary"></i>
+              </button>
+            </form>
+            {suggestions.length > 0 && (
+              <ul className="absolute bg-white border border-gray-300 mt-2 w-full z-10">
+                {suggestions.map((suggestion) => (
+                  <li
+                    key={suggestion.id}
+                    className="p-2 hover:bg-gray-200 cursor-pointer"
+                    onClick={() => {
+                      setSearchQuery(suggestion.title);
+                      setSuggestions([]);
+                      navigate(`/listing/${suggestion.id}`);
+                    }}
+                  >
+                    {suggestion.title}
+                  </li>
+                ))}
+              </ul>
+            )}
           </li>
         </ul>
         {user ? (
@@ -115,7 +154,7 @@ export default function Navbar() {
               <Link to={"/profile"} className="rounded-full h-10 w-10">
                 <img
                   className="w-full h-full rounded-full"
-                  src="https://picsum.photos/200/300"
+                  src={url + user.image || "https://picsum.photos/200/300"}
                   alt="profile"
                 />
                 <p className="bg-transparent flex justify-center items-center text-sm">

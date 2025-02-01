@@ -51,39 +51,44 @@ export default function CategoryItems() {
                 {category}
               </h1>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 grid-cols-1 gap-6 mt-5 p-4 place-items-center">
-                {items.map((item) => (
-                  <div
-                    key={item.id}
-                    className=" p-6 rounded-lg shadow-sm shadow-text2 hover:shadow-xl transition-shadow duration-300"
-                  >
-                    <Link to={`/seller/info/${item.user.id}`}>
-                      <SellerProfile seller={item.user} />
-                    </Link>
+                {items.map(
+                  (item) =>
+                    item.status !== "ended" && (
+                      <div
+                        key={item.id}
+                        className=" p-6 rounded-lg shadow-sm shadow-text2 hover:shadow-xl transition-shadow duration-300"
+                      >
+                        <Link to={`/seller/info/${item.user.id}`}>
+                          <SellerProfile seller={item.user} />
+                        </Link>
 
-                    <Link to={`/product/${item.id}`} className="block">
-                      <img
-                        className="w-full rounded-lg mb-4 hover:scale-105 transition-transform duration-300"
-                        src={url + item.image}
-                        alt="Product"
-                      />
-                      <h3 className="text-xl font-bold mb-2">{item.title}</h3>
-                      <div className="flex justify-between items-center mb-4">
-                        <p className="text-lg font-semibold text-primary">
-                          Birr: {item.starting_price}
-                        </p>
-                        <button className="btn bg-primary text-white px-4 py-2 rounded-lg">
-                          Detail
-                        </button>
+                        <Link to={`/product/${item.id}`} className="block">
+                          <img
+                            className="w-full rounded-lg mb-4 hover:scale-105 transition-transform duration-300"
+                            src={url + item.image}
+                            alt="Product"
+                          />
+                          <h3 className="text-xl font-bold mb-2">
+                            {item.title}
+                          </h3>
+                          <div className="flex justify-between items-center mb-4">
+                            <p className="text-lg font-semibold text-primary">
+                              Birr: {item.starting_price}
+                            </p>
+                            <button className="btn bg-primary text-white px-4 py-2 rounded-lg">
+                              Detail
+                            </button>
+                          </div>
+                          <p className="text-sm text-gray-500">
+                            <RemainingTime
+                              bidEndTime={item.bid_end_time}
+                              createdAt={item.created_at}
+                            />
+                          </p>
+                        </Link>
                       </div>
-                      <p className="text-sm text-gray-500">
-                        <RemainingTime
-                          bidEndTime={item.bid_end_time}
-                          createdAt={item.created_at}
-                        />
-                      </p>
-                    </Link>
-                  </div>
-                ))}
+                    )
+                )}
               </div>
             </div>
           )}

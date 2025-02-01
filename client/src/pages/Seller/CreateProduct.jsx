@@ -82,10 +82,9 @@ export default function CreateProduct() {
   };
 
   const handleSubmit = async () => {
-    // Convert data to FormData
+    setMessage("");
     const formData = new FormData();
 
-    // Append all form values
     for (const key in formValues) {
       formData.append(key, formValues[key]);
     }

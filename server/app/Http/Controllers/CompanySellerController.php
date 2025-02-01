@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CompanySeller;
 use App\Models\User;
+use App\Models\Listing;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -123,5 +124,24 @@ class CompanySellerController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function getListingCounts($id)
+    {
+        try {
+            $totalListings = Listing::where('user_id', $id)->count();
+            $liveListings = Listing::where('user_id', $id)->whereNull('winner_id')->count();
+            $soldListings = Listing::where('user_id', $id)->whereNotNull('winner_id')->count();
+
+            return response()->json([
+                'total_listings' => $totalListings,
+                'live_listings' => $liveListings,
+                'sold_listings' => $soldListings
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 }

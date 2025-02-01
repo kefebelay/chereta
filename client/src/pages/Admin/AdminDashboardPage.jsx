@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 export default function AdminDashboardPage() {
   const [open, isOpen] = useState(true);
   const [usersCount, setusersCount] = useState({} || null);
+  const [Listingstats, setListingstats] = useState({} || null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,9 +29,18 @@ export default function AdminDashboardPage() {
         },
       });
       setusersCount(res.data);
+    }
+    //
+    async function getstatistics() {
+      const res = await Api.get("api/listings/statistics", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setListingstats(res.data);
       console.log(res.data);
     }
-
+    getstatistics();
     getRolesCount();
   }, []);
 
@@ -103,16 +113,20 @@ export default function AdminDashboardPage() {
               <div className="bg-red-500 p-6 rounded-lg shadow-md">
                 {" "}
                 <h3 className="text-xl font-bold mb-2 bg-transparent text-white">
-                  Total Listings
+                  Total products
                 </h3>
-                <p className="text-3xl bg-transparent text-white">1,200</p>
+                <p className="text-3xl bg-transparent text-white">
+                  {Listingstats.totalListings}
+                </p>
               </div>
               <div className="bg-yellow-500 p-6 rounded-lg shadow-md">
                 {" "}
                 <h3 className="text-xl font-bold mb-2 bg-transparent text-white">
-                  Active Listings
+                  Active products
                 </h3>
-                <p className="text-3xl bg-transparent text-white">200</p>
+                <p className="text-3xl bg-transparent text-white">
+                  {Listingstats.activeListings}
+                </p>
               </div>
             </div>
           </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin;
 use App\Models\User;
+use App\Models\Listing;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -121,6 +122,23 @@ class AdminController extends Controller
             'message' => $e->getMessage()], 500);
         }
 
+    }
+
+    public function getListingCounts()
+    {
+        try {
+            $totalListings = Listing::count();
+            $activeListings = Listing::whereNull('winner_id')->count();
+
+            return response()->json([
+                'total_listings' => $totalListings,
+                'active_listings' => $activeListings
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**

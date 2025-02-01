@@ -78,7 +78,7 @@ class UserController extends Controller
     public function show(string $id)
 {
     try {
-        // Fetch the user with roles and actor dynamically loaded
+
         $user = User::with(['roles'])->findOrFail($id);
 
         return response()->json([

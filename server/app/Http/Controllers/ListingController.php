@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Listing;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ListingController extends Controller
 {
@@ -24,13 +25,28 @@ class ListingController extends Controller
     public function search(Request $request) {
         try {
             $query = $request->input('query');
-            $listings = Listing::where('title', 'LIKE', '%' + $query + '%')
-                ->orWhere('description', 'LikE', '%' + $query + '%')
+            $category = $request->input('category');
+            $sort = $request->input('sort', 'asc'); // default to ascending
+
+            Log::info("Search query: $query, Category: $category, Sort: $sort");
+
+            $listings = Listing::where(function($q) use ($query) {
+                    $q->where('title', 'LIKE', '%' . $query . '%')
+                      ->orWhere('description', 'LIKE', '%' . $query . '%');
+                })
+                ->when($category, function($q) use ($category) {
+                    $q->where('category_id', $category);
+                })
                 ->with('category', 'user')
-                ->take(5)->get();
+                ->orderBy('starting_price', $sort)
+                ->take(5)
+                ->get();
+
+            Log::info("Listings found: " . $listings->count());
             return response()->json($listings);
         }
         catch (\Exception $e) {
+            Log::error("Error in search: " . $e->getMessage());
             return response()->json(["message" => $e->getMessage()], 500);
         }
     }
@@ -38,7 +54,7 @@ class ListingController extends Controller
     public function index()
     {
         try {
-            $listings = Listing::with('category', 'user')->paginate(10);
+            $listings = Listing::with('category', 'user')->get();
             return response()->json($listings);
         } catch (\Exception $e) {
             return response()->json(["message" => $e->getMessage()], 500);
@@ -57,8 +73,8 @@ class ListingController extends Controller
                 'title' => ['required', 'string', 'max:255'],
                 'description' => ['required', 'string'],
                 'starting_price' => ['required', 'numeric', 'min:0'],
-                'bid_start_time' => ['required', 'date', 'after:now', 'before_or_equal:'.now()->addMonths(6)],
-                'after_or_equal:' . $request->input('bid_start_time') ? now()->parse($request->bid_start_time)->addDays(30) : now()->addDays(30),
+                'bid_start_time' => ['required', 'date', 'before_or_equal:' . now()->addMonths(6)],
+                'bid_end_time' => ['required', 'date', 'after_or_equal:' . $request->input('bid_start_time')],
                 'image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:5000'],
             ]);
 
@@ -154,6 +170,66 @@ class ListingController extends Controller
             $listing->delete();
 
             return response()->json(["message" => "Listing Deleted Successfully"]);
+        } catch (\Exception $e) {
+            return response()->json(["message" => $e->getMessage()], 500);
+        }
+    }
+
+    public function endAuction(string $id)
+    {
+        try {
+            $listing = Listing::with('bids')->findOrFail($id);
+
+            // Log the current time and bid_end_time for debugging
+            Log::info("Checking auction end for listing ID: $id", [
+                'current_time' => now(),
+                'bid_end_time' => $listing->bid_end_time,
+            ]);
+
+            if ($listing->bid_end_time > now()) {
+                Log::info("Auction has not ended yet for listing ID: $id", [
+                    'current_time' => now(),
+                    'bid_end_time' => $listing->bid_end_time,
+                ]);
+                return; // Do not change the status if the auction has not ended
+            }
+
+            $highestBid = $listing->bids()->orderBy('amount', 'desc')->first();
+
+            if ($highestBid) {
+                $listing->winner_id = $highestBid->user_id;
+                Log::info("Highest bid found for listing ID: $id", [
+                    'highest_bid' => $highestBid->amount,
+                    'winner_id' => $highestBid->user_id,
+                ]);
+            } else {
+                Log::info("No bids found for listing ID: $id");
+            }
+
+            $listing->status = 'ended';
+            $listing->save();
+
+            Log::info("Auction ended successfully for listing ID: $id");
+
+        } catch (\Exception $e) {
+            Log::error("Error ending auction for listing ID: $id", ['error' => $e->getMessage()]);
+        }
+    }
+
+    public function getListingStatistics()
+    {
+        try {
+            $totalListings = Listing::count();
+            $activeListings = Listing::where('status', 'active')->count();
+            $endedListings = Listing::where('status', 'ended')->count();
+            $listingsWithWinner = Listing::whereNotNull('winner_id')->count();
+
+            return response()->json([
+                'totalListings' => $totalListings,
+                'activeListings' => $activeListings,
+                'endedListings' => $endedListings,
+                'listingsWithWinner' => $listingsWithWinner,
+            ]);
         } catch (\Exception $e) {
             return response()->json(["message" => $e->getMessage()], 500);
         }

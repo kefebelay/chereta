@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import "./styles/Auth.css";
 
 // General routes
 import MainPage from "./pages/shared/MainPage";
@@ -10,6 +11,7 @@ import CategoryItems from "./pages/shared/Category/CategoryItems";
 import Products from "./pages/shared/Category/Products";
 import ProductDetail from "./pages/shared/Category/ProductDetail";
 import Notification from "./pages/shared/Notification";
+import SearchResults from "./pages/SearchResults";
 
 // Buyer routes
 import MyBids from "./pages/Buyer/MyBids";
@@ -48,6 +50,7 @@ import DeliveryPersonnelDashboardPage from "./pages/DeliveryPersonnel/DeliveryPe
 import DeliveryAnalytics from "./pages/DeliveryPersonnel/Analytics";
 import DeliveryHistory from "./pages/DeliveryPersonnel/History";
 import DeliveryOrders from "./pages/DeliveryPersonnel/Orders";
+import ResetPassword from "./pages/Auth/ResetPassword";
 
 export default function App() {
   return (
@@ -64,6 +67,8 @@ export default function App() {
         <Route path="/notifications" element={<Notification />} />
         <Route path="/seller/info/:id" element={<SellerInfo />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/search" element={<SearchResults />} />
 
         {/* Buyer routes */}
         <Route path="/my-bids" element={<MyBids />} />
