@@ -13,7 +13,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CompanySellerController;
 use App\Http\Controllers\DeliveryPersonController;
-use App\Http\Controllers\FavoriteControlle;
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\IndividualSellerController;
 use App\Http\Controllers\ListingController;
 use App\Http\Controllers\UserController;
@@ -40,10 +40,10 @@ Route::get('/listing/{id}', [ListingController::class, 'show']);
 Route::get('/seller/profile/{id}', [UserController::class, 'getSellerProfile']);
 Route::get('/listings/statistics', [ListingController::class, 'getListingStatistics']);
 
-Route::post('/listing/{id}/favorites', [FavoriteControlle::class, 'addFavorite'])->middleware( 'auth:sanctum');
-Route::get('/favorites', [FavoriteControlle::class, 'getFavorites'])->middleware( 'auth:sanctum','role:buyer');
-
-
+Route::post('/favorites/add/{id}', [FavoriteController::class, 'addFavorite'])->middleware( 'auth:sanctum');
+Route::get('/favorites', [FavoriteController::class, 'getFavorites'])->middleware( 'auth:sanctum','role:buyer');
+Route::delete('/favorites/remove/{id}', [FavoriteController::class, 'removeFavorite'])->middleware( 'auth:sanctum');
+Route::get('/favorites/is-favorite/{id}', [FavoriteController::class, 'isFavorite'])->middleware( 'auth:sanctum');
 Route::post('/bid',[BidController::class,'index']);
 
 
@@ -71,6 +71,7 @@ Route::post('/bid',[BidController::class,'index']);
 
 Route::post('/listing/{listing}/report', [ListingReportController::class, 'report']);
 Route::get('/listings/reports', [ListingReportController::class, 'index']);
+Route::get('/live/listings', [ListingController::class, 'getLiveListings']);
 Route::delete('/listings/{listing}', [ListingReportController::class, 'deleteListing']);
 
 

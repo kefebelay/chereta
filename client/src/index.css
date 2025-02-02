@@ -8,6 +8,7 @@
   font-family: "Ubuntu", sans-serif;
   color: var(--text);
   background: var(--background);
+  text-decoration: none;
 }
 /* Do Not Edit */
 /* Do Not Edit */
@@ -97,11 +98,24 @@
   opacity: 1;
   transform: translateY(0);
 }
-.Toastify__toast {
+
+.Toastify__toast-container {
   background: transparent !important;
+}
+
+.Toastify__toast {
+  background: var(--background2) !important;
   box-shadow: none !important;
   color: inherit;
   border: var(--accent) 1px solid;
+}
+
+.Toastify__toast-body {
+  background: transparent !important;
+}
+
+.Toastify__progress-bar {
+  background: var(--accent) !important;
 }
 
 /* button {

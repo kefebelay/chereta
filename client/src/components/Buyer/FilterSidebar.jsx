@@ -1,6 +1,8 @@
+/* eslint-disable react/prop-types */
 import { IoFilter } from "react-icons/io5";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Api from "../../pages/Auth/Axios";
+import { Link } from "react-router-dom";
 
 export const FilterSidebar = ({ filters, setFilters }) => {
   const handleCategoryChange = (e) => {
@@ -24,7 +26,7 @@ export const FilterSidebar = ({ filters, setFilters }) => {
     fetchCategories();
   }, []);
   // Handle filter changes
-  
+
   const handleStatusChange = (e) => {
     setFilters({
       ...filters,
@@ -126,7 +128,8 @@ export const FilterSidebar = ({ filters, setFilters }) => {
         <label className="block font-semibold text-black-600 mb-2">
           Favorite Status
         </label>
-        <button
+        <Link
+          to="/favorites"
           onClick={handleFavoriteToggle}
           className={`w-32 py-2 rounded-lg text-sm border border-primary ${
             filters.favoriteOnly
@@ -134,8 +137,9 @@ export const FilterSidebar = ({ filters, setFilters }) => {
               : "bg-gray-200 text-blue-600"
           }`}
         >
+          {" "}
           Favorite Only
-        </button>
+        </Link>
       </div>
     </div>
   );

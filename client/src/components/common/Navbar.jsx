@@ -141,7 +141,7 @@ export default function Navbar() {
         </ul>
         {user ? (
           <div className="lg:flex gap-x-3 hidden justify-center items-center mr-5">
-            <Link
+            {/* <Link
               to={"/my-bids"}
               className="flex hover:text-accent hover:scale-105 transition-transform duration-300 cursor-pointer"
             >
@@ -149,9 +149,9 @@ export default function Navbar() {
               <span className="bg-red-500 rounded-full w-5 h-5 font-bold flex justify-center items-center animate-pulse text-white">
                 3
               </span>
-            </Link>
+            </Link> */}
             <div className="bg-transparent h-10 w-10 mx-5 ">
-              <Link to={"/profile"} className="rounded-full h-10 w-10">
+              <Link to={"/buyer/dashboard"} className="rounded-full h-10 w-10">
                 <img
                   className="w-full h-full rounded-full"
                   src={url + user.image || "https://picsum.photos/200/300"}

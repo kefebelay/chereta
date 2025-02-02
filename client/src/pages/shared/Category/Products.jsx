@@ -7,19 +7,15 @@ import SellerProfile from "../../../components/Seller/SellerProfile";
 import Api from "../../Auth/Axios";
 import { UsersContext } from "../../../hooks/Users_Hook";
 import RemainingTime from "../../../components/common/Remaining_time";
-import { FcAbout, FcLike } from "react-icons/fc";
-import Cookies from "js-cookie";
+import { FcAbout } from "react-icons/fc";
+import ReportForm from "../../../components/common/ReportForm";
+import Favorites from "../../../components/common/Favorites";
 
 export default function Items() {
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [reportData, setReportData] = useState({
-    itemId: null,
-    seller_id: null,
-    reason: "",
-    customReason: "",
-  });
+  const [selectedItem, setSelectedItem] = useState(null);
   const { url, user } = useContext(UsersContext);
 
   useEffect(() => {
@@ -39,39 +35,13 @@ export default function Items() {
   }, []);
 
   const openPopup = (item) => {
-    setReportData({
-      itemId: item.id,
-      seller_id: item.user.id,
-      reason: "",
-      customReason: "",
-    });
+    setSelectedItem(item);
     setIsPopupOpen(true);
   };
 
   const closePopup = () => {
     setIsPopupOpen(false);
-  };
-
-  const handleReportSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const { itemId, seller_id, reason, customReason } = reportData;
-      const reportPayload = {
-        listing_id: itemId,
-        user_id: user.id,
-        seller_id: seller_id,
-        reason: reason || "Inappropriate content",
-        custom_reason: customReason || "",
-      };
-      await Api.post(`/api/listing/${itemId}/report`, reportPayload, {
-        headers: {
-          "X-XSRF-TOKEN": Cookies.get("XSRF-TOKEN"),
-        },
-      });
-      closePopup();
-    } catch (err) {
-      console.log(err);
-    }
+    setSelectedItem(null);
   };
 
   return (
@@ -108,7 +78,7 @@ export default function Items() {
                             className="text-2xl cursor-pointer"
                             onClick={() => openPopup(item)}
                           />
-                          <FcLike className="text-2xl" />
+                          <Favorites item={item} />
                         </div>
                         <Link
                           to={`/product/${item.id}`}
@@ -154,58 +124,8 @@ export default function Items() {
       )}
       <Footer />
 
-      {isPopupOpen && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className=" p-6 rounded shadow-lg w-96">
-            <h2 className="text-xl font-bold mb-4">Report Item</h2>
-            <form onSubmit={handleReportSubmit}>
-              <label className="block mb-2">
-                Reason:
-                <select
-                  className="block w-full mt-1 p-2 border rounded"
-                  value={reportData.reason}
-                  onChange={(e) =>
-                    setReportData({ ...reportData, reason: e.target.value })
-                  }
-                >
-                  <option value="Inappropriate">Inappropriate</option>
-                  <option value="Fake">Fake</option>
-                  <option value="Spam">Spam</option>
-                  <option value="Other">Other</option>
-                </select>
-              </label>
-              <label className="block mb-4">
-                Custom Reason:
-                <input
-                  type="text"
-                  className="block w-full mt-1 p-2 border rounded"
-                  value={reportData.customReason}
-                  onChange={(e) =>
-                    setReportData({
-                      ...reportData,
-                      customReason: e.target.value,
-                    })
-                  }
-                />
-              </label>
-              <div className="flex justify-end space-x-4">
-                <button
-                  type="button"
-                  className="px-4 py-2 text-black bg-gray-300 rounded"
-                  onClick={closePopup}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-primary text-white rounded"
-                >
-                  Submit
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+      {isPopupOpen && selectedItem && (
+        <ReportForm item={selectedItem} user={user} onClose={closePopup} />
       )}
     </div>
   );

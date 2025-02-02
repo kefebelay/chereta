@@ -21,6 +21,17 @@ class ListingController extends Controller
             return response()->json(["message" => $e->getMessage()], 500);
         }
     }
+    public function getLiveListings() {
+        try {
+            $listings = Listing::with('category', 'user')
+                ->where('status', 'active')
+                ->where('bid_end_time', '>', now())
+                ->get();
+            return response()->json($listings);
+        } catch (\Exception $e) {
+            return response()->json(["message" => $e->getMessage()], 500);
+        }
+    }
 
     public function search(Request $request) {
         try {
@@ -54,7 +65,9 @@ class ListingController extends Controller
     public function index()
     {
         try {
-            $listings = Listing::with('category', 'user')->get();
+            $listings = Listing::with('category', 'user')
+            ->where('status', 'active')
+            ->where('bid_end_time', '>', now())->get();
             return response()->json($listings);
         } catch (\Exception $e) {
             return response()->json(["message" => $e->getMessage()], 500);

@@ -1,17 +1,18 @@
 import { useContext, useEffect, useState } from "react";
 import CoolerRemainingTime from "../../../components/common/CoolerRemaining-time";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Loading from "../../../components/common/Loading";
 import Navbar from "../../../components/common/Navbar";
 import Footer from "../../../components/common/Footer";
 import Api from "../../Auth/Axios";
 import { toast } from "react-toastify";
 import { UsersContext } from "../../../hooks/Users_Hook";
-import { AiOutlineHeart } from "react-icons/ai";
 import Cookies from "js-cookie";
 import CommentTab from "../../../components/common/CommentTab";
 import BidsTab from "../../../components/common/BidsTab";
 import { FcAbout } from "react-icons/fc";
+import ReportForm from "../../../components/common/ReportForm";
+import Favorites from "../../../components/common/Favorites";
 
 export default function Item() {
   const [message, setMessage] = useState("");
@@ -24,6 +25,8 @@ export default function Item() {
   const [isLoading, setisLoading] = useState(true);
   const { url, user } = useContext(UsersContext);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const redirect = useNavigate();
 
   const handleBidIncrement = () => {
     setBid((prevBid) => prevBid + 1);
@@ -50,6 +53,11 @@ export default function Item() {
     }
 
     try {
+      if (!user) {
+        toast.info("You must be logged in to place a bid.");
+        redirect("/login");
+        return;
+      }
       await Api.post(
         "api/bid",
         {
@@ -89,6 +97,14 @@ export default function Item() {
     getItems();
   }, [id]);
 
+  const openPopup = () => {
+    setIsPopupOpen(true);
+  };
+
+  const closePopup = () => {
+    setIsPopupOpen(false);
+  };
+
   return (
     <div>
       <Navbar />
@@ -114,7 +130,10 @@ export default function Item() {
                 <div className="mt-8">
                   <div className="flex justify-between  bg-transparent">
                     <h1 className="text-3xl font-bold mb-2">{item.title}</h1>
-                    <FcAbout className="text-3xl" />
+                    <FcAbout
+                      className="text-3xl cursor-pointer"
+                      onClick={openPopup}
+                    />
                   </div>
                   <p className="text-2xl font-semibold mb-2 text-primary">
                     Birr: {item.starting_price}
@@ -162,14 +181,7 @@ export default function Item() {
                   >
                     Bid
                   </button>
-                  <button
-                    onClick={toggleFavorite}
-                    className={`text-2xl ${
-                      isFavorite ? "text-blue-600" : "text-primary"
-                    }`}
-                  >
-                    <AiOutlineHeart />
-                  </button>
+                  <Favorites item={item} />
                 </div>
                 <p className="p-2 text-red-600">{message}</p>
               </div>
@@ -224,6 +236,10 @@ export default function Item() {
         </div>
       )}
       <Footer />
+
+      {isPopupOpen && (
+        <ReportForm item={item} user={user} onClose={closePopup} />
+      )}
     </div>
   );
 }
