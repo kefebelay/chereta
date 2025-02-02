@@ -57,11 +57,18 @@ export default function Navbar() {
       } bg-transparent`}
     >
       <nav className=" px-4 py-4 flex justify-between items-center shadow-md shadow-nav-bg">
+       <div className="flex gap-3 items-center ">
         <Link
-          className="text-3xl font-bold leading-none md:ml-28 ml-3 bg-transparent"
+          className="text-3xl font-bold leading-none md:ml-8 ml-3 bg-transparent"
           to={"/"}
         >
           <img src=" /chereta_logo.svg" className="bg-transparent h-12 w-12" />
+        </Link>
+        <Link
+          className="text-3xl text-primary font-bold leading-none  bg-transparent"
+          to={"/"}
+        >
+          CHERETA
         </Link>
         <ul
           className={
@@ -107,7 +114,10 @@ export default function Navbar() {
           <li className="bg-transparent">
             <ThemeSwitcher />
           </li>
-          <li className="bg-transparent relative">
+          
+        </ul>
+        </div>
+        <div className="bg-transparent relative">
             <form onSubmit={handleSearch} className="flex items-center">
               <input
                 type="text"
@@ -137,21 +147,32 @@ export default function Navbar() {
                 ))}
               </ul>
             )}
-          </li>
-        </ul>
+          </div>
         {user ? (
-          <div className="lg:flex gap-x-3 hidden justify-center items-center mr-5">
-            {/* <Link
+          <div className="md:flex gap-3 hidden justify-center items-center mr-5">
+            
+            <Link
+              className={`
+              ${
+                location.pathname === "/my-bids" &&
+                "text-primary font-bold underline underline-offset-4"
+              }
+              text-md  hover:text-accent bg-transparent `}
               to={"/my-bids"}
-              className="flex hover:text-accent hover:scale-105 transition-transform duration-300 cursor-pointer"
             >
-              <i className="fas fa-gavel text-3xl text-primary "></i>
+              My-Bids
+            </Link>
+            <Link
+              to={"/notifications"}
+              className="flex hover:text-accent mx-3 hover:scale-105 transition-transform duration-300 cursor-pointer"
+            >
+              <i className="fas fa-bell text-3xl text-primary "></i>
               <span className="bg-red-500 rounded-full w-5 h-5 font-bold flex justify-center items-center animate-pulse text-white">
                 3
               </span>
-            </Link> */}
-            <div className="bg-transparent h-10 w-10 mx-5 ">
-              <Link to={"/buyer/dashboard"} className="rounded-full h-10 w-10">
+            </Link>
+            <div className="bg-transparent h-10 w-10 mx-3 ">
+              <Link to={"/profile"} className="rounded-full h-10 w-10">
                 <img
                   className="w-full h-full rounded-full"
                   src={url + user.image || "https://picsum.photos/200/300"}

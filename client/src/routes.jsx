@@ -190,7 +190,7 @@ export default function App() {
           }
         />
         <Route
-          path="/delivery-page"
+          path="/delivery-page/:id"
           element={
             <ProtectedRoute element={<DeliveryPage />} roles={["buyer"]} />
           }
