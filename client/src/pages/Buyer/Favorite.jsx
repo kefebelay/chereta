@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import Footer from "../../components/common/Footer";
 import Navbar from "../../components/common/Navbar";
-import { Sidebar } from "../../components/Buyer/Sidebar";
+import { useNavigate } from "react-router-dom";
 import { TiEyeOutline } from "react-icons/ti";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import { NavLink } from "react-router-dom";
@@ -12,6 +12,8 @@ import Cookies from "js-cookie";
 export default function Favorites() {
   const { token } = useContext(UsersContext);
   const [favorites, setFavorites] = useState([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchFavorites = async () => {
@@ -48,9 +50,16 @@ export default function Favorites() {
 
   return (
     <div className="mt-20">
+      {/* Back Button */}
+      <button
+        onClick={() => navigate(-1)} // Go back to the previous page
+        className="mb-4  text-primary border border-gray-700 px-4 py-2 rounded hover:bg-blue-300 transition duration-300 flex items-center"
+      >
+        ← Back
+      </button>
       <Navbar />
-      <div className="flex gap-5">
-        <Sidebar />
+      <div className="">
+        
         <div>
           <section className="shadow-s1 p-8 rounded-lg">
             <div className="text-center text-xs text-gray-700 uppercase w-full">
@@ -119,7 +128,7 @@ export default function Favorites() {
                           }
                           className="font-medium text-red-500"
                         >
-                          <MdOutlineDeleteOutline size={25} />
+                          <i class="fas fa-heart text-2xl text-red-500"></i>
                         </button>
                       </td>
                     </tr>

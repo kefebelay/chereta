@@ -21,7 +21,9 @@ import ProductDetail from "./pages/shared/Category/ProductDetail";
 import Notification from "./pages/shared/Notification";
 import SearchResults from "./pages/SearchResults";
 import FavoriteListings from "./pages/Buyer/Favorite";
-
+import About from "./components/common/About";
+import How_It_Works from "./components/common/How_It_Works";
+import Why_choose_us from "./components/common/Why_choose_us";
 // Buyer routes
 import MyBids from "./pages/Buyer/MyBids";
 import BidPage from "./pages/Buyer/BidPage";
@@ -143,6 +145,18 @@ export default function App() {
         <Route
           path="/search"
           element={<RedirectRoute element={<SearchResults />} />}
+        />
+        <Route
+          path="/about"
+          element={<RedirectRoute element={<About />} />}
+        />
+        <Route
+          path="/how-it-works"
+          element={<RedirectRoute element={<How_It_Works />} />}
+        />
+        <Route
+          path="/why-choose-us"
+          element={<RedirectRoute element={<Why_choose_us />} />}
         />
 
         {/* Buyer routes */}

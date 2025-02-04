@@ -8,6 +8,7 @@ import { UsersContext } from "../../hooks/Users_Hook";
 import Api from "../Auth/Axios";
 import Pagination from "../../components/common/Pagination";
 import Favorites from "../../components/common/Favorites";
+import {IoIosHeartEmpty,} from "react-icons/io";
 
 export default function BidPage() {
 const [bids, setBids] = useState([]);
@@ -100,11 +101,19 @@ const navigate = useNavigate();
 
 return (
 <div className="mt-20 relative">
-    <button onClick={()=> navigate("/orderlist")}
-        className="absolute top-5 right-5 bg-blue-500 text-white p-3 rounded-full shadow-md hover:bg-blue-600"
+    <div>
+    <button onClick={()=> navigate("/favorites")}
+        className="absolute top-5 right-20 hover:text-accent mx-3 hover:scale-105 transition-transform duration-300 cursor-pointer"
         >
-        <FaTruck className="text-xl" />
+        <i className="fas fa-heart text-2xl text-primary "></i>
+        
     </button>
+    <button onClick={()=> navigate("/orderlist")}
+        className="absolute top-5 right-5 hover:text-accent mx-3 hover:scale-105 transition-transform duration-300 cursor-pointer"
+        >
+        <i className="fas fa-truck text-2xl text-primary "></i>
+    </button>
+    </div>
 
     <Navbar />
     <div className="flex gap-5">
