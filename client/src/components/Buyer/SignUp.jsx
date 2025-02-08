@@ -31,17 +31,16 @@ export default function SignUp() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    
+
     const formDataToSend = new FormData();
-    
-    
+
     for (let key in formData) {
       formDataToSend.append(key, formData[key]);
     }
-    
+
     try {
       const response = await Api.post("/api/buyer/register", formDataToSend, {
-        headers: { 
+        headers: {
           "X-XSRF-TOKEN": csrf,
           // "Content-Type": "multipart/form-data"
         },
@@ -58,9 +57,12 @@ export default function SignUp() {
 
   return (
     <div className="p-3 mt-4">
+      <h1 className="text-4xl p-3 text-center font-semibold text-primary">
+        Sign Up
+      </h1>
       <p className="mb-3 text-sm text-left text-text2 px-9">
-        Sign up as a <span className="text-primary">buyer</span> to explore
-        and bid on items, track your bids, and manage your purchases. Provide
+        Sign up as a <span className="text-primary">buyer</span> to explore and
+        bid on items, track your bids, and manage your purchases. Provide
         accurate information to verify your identity and protect your account.
         Use a strong, unique password for security. Happy bidding on Chereta!
       </p>
@@ -160,7 +162,6 @@ export default function SignUp() {
             <p className="text-text2 text-sm p-1">* required for delivery</p>
           </div>
 
-          
           <div className="mb-4">
             <label className="block mb-2">Profile Picture</label>
             <input

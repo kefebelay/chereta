@@ -13,7 +13,50 @@ use Exception;
 
 class OrderController extends Controller
 {
-    // Fetch all orders
+    public function deliveryStats(string $id){
+        try {
+            $delivered = Order::where('delivery_person_id', $id)->where('status', 'delivered')->count();
+            $pending = Order::where('delivery_person_id', $id)->where('status', 'pending')->count();
+            $cancelled = Order::where('delivery_person_id', $id)->where('status', 'cancelled')->count();
+            return response()->json(['delivered' => $delivered, 'pending' => $pending, 'cancelled' => $cancelled], 200);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'Error fetching delivery stats', 'error' => $e->getMessage()], 500);
+        }
+
+    }
+    public function changeStatus(string $id, Request $request){
+        try {
+            $order = Order::find($id);
+            if (!$order) {
+                return response()->json(['message' => 'Order not found'], 404);
+            }
+            $order->update([
+                'status' => $request->status,
+            ]);
+            return response()->json(['message' => 'Order status updated successfully', 'order' => $order], 200);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'Error updating order status', 'error' => $e->getMessage()], 500);
+        }
+    }
+    public function myOrders(string $id)
+    {
+        try {
+            $orders = Order::where('buyer_id', $id)->with(['user', 'listing', 'deliveryPersonnel'])->get();
+            return response()->json($orders, 200);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'Error fetching orders', 'error' => $e->getMessage()], 500);
+        }
+    }
+    public function Deliveries(string $id)
+    {
+        try {
+            $orders = Order::where('delivery_person_id', $id)->with(['user', 'listing', 'deliveryPersonnel'])->get();
+            return response()->json($orders, 200);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'Error fetching orders', 'error' => $e->getMessage()], 500);
+        }
+    }
+
     public function index()
     {
         try {
@@ -24,34 +67,37 @@ class OrderController extends Controller
         }
     }
 
-    // Create a new order
+
     public function store(Request $request)
     {
         try {
-            // Validate input
+
             $validator = Validator::make($request->all(), [
-                'order_number' => 'required|unique:orders',
-                'quantity' => 'required|integer|min:1',
                 'buyer_id' => 'required|exists:users,id',
                 'listing_id' => 'required|exists:listings,id',
-                'delivery_person_id' => 'required|exists:delivery_personnel,id',
-                'delivery_date' => 'required|date',
-                'status' => 'required|string',
+                'delivery_person_id' => 'required|exists:users,id',
+                'full_name' => 'required|string',
+                'additional_info' => 'nullable|string',
+                'street' => 'required|string',
+                'city' => 'required|string',
+                'phone' => 'required|string',
             ]);
 
             if ($validator->fails()) {
                 return response()->json($validator->errors(), 400);
             }
 
-            // Create the order
+
             $order = Order::create([
-                'order_number' => $request->order_number,
-                'quantity' => $request->quantity,
+
                 'buyer_id' => $request->buyer_id,
                 'listing_id' => $request->listing_id,
                 'delivery_person_id' => $request->delivery_person_id,
-                'delivery_date' => $request->delivery_date,
-                'status' => $request->status,
+                'full_name' => $request->full_name,
+                'additional_info' => $request->additional_info,
+                'street' => $request->street,
+                'city' => $request->city,
+                'phone' => $request->phone,
             ]);
 
             return response()->json(['message' => 'Order created successfully', 'order' => $order], 201);
@@ -60,7 +106,7 @@ class OrderController extends Controller
         }
     }
 
-    // Show a specific order
+
     public function show($id)
     {
         try {
@@ -76,26 +122,29 @@ class OrderController extends Controller
         }
     }
 
-    // Update an existing order
+
     public function update(Request $request, $id)
     {
         try {
-            // Validate input
+
             $validator = Validator::make($request->all(), [
-                'order_number' => 'required|unique:orders,order_number,' . $id,
-                'quantity' => 'required|integer|min:1',
+
                 'buyer_id' => 'required|exists:users,id',
                 'listing_id' => 'required|exists:listings,id',
                 'delivery_person_id' => 'required|exists:delivery_personnel,id',
-                'delivery_date' => 'required|date',
-                'status' => 'required|string',
+                'full_name' => 'required|string',
+                'additional_info' => 'nullable|string',
+                'street' => 'required|string',
+                'city' => 'required|string',
+                'phone' => 'required|string',
+                'status' => 'nullable|string',
             ]);
 
             if ($validator->fails()) {
                 return response()->json($validator->errors(), 400);
             }
 
-            // Find and update the order
+
             $order = Order::find($id);
 
             if (!$order) {
@@ -103,12 +152,15 @@ class OrderController extends Controller
             }
 
             $order->update([
-                'order_number' => $request->order_number,
-                'quantity' => $request->quantity,
+
                 'buyer_id' => $request->buyer_id,
                 'listing_id' => $request->listing_id,
                 'delivery_person_id' => $request->delivery_person_id,
-                'delivery_date' => $request->delivery_date,
+                'full_name' => $request->full_name,
+                'additional_info' => $request->additional_info,
+                'street' => $request->street,
+                'city' => $request->city,
+                'phone' => $request->phone,
                 'status' => $request->status,
             ]);
             return response()->json(['message' => 'Order updated successfully', 'order' => $order], 200);
@@ -117,7 +169,7 @@ class OrderController extends Controller
         }
     }
 
-    // Delete an order
+
     public function destroy($id)
     {
         try {

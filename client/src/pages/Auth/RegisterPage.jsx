@@ -4,7 +4,7 @@ import CompanySellerSignup from "../../components/Seller/CompanySignUpForm";
 import IndividualSellerSignUpForm from "../../components/Seller/IndividualSellerSignUpForm";
 import { Link } from "react-router-dom";
 export default function RegisterPage() {
-  const [user, setUser] = useState("buyer");
+  const [user, setUser] = useState("individual seller");
 
   return (
     <div className="bg-transparent p-10 mb-10 md:p-0">
@@ -13,17 +13,6 @@ export default function RegisterPage() {
       </h1>
       <div className="p-4 md:p-0 rounded-lg border border-text2 md:py-3 md:mx-10 mx-auto bg-transparent">
         <div className="flex gap-3 bg-transparent justify-center w-auto">
-          <button
-            className={`border border-transparent  duration-300 ${
-              user === "buyer"
-                ? "px-3 py-1 bg-primary text-white rounded-md"
-                : "px-3 py-1 bg-transparent text-primary hover:border-primary rounded-md"
-            }`}
-            onClick={() => setUser("buyer")}
-          >
-            Buyer
-          </button>
-          <span className="text-2xl text-text2">|</span>
           <button
             className={`border border-transparent duration-300 ${
               user === "individual seller"

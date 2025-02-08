@@ -8,12 +8,14 @@ class Order extends Model
 {
     //
     protected $fillable = [
-        'order_number',
-        'quantity',
+        'full_name',
+        'additional_info',
+        'street',
+        'city',
+        'phone',
         'buyer_id',
         'listing_id',
         'delivery_person_id',
-        'delivery_date',
         'status',
     ];
 
@@ -32,7 +34,7 @@ class Order extends Model
         return $this->status === 'Pending';
     }
 
-    public function delivery()
+    public function deliverypersonnel()
    {
     return $this->belongsTo(DeliveryPerson::class);
    }

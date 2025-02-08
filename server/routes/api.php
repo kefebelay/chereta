@@ -59,13 +59,16 @@ Route::post('/bid',[BidController::class,'index']);
     Route::get('/seller/comments', [CommentController::class, 'sellerComments']);
     Route::post('/seller/comments/{parentId}/reply', [CommentController::class, 'sellerReply']);
 
+    Route::get('/delivery/{id}/stats', [OrderController::class, 'deliveryStats']);
 
-
-    Route::get('orders', [OrderController::class, 'index']);
-    Route::post('orders', [OrderController::class, 'store']);
-    Route::get('orders/{id}', [OrderController::class, 'show']);
-    Route::put('orders/{id}', [OrderController::class, 'update']);
-    Route::delete('orders/{id}', [OrderController::class, 'destroy']);
+    Route::put('/orders/{id}/status', [OrderController::class, 'changeStatus']);
+    Route::get('/my-orders/{id}', [OrderController::class, 'myOrders']);
+    Route::get('/deliveries/{id}', [OrderController::class, 'Deliveries']);
+    Route::get('/orders', [OrderController::class, 'index']);
+    Route::post('/order', [OrderController::class, 'store']);
+    Route::get('/orders/{id}', [OrderController::class, 'show']);
+    Route::put('/orders/{id}', [OrderController::class, 'update']);
+    Route::delete('/orders/{id}', [OrderController::class, 'destroy']);
 
 
 

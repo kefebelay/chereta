@@ -10,6 +10,7 @@ import {
 import { RiAuctionLine } from "react-icons/ri";
 import { MdOutlineAutorenew } from "react-icons/md";
 import { GiHamburgerMenu } from "react-icons/gi";
+import Logout from "../../pages/Auth/Logout";
 
 export const Sidebar = () => {
   const location = useLocation();
@@ -151,6 +152,7 @@ export const Sidebar = () => {
             </span>
             <span className="bg-transparent">Delivery Tracking</span>
           </NavLink>
+          <Logout />
         </div>
       </section>
     </>

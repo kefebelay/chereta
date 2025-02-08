@@ -61,6 +61,7 @@ import DeliveryHistory from "./pages/DeliveryPersonnel/History";
 import DeliveryOrders from "./pages/DeliveryPersonnel/Orders";
 import ResetPassword from "./pages/Auth/ResetPassword";
 import Loading from "./components/common/Loading";
+import SignUp from "./components/Buyer/SignUp";
 
 export default function App() {
   const { user } = useContext(UsersContext);
@@ -68,13 +69,17 @@ export default function App() {
   const ProtectedRoute = ({ element, roles }) => {
     if (!user) {
       return (
-        <div>
+        <div className="flex justify-center items-center h-screen">
           <Loading />
         </div>
       );
     }
     if (roles && !roles.includes(user.roles[0].name)) {
-      return <div>Access Denied</div>;
+      return (
+        <div>
+          <NotFoundPage />
+        </div>
+      );
     }
     return element;
   };
@@ -93,7 +98,7 @@ export default function App() {
       return <Navigate to="/seller/dashboard" />;
     } else if (userRole === "admin") {
       return <Navigate to="/admin/dashboard" />;
-    } else if (userRole === "delivery_personnel") {
+    } else if (userRole === "delivery_person") {
       return <Navigate to="/delivery/dashboard" />;
     }
     return element;
@@ -109,7 +114,8 @@ export default function App() {
           element={<RedirectRoute element={<MainPage />} />}
         />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/register" element={<SignUp />} />
+        <Route path="/seller/register" element={<RegisterPage />} />
         <Route
           path="/categories"
           element={<RedirectRoute element={<Categories />} />}
@@ -312,7 +318,7 @@ export default function App() {
           element={
             <ProtectedRoute
               element={<DeliveryPersonnelDashboardPage />}
-              roles={["delivery_personnel"]}
+              roles={["delivery_person"]}
             />
           }
         />
@@ -321,7 +327,7 @@ export default function App() {
           element={
             <ProtectedRoute
               element={<DeliveryAnalytics />}
-              roles={["delivery_personnel"]}
+              roles={["delivery_person"]}
             />
           }
         />
@@ -330,7 +336,7 @@ export default function App() {
           element={
             <ProtectedRoute
               element={<DeliveryHistory />}
-              roles={["delivery_personnel"]}
+              roles={["delivery_person"]}
             />
           }
         />
@@ -339,7 +345,7 @@ export default function App() {
           element={
             <ProtectedRoute
               element={<DeliveryOrders />}
-              roles={["delivery_personnel"]}
+              roles={["delivery_person"]}
             />
           }
         />

@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function About() {
   return (
     <div className="">
@@ -50,6 +52,13 @@ export default function About() {
           </li>
         </ul>
         <br />{" "}
+        <p className="bg-transparent text-text2">
+          Want to partner with us? create your account{" "}
+          <Link to="/seller/register" className="text-primary">
+            here
+          </Link>{" "}
+          and start selling immediately
+        </p>
         <p className="bg-transparent text-text2">
           Start your auction journey today and experience e-commerce like never
           before!

@@ -71,7 +71,7 @@ export default function UserManagement() {
           User management
         </h1>
         {!users ? (
-          <div className="grid place-items-center h-screen">
+          <div className="grid place-items-center h-screen w-screen">
             <Loading />
           </div>
         ) : (
