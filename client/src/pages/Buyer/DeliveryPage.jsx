@@ -19,14 +19,32 @@ const DeliveryPage = () => {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+  useEffect(() => {
+    const fetchDeliveries = async () => {
+        try {
+            const response = await Api.get(`/api/my-bids/${user.id}`);
+            let fetchedBids = response.data.bids;
+
+            // Filter only won bids
+            let wonBids = fetchedBids.filter(bid => bid.listing.winning_bid_amount === bid.bid_amount);
+
+            setDeliveries(wonBids);
+        } catch (error) {
+            console.error("Error fetching deliveries:", error);
+        }
+    };
+
+    if (user) fetchDeliveries();
+}, [user]);
+
 
   return (
-    <div className="mt-20 relative min-h-screen p-10 bg-gray-50">
+    <div className="mt-20 relative min-h-screen p-10 ">
       <Navbar />
       {/* Back Button */}
       <button
         onClick={() => navigate(-1)} // Go back to the previous page
-        className="absolute top-5 left-5 bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded transition"
+        className="mb-4  text-primary border border-gray-700 px-4 py-2 rounded hover:bg-blue-300 transition duration-300 flex items-center"
       >
         &larr; 
       </button>

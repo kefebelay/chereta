@@ -7,9 +7,12 @@ import { FilterSidebar } from "../../components/Buyer/FilterSidebar";
 import { UsersContext } from "../../hooks/Users_Hook";
 import Api from "../Auth/Axios";
 import Pagination from "../../components/common/Pagination";
+import Favorites from "../../components/common/Favorites";
+import {IoIosHeartEmpty,} from "react-icons/io";
 
 export default function BidPage() {
 const [bids, setBids] = useState([]);
+const [favorites, setFavorites] = useState([]);
 const [filteredBids, setFilteredBids] = useState([]);
 const [filters, setFilters] = useState({
 category: "",
@@ -17,6 +20,28 @@ status: { winning: false, ongoing: false, lost: false },
 favoriteOnly: false,
 });
 const { user, url } = useContext(UsersContext);
+
+useEffect(() => {
+    const fetchBids = async () => {
+        try {
+            const response = await Api.get(`/api/my-bids/${user.id}`);
+            let fetchedBids = response.data.bids;
+
+            // Mark bids as favorites based on the fetched favorites list
+            fetchedBids = fetchedBids.map(bid => ({
+                ...bid,
+                is_favorite: favorites.some(fav => fav.listing_id === bid.listing_id)
+            }));
+
+            setBids(fetchedBids);
+        } catch (error) {
+            console.error("Error fetching bids:", error);
+        }
+    };
+
+    if (user) fetchBids();
+}, [user, favorites]); // Depend on `favorites` so bids update when favorites are fetched
+
 
 useEffect(() => {
 const fetchBids = async () => {
@@ -55,7 +80,7 @@ filtered = filtered.filter(
 );
 }
 if (favoriteOnly) {
-filtered = filtered.filter((bid) => bid.is_favorite);
+    filtered = filtered.filter((bid) => bid.is_favorite === true);
 }
 
 setFilteredBids(filtered);
@@ -76,11 +101,19 @@ const navigate = useNavigate();
 
 return (
 <div className="mt-20 relative">
-    <button onClick={()=> navigate("/orderlist")}
-        className="absolute top-5 right-5 bg-blue-500 text-white p-3 rounded-full shadow-md hover:bg-blue-600"
+    <div>
+    <button onClick={()=> navigate("/favorites")}
+        className="absolute top-5 right-20 hover:text-accent mx-3 hover:scale-105 transition-transform duration-300 cursor-pointer"
         >
-        <FaTruck className="text-xl" />
+        <i className="fas fa-heart text-2xl text-primary "></i>
+        
     </button>
+    <button onClick={()=> navigate("/orderlist")}
+        className="absolute top-5 right-5 hover:text-accent mx-3 hover:scale-105 transition-transform duration-300 cursor-pointer"
+        >
+        <i className="fas fa-truck text-2xl text-primary "></i>
+    </button>
+    </div>
 
     <Navbar />
     <div className="flex gap-5">
@@ -99,18 +132,20 @@ return (
                             <th scope="col" className="px-6 py-3">Your Bid</th>
                             <th scope="col" className="px-6 py-3">Highest Bid</th>
                             <th scope="col" className="px-6 py-3">Status</th>
+                            <th scope="col" className="px-6 py-3">Delivery</th>
+                            
                         </tr>
                     </thead>
                     <tbody>
                         {paginatedBids.length > 0 ? (
                         paginatedBids.map((bid) => (
-                        <tr key={bid.id} onClick={() => navigate(`/product/${bid.listing_id}`)} 
+                        <tr key={bid.id}  
                         className="border-b border-text2 hover:border-b-primary hover:border-b-4 transition-transform duration-300">
                           
-                            <td>
+                            <td onClick={() => navigate(`/product/${bid.listing_id}`)}>
                                 <img className="h-8 w-8" src={url + bid.listing.image} alt={bid.listing.title} />
                             </td>
-                            <td className="px-6 py-4">{bid.listing.title}</td>
+                            <td onClick={() => navigate(`/product/${bid.listing_id}`)} className="px-6 py-4">{bid.listing.title}</td>
                             <td className="px-6 py-4">{bid.listing_id}</td>
                             <td className="px-6 py-4">{bid.listing.starting_price}</td>
                             <td className="px-6 py-4">{bid.bid_amount}</td>
@@ -122,6 +157,11 @@ return (
                                     {bid.listing.status}
                                 </span>
                             </td>
+                            {bid.listing.winner_id==bid.user_id &&  (<td className="px-6 py-4"><button
+                            className="btn hidden lg:inline-block lg:ml-auto md:mr-3 bg-primary text-white text-md font-bold w-28 text-center"
+                            onClick={() => navigate(`/delivery-page/${bid.listing_id}`)}>delivery</button></td>)}
+
+                            
 
                         </tr>
                         ))

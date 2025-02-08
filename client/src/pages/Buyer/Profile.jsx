@@ -87,7 +87,7 @@ export default function ProfilePage() {
         />
       )}
       <div className="flex gap-5 mt-24">
-        <Sidebar />
+        {/* <Sidebar /> */}
         <div className=" mx-auto shadow-text2 rounded-lg shadow-sm  p-5">
           <div className="float-right">
             <Logout />
