@@ -99,6 +99,10 @@ currentPage * ITEMS_PER_PAGE
 
 const navigate = useNavigate();
 
+const handleNavigate = (bid) => {
+    navigate(`/delivery-page/${bid.listing_id}`, { state: { data: bid.listing } });
+};
+
 return (
 <div className="mt-20 relative">
     <div>
@@ -159,7 +163,7 @@ return (
                             </td>
                             {bid.listing.winner_id==bid.user_id &&  (<td className="px-6 py-4"><button
                             className="btn hidden lg:inline-block lg:ml-auto md:mr-3 bg-primary text-white text-md font-bold w-28 text-center"
-                            onClick={() => navigate(`/delivery-page/${bid.listing_id}`)}>delivery</button></td>)}
+                            onClick={() => handleNavigate(bid) }>delivery</button></td>)}
 
                             
 
