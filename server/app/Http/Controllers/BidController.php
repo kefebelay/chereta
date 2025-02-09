@@ -38,6 +38,7 @@ class BidController extends Controller
         $bid = Bid::create($validated);
 
 
+        sendNotification($bid->user_id, 'bid placed!!', "you have plased a bid on {$listing->title} for {$bid->bid_amount} birr");
         $listing->winning_bid_amount = $bid->bid_amount;
         $listing->save();
 
