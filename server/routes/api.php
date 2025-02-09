@@ -16,6 +16,7 @@ use App\Http\Controllers\DeliveryPersonController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\IndividualSellerController;
 use App\Http\Controllers\ListingController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
@@ -70,6 +71,10 @@ Route::post('/bid',[BidController::class,'index']);
     Route::put('/orders/{id}', [OrderController::class, 'update']);
     Route::delete('/orders/{id}', [OrderController::class, 'destroy']);
 
+    Route::get('/notifications/{id}', [NotificationController::class, 'show']);
+    Route::put('/mark-as-read/{id}', [NotificationController::class, 'markAsRead']);
+    Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']);
+    Route::get('/unread-notifications/{id}', [NotificationController::class, 'getUnreadNotifications']);
 
 
 Route::post('/listing/{listing}/report', [ListingReportController::class, 'report']);
@@ -97,7 +102,7 @@ Route::delete('/category/{id}', [CategoryController::class, 'destroy'])->middlew
 Route::post('/assign-role', [AdminController::class, 'assignRole'])->middleware(['auth:sanctum', 'role:admin']);
 
 Route::get('/buyers', [BuyerController::class, 'index'])->middleware(['auth:sanctum', 'role:admin']);
-Route::get('/delivery_persons', [DeliveryPersonController::class, 'index'])->middleware(['auth:sanctum', 'role:admin']);
+Route::get('/delivery_persons', [DeliveryPersonController::class, 'index']);
 Route::get('/individual_sellers', [IndividualSellerController::class, 'index'])->middleware(['auth:sanctum', 'role:admin']);
 Route::get('/company_sellers', [CompanySellerController::class, 'index'])->middleware(['auth:sanctum', 'role:admin']);
 

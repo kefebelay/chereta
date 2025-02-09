@@ -30,6 +30,7 @@ class AuthenticatedSessionController extends Controller
                 return response()->json(['message' => ['The provided credentials are incorrect.']], 401);
             }
 
+            sendNotification($user->id, 'Welcome back!!', 'You have logged in successfully. Enjoy your experience on chereta : ).');
             $token = $user->createToken('User Token');
             return response()->json([
                 'token' => $token->plainTextToken,

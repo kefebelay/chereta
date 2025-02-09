@@ -89,6 +89,9 @@ class User extends Authenticatable
    {
        return $this->hasMany(ListingReport::class);
    }
+   public function notification(){
+    return $this->hasMany(Notification::class);
+   }
 
 
 

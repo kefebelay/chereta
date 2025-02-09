@@ -15,10 +15,10 @@ export default function DeliveryPersonnel() {
   const [selectedID, setSelectedID] = useState();
   const [userChanged, setUserChanged] = useState(1);
   const [infoClick, setInfoClick] = useState(false);
-
   const ITEMS_PER_PAGE = 8;
   const { currentPage, totalPages, currentItems, handlePageChange } =
     usePagination(personnel, ITEMS_PER_PAGE);
+
   async function handleDelete() {
     const res = await Api.delete(`/api/user/${selectedID}`, {
       headers: {
@@ -41,7 +41,6 @@ export default function DeliveryPersonnel() {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-
       setPersonnel(res.data);
     }
     getPersonnel();
@@ -73,7 +72,7 @@ export default function DeliveryPersonnel() {
           </h2>
           <table className="min-w-full bg-white border border-text2">
             <thead>
-              <tr className=" border-b border-text2">
+              <tr className="border-b border-text2">
                 <th className="text-left py-2 px-4">Name</th>
                 <th className="text-left py-2 px-4">Email</th>
                 <th className="text-left py-2 px-4">Phone Number</th>
@@ -85,9 +84,8 @@ export default function DeliveryPersonnel() {
               {currentItems.map((person) => (
                 <React.Fragment key={person.id}>
                   <tr
-                    key={person.id}
                     onClick={() => setInfoClick(!infoClick)}
-                    className=" hover-m-2 hover:border hover:border-text2 transition-transform duration-500 cursor-pointer mb-2"
+                    className="hover-m-2 hover:border hover:border-text2 transition-transform duration-500 cursor-pointer mb-2"
                   >
                     <td className="py-2 px-4">{person.username}</td>
                     <td className="py-2 px-4">{person.email}</td>
@@ -99,7 +97,6 @@ export default function DeliveryPersonnel() {
                       <button
                         onClick={() => {
                           setSelectedID(person.actor.user_id);
-                          console.log(person.actor.user_id);
                           setPopup(true);
                         }}
                         className="btn bg-primary text-white"
@@ -118,7 +115,7 @@ export default function DeliveryPersonnel() {
                           <p>
                             <strong>Name:</strong> {person.name}
                           </p>
-                          {person.actor !== null && (
+                          {person.actor && (
                             <div>
                               {person.actor.age && (
                                 <p>
@@ -130,7 +127,6 @@ export default function DeliveryPersonnel() {
                                   <strong>Gender:</strong> {person.actor.gender}
                                 </p>
                               )}
-
                               <p>
                                 <strong>Address:</strong> {person.actor.address}
                               </p>
@@ -151,11 +147,10 @@ export default function DeliveryPersonnel() {
           />
         </div>
         <div className="mt-8">
-          <div>
-            <h2 className="text-2xl font-semibold mb-4">
-              Add New Delivery Personnel
-            </h2>
-          </div>
+          <h2 className="text-2xl font-semibold mb-4">
+            Add New Delivery Personnel
+          </h2>
+
           <SignUp />
         </div>
       </div>

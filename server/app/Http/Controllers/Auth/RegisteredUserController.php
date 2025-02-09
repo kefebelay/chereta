@@ -62,6 +62,7 @@ class RegisteredUserController extends Controller
         DB::commit();
 
         $token = $user->createToken($request->name);
+        sendNotification($user->id, 'Welcome to our chereta', 'Welcome to our chereta, we are glad to have you here, happy bidding!!');
 
         return response()->json([
         "message" => "Registered Successfully",

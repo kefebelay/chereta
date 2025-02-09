@@ -1,10 +1,22 @@
-import { useContext } from "react";
+/* eslint-disable react/prop-types */
+import { useContext, useEffect, useState } from "react";
 import ThemeSwitcher from "./ThemeSwitcherBtn";
 import { Link } from "react-router-dom";
 import { UsersContext } from "../../hooks/Users_Hook";
+import Api from "../../pages/Auth/Axios";
 
 export default function Hamburger({ isOpen, setIsOpen }) {
   const { user } = useContext(UsersContext);
+  const [notificationsCount, setNotificationsCount] = useState();
+  async function getNotificationCount() {
+    const res = await Api.get(`/api/unread-notifications/${user.id}`);
+    setNotificationsCount(res.data);
+    console.log(res);
+  }
+
+  useEffect(() => {
+    getNotificationCount();
+  }, []);
 
   function handleClick() {
     const aboutSection = document.getElementById("About");
@@ -57,6 +69,17 @@ export default function Hamburger({ isOpen, setIsOpen }) {
                 </button>
               </div>
               <div>
+                <Link
+                  to={"/notifications"}
+                  className="flex hover:text-accent mx-3 hover:scale-105 transition-transform duration-300 cursor-pointer justify-end"
+                >
+                  <i className="fas fa-bell text-3xl text-primary "></i>
+                  {notificationsCount > 0 && (
+                    <span className="bg-red-500 rounded-full w-5 h-5 font-bold flex justify-center items-center animate-pulse text-white">
+                      {notificationsCount}
+                    </span>
+                  )}
+                </Link>
                 <ul className="grid place-items-center">
                   {user ? (
                     <li className="mt-3 flex flex-col justify-center items-center">
@@ -104,10 +127,10 @@ export default function Hamburger({ isOpen, setIsOpen }) {
                   <li className="mb-1">
                     <Link
                       className="text-md hover:text-accent bg-none bg-transparent"
-                      to={"/#About"}
+                      to={"/my-bids"}
                       onClick={handleClick}
                     >
-                      About
+                      my bids
                     </Link>
                   </li>
                   <li className="mb-1">

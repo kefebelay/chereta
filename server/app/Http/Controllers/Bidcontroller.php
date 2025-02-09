@@ -40,6 +40,7 @@ class BidController extends Controller
 
         $listing->winning_bid_amount = $bid->bid_amount;
         $listing->save();
+        sendNotification($bid->user_id, 'bid placed!!', "you have plased a bid on {$listing->title} for {$bid->bid_amount} birr");
 
         return response()->json(['message' => 'Bid placed successfully!', 'bid' => $bid, 'listing' => $listing->winning_bid_amount], 201);
     }

@@ -57,6 +57,7 @@ export default function LoginPage() {
     } catch (err) {
       if (err.response.status === 401) {
         setMessage(err.response.data.message);
+        console.log(err);
         return;
       } else
         toast.error(

@@ -83,6 +83,7 @@ class AdminController extends Controller
         ]);
 
         $user->assignRole('admin');
+        sendNotification($user->id, 'Welcome to chereta', 'We are looking forwart to working with you');
         return response()->json(["Admin"=>$user, "message"=>"Admin created successfully"]);
     }
 

@@ -5,6 +5,8 @@ import { toast } from "react-toastify";
 
 export default function SignUp() {
   const [message, setMessage] = useState("");
+  const [image, setImage] = useState(null);
+  const [preview, setPreview] = useState(null);
   const [newPersonnel, setNewPersonnel] = useState({
     name: "",
     email: "",
@@ -16,6 +18,13 @@ export default function SignUp() {
     username: "",
     address: "",
   });
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(file);
+      setPreview(URL.createObjectURL(file));
+    }
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -23,20 +32,43 @@ export default function SignUp() {
   };
   const handleAddPersonnel = async () => {
     try {
-      const res = await Api.post(
-        "/api/delivery-person/register",
-        newPersonnel,
-        {
-          headers: {
-            "x-xsrf-token": Cookies.get("XSRF-TOKEN"),
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      toast.success(res.message);
-      setNewPersonnel("");
+      const formData = new FormData();
+
+      // Append text fields
+      Object.keys(newPersonnel).forEach((key) => {
+        formData.append(key, newPersonnel[key]);
+      });
+
+      // Append image file
+      if (image) {
+        formData.append("image", image);
+      }
+
+      const res = await Api.post("/api/delivery-person/register", formData, {
+        headers: {
+          "x-xsrf-token": Cookies.get("XSRF-TOKEN"),
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      toast.success(res.data.message);
+      setNewPersonnel({
+        name: "",
+        email: "",
+        phone_number: "",
+        password: "",
+        age: "",
+        gender: "",
+        vehicle: "",
+        username: "",
+        address: "",
+      });
+      setImage(null);
+      setPreview(null);
+      setMessage(null);
     } catch (err) {
-      if (err.response.status === 500) {
+      if (err.response && err.response.status === 500) {
         setMessage(err.response.data.message);
       }
     }
@@ -45,6 +77,24 @@ export default function SignUp() {
   return (
     <div className="bg-transparent border-text2 p-6 rounded shadow-lg">
       <div className="mb-4">
+        <div className=" ml-4">
+          <label className="block text-text2 font-bold mb-2">
+            Upload Profile Picture:
+          </label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="block w-full text-sm text-gray-500"
+          />
+          {preview && (
+            <img
+              src={preview}
+              alt="Preview"
+              className="mt-4 w-32 h-32 object-cover border border-gray-300 rounded"
+            />
+          )}
+        </div>
         <label className="block  text-sm font-bold mb-2">Name</label>
         <input
           type="text"
