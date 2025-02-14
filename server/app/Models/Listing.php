@@ -16,6 +16,8 @@ class Listing extends Model
         'title',
         'description',
         'starting_price',
+        'quantity',
+        'is_private',
         'bid_end_time',
         'bid_start_time',
         'winning_bid_amount',
@@ -52,6 +54,11 @@ class Listing extends Model
     public function listingreport()
     {
         return $this->hasMany(ListingReport::class);
+    }
+
+    public function winner()
+    {
+        return $this->belongsTo(User::class, 'winner_id');
     }
 
     public function endAuction()

@@ -68,14 +68,14 @@ export default function SellerDashboardPage() {
                 {statistics.total_listings}
               </p>
             </div>
-            <div className="bg-yellow-500 p-6 rounded-lg shadow-md">
+            {/* <div className="bg-yellow-500 p-6 rounded-lg shadow-md">
               <h3 className="text-xl font-bold mb-2 bg-transparent text-white">
                 Active Items
               </h3>
               <p className="text-3xl bg-transparent text-white">
                 {statistics.live_listings}
               </p>
-            </div>
+            </div> */}
             <div className="bg-lime-500 p-6 rounded-lg shadow-md">
               <h3 className="text-xl font-bold mb-2 bg-transparent text-white">
                 Total Items Sold

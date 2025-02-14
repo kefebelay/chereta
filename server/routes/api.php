@@ -47,34 +47,33 @@ Route::delete('/favorites/remove/{id}', [FavoriteController::class, 'removeFavor
 Route::get('/favorites/is-favorite/{id}', [FavoriteController::class, 'isFavorite'])->middleware( 'auth:sanctum');
 Route::post('/bid',[BidController::class,'index']);
 
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('comments', [CommentController::class, 'index']);
+    Route::post('comments', [CommentController::class, 'store']);
+    Route::post('comments/{comment}/reply', [CommentController::class, 'reply']);
+    Route::get('comments/{id}', [CommentController::class, 'show']);
+    Route::put('comments/{id}', [CommentController::class, 'update']);
+    Route::delete('comments/{id}', [CommentController::class, 'destroy']);
+    Route::get('seller/comments', [CommentController::class, 'sellerComments']);
+    Route::post('seller/comments/{comment}/reply', [CommentController::class, 'sellerReply']);
+});
 
+Route::get('/delivery/{id}/stats', [OrderController::class, 'deliveryStats']);
 
+Route::put('/orders/{id}/status', [OrderController::class, 'changeStatus']);
+Route::get('/my-orders/{id}', [OrderController::class, 'myOrders']);
+Route::get('/deliveries/{id}', [OrderController::class, 'Deliveries']);
+Route::get('/orders', [OrderController::class, 'index']);
+Route::post('/order', [OrderController::class, 'store']);
+Route::get('/orders/{id}', [OrderController::class, 'show']);
+Route::put('/orders/{id}', [OrderController::class, 'update']);
+Route::delete('/orders/{id}', [OrderController::class, 'destroy']);
+Route::put('/orders/{id}/arrived', [OrderController::class, 'markAsArrived']);
 
-    Route::get('/comments', [CommentController::class, 'index']);
-    Route::post('/comments', [CommentController::class, 'store']);
-    Route::get('/comments/{id}', [CommentController::class, 'show']);
-    Route::put('/comments/{id}', [CommentController::class, 'update']);
-    Route::delete('/comments/{id}', [CommentController::class, 'destroy']);
-
-    Route::post('/comments/{commentId}/reply', [CommentController::class, 'reply']);
-    Route::get('/seller/comments', [CommentController::class, 'sellerComments']);
-    Route::post('/seller/comments/{parentId}/reply', [CommentController::class, 'sellerReply']);
-
-    Route::get('/delivery/{id}/stats', [OrderController::class, 'deliveryStats']);
-
-    Route::put('/orders/{id}/status', [OrderController::class, 'changeStatus']);
-    Route::get('/my-orders/{id}', [OrderController::class, 'myOrders']);
-    Route::get('/deliveries/{id}', [OrderController::class, 'Deliveries']);
-    Route::get('/orders', [OrderController::class, 'index']);
-    Route::post('/order', [OrderController::class, 'store']);
-    Route::get('/orders/{id}', [OrderController::class, 'show']);
-    Route::put('/orders/{id}', [OrderController::class, 'update']);
-    Route::delete('/orders/{id}', [OrderController::class, 'destroy']);
-
-    Route::get('/notifications/{id}', [NotificationController::class, 'show']);
-    Route::put('/mark-as-read/{id}', [NotificationController::class, 'markAsRead']);
-    Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']);
-    Route::get('/unread-notifications/{id}', [NotificationController::class, 'getUnreadNotifications']);
+Route::get('/notifications/{id}', [NotificationController::class, 'show']);
+Route::put('/mark-as-read/{id}', [NotificationController::class, 'markAsRead']);
+Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']);
+Route::get('/unread-notifications/{id}', [NotificationController::class, 'getUnreadNotifications']);
 
 
 Route::post('/listing/{listing}/report', [ListingReportController::class, 'report']);
@@ -82,6 +81,8 @@ Route::get('/listings/reports', [ListingReportController::class, 'index']);
 Route::get('/live/listings', [ListingController::class, 'getLiveListings']);
 Route::delete('/listings/{listing}', [ListingReportController::class, 'deleteListing']);
 
+Route::get('/seller-orders/{sellerId}', [OrderController::class, 'sellerOrders'])->middleware(['auth:sanctum', 'role:individual_seller|company_seller']);
+Route::get('/seller/sold-products/{id}', [ListingController::class, 'getSoldProducts'])->middleware(['auth:sanctum', 'role:individual_seller|company_seller']);
 
 //                        Admin routes
 
@@ -89,6 +90,11 @@ Route::post('/admin/register', [AdminController::class, 'store'])->middleware(['
 Route::patch('/admin/{id}',[AdminController::class,'update'])->middleware(['auth:sancturm', 'role:admin']);
 Route::get('/admins', [AdminController::class, 'index'])->middleware(['auth:sanctum', 'role:admin']);
 Route::get('/admin/listing-counts', [AdminController::class, 'getListingCounts'])->middleware(['auth:sanctum', 'role:admin']);
+Route::post('/assign-role', [AdminController::class, 'assignRole'])->middleware(['auth:sanctum', 'role:admin']);
+
+// Add new routes for verifying sellers
+Route::post('/admin/verify-company-seller/{id}', [AdminController::class, 'verifyCompanySeller'])->middleware(['auth:sanctum', 'role:admin']);
+Route::post('/admin/verify-individual-seller/{id}', [AdminController::class, 'verifyIndividualSeller'])->middleware(['auth:sanctum', 'role:admin']);
 
 Route::get('/users', [UserController::class, 'index'])->middleware(['auth:sanctum', 'role:admin']);
 Route::get('/user/{id}', [UserController::class, 'show'])->middleware(['auth:sanctum', 'role:admin']);

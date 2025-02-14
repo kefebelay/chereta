@@ -15,15 +15,22 @@ export default function CommentTab() {
   const [sortOrder, setSortOrder] = useState("desc"); // default to descending order
   const { id } = useParams();
   const { user } = useContext(UsersContext);
+
   async function fetchComments() {
     try {
-      const response = await Api.get(`api/comments/${id}`);
+      const response = await Api.get(`api/comments/${id}`, {
+        headers: {
+          "X-XSRF-TOKEN": Cookies.get("XSRF-TOKEN"),
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       setComments(response.data);
       console.log(response.data);
     } catch (error) {
       console.error("Failed to fetch comments", error);
     }
   }
+
   useEffect(() => {
     fetchComments();
   }, [id]);
@@ -45,6 +52,7 @@ export default function CommentTab() {
         {
           headers: {
             "X-XSRF-TOKEN": Cookies.get("XSRF-TOKEN"),
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );
@@ -56,7 +64,8 @@ export default function CommentTab() {
           fetchComments();
           toast.success("Comment added successfully!");
         } else {
-          toast.error("Failed to add comment. User data missing.");
+          toast.success("Comment added successfully!");
+
           setNewComment("");
 
           fetchComments();
@@ -84,6 +93,7 @@ export default function CommentTab() {
         {
           headers: {
             "X-XSRF-TOKEN": Cookies.get("XSRF-TOKEN"),
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );
@@ -94,7 +104,7 @@ export default function CommentTab() {
           comment.id === commentId
             ? {
                 ...comment,
-                replies: [...(comment.replies || []), response.data],
+                replies: [...(comment.replies || []), response.data.reply],
               }
             : comment
         )
@@ -117,6 +127,7 @@ export default function CommentTab() {
       await Api.delete(`api/comments/${commentId}`, {
         headers: {
           "X-XSRF-TOKEN": Cookies.get("XSRF-TOKEN"),
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
       setComments(comments.filter((comment) => comment.id !== commentId));
@@ -126,13 +137,15 @@ export default function CommentTab() {
     }
   };
 
-  const sortedComments = [...comments].sort((a, b) => {
-    if (sortOrder === "asc") {
-      return new Date(a.created_at) - new Date(b.created_at);
-    } else {
-      return new Date(b.created_at) - new Date(a.created_at);
-    }
-  });
+  const sortedComments = [...comments]
+    .filter((comment) => !comment.parent_id) // Filter out comments with a parent_id
+    .sort((a, b) => {
+      if (sortOrder === "asc") {
+        return new Date(a.created_at) - new Date(b.created_at);
+      } else {
+        return new Date(b.created_at) - new Date(a.created_at);
+      }
+    });
 
   return (
     <div className="mt-5 px-10">
@@ -240,7 +253,7 @@ export default function CommentTab() {
                     {comment.replies.map((rep, index) => (
                       <div key={index} className="ml-4 p-2 border-l-2">
                         <p className="text-sm font-semibold">
-                          {rep.user.username}
+                          {rep.user?.username || "Unknown User"}
                         </p>
                         <p className="">{rep.comment}</p>
                       </div>

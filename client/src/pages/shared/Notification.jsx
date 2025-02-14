@@ -110,11 +110,13 @@ export default function Notification() {
                   >
                     {notification.title}
                   </h2>
-                  {!notification.read && (
-                    <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full">
-                      New
-                    </span>
-                  )}
+                  <button
+                    onClick={() => deleteNotification(notification.id)}
+                    title="Delete this notification"
+                    className="text-red-500 hover:underline"
+                  >
+                    Delete
+                  </button>
                 </div>
                 {expandedNotification === notification.id && (
                   <div className="mt-2">
@@ -122,13 +124,6 @@ export default function Notification() {
                     <p className="text-text3 text-sm mt-2">
                       {notification.time}
                     </p>
-                    <button
-                      onClick={() => deleteNotification(notification.id)}
-                      title="Delete this notification"
-                      className="mt-2 text-red-500 hover:underline"
-                    >
-                      Delete
-                    </button>
                   </div>
                 )}
               </li>

@@ -14,6 +14,7 @@ export default function CompanySignUpForm() {
     username: "",
     description: "",
     address: "",
+    tin: "",
     image: null,
   });
   const csrf = Cookies.get("XSRF-TOKEN");
@@ -116,7 +117,7 @@ export default function CompanySignUpForm() {
             />
           </div>
           <div className="mb-4">
-            <label className="block mb-2">Company Number</label>
+            <label className="block mb-2">Company phone Number</label>
             <input
               type="text"
               name="phone_number"
@@ -140,6 +141,16 @@ export default function CompanySignUpForm() {
               name="description"
               className="w-full p-2 border border-text2 rounded focus:ring-blue-500"
               value={formData.description}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block mb-2">Company TIN</label>
+            <input
+              type="text"
+              name="tin"
+              className="w-full p-2 border focus:ring-blue-500 border-text2 rounded"
+              value={formData.tin}
               onChange={handleChange}
             />
           </div>

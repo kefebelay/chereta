@@ -6,6 +6,7 @@ import VerifiedBadge from "../../components/Seller/VerifiedBadge";
 import Api from "../Auth/Axios";
 import { UsersContext } from "../../hooks/Users_Hook";
 import RemainingTime from "../../components/common/Remaining_time";
+import Pagination from "../../components/common/Pagination";
 
 export default function SellerInfo() {
   const { id } = useParams();
@@ -14,6 +15,21 @@ export default function SellerInfo() {
   const [isLoading, setIsLoading] = useState(false);
   const [profile, setProfile] = useState(null);
   const [items, setItems] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const PAGE_SIZE = 8;
+
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
+
+  const filteredItems = items.filter((item) => item.status === "active");
+  const totalPages = Math.ceil(filteredItems.length / PAGE_SIZE);
+  const paginatedItems = filteredItems.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE
+  );
 
   useEffect(() => {
     async function get() {
@@ -64,43 +80,47 @@ export default function SellerInfo() {
             <VerifiedBadge isVerified={profile.actor.age > 1} />
           </div>
           <p className="text-text2">{profile.email}</p>
-          <p className="text-text p-6 bg-transparent text-start">
+          <p className="text-text2 text-center">{profile.phone_number}</p>
+          <p className="text-text bg-transparent text-center">
             {profile.actor.description}
           </p>
           <div className="flex justify-center items-center mt-2"></div>
           <div className="mt-8">
             <h3 className="text-xl font-semibold mb-4">Ongoing Auctions</h3>
             <div className="grid md:grid-cols-3 lg:grid-cols-4 grid-cols-1 gap-4">
-              {items.map((item) => (
+              {paginatedItems.map((item) => (
                 <div
                   key={item.id}
                   className="bg-transparent shadow-text2 p-4 rounded-lg shadow hover:shadow-lg 
                   duration-500 hover:scale-105 transition-transform hover:duration-700"
                 >
-                  {item.status === "active" && (
-                    <Link key={item.id} to={`/product/${item.id}`} className="">
-                      <img
-                        className="w-auto h-auto object-cover rounded-lg mb-4"
-                        src={url + item.image}
-                        alt="Product"
+                  <Link key={item.id} to={`/product/${item.id}`} className="">
+                    <img
+                      className="w-auto h-auto object-cover rounded-lg mb-4"
+                      src={url + item.image}
+                      alt="Product"
+                    />
+                    <h4 className="text-lg font-bold text-text2 mb-2">
+                      {item.title}
+                    </h4>
+                    <p className="text-birr font-semibold">
+                      Birr: {item.starting_price}
+                    </p>
+                    <p className="text-sm ">
+                      <RemainingTime
+                        bidEndTime={item.bid_end_time}
+                        createdAt={item.createdAt}
                       />
-                      <h4 className="text-lg font-bold text-text2 mb-2">
-                        {item.title}
-                      </h4>
-                      <p className="text-birr font-semibold">
-                        Birr: {item.starting_price}
-                      </p>
-                      <p className="text-sm ">
-                        <RemainingTime
-                          bidEndTime={item.bid_end_time}
-                          createdAt={item.createdAt}
-                        />
-                      </p>
-                    </Link>
-                  )}
+                    </p>
+                  </Link>
                 </div>
               ))}
             </div>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
           </div>
         </div>
       </div>

@@ -13,7 +13,7 @@ export default function SignUp() {
     password: "",
     username: "",
     gender: "",
-    age: "",
+    dob: "",
     address: "",
     profile_image: null,
   });
@@ -125,12 +125,12 @@ export default function SignUp() {
           </div>
           <div className="flex gap-5">
             <div className="mb-4">
-              <label className="block mb-2">Age</label>
+              <label className="block mb-2">Date of Birth</label>
               <input
-                type="number"
-                name="age"
+                type="date"
+                name="dob"
                 className="w-full p-2 border border-text2 rounded focus:ring-blue-500"
-                value={formData.age}
+                value={formData.dob}
                 onChange={handleChange}
               />
               <p className="text-text2 text-sm p-1">* required</p>

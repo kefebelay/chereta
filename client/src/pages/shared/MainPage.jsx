@@ -21,11 +21,11 @@ export default function MainPage() {
         <div id="whyChooseUs bg-background">
           <Why_choose_us />
         </div>
-        <div id="HowItWorks" className="bg-background2">
-          <How_It_Works />
-        </div>
-        <div id="About" className=" my-14">
+        <div id="About" className=" my-14 bg-background2">
           <About />
+        </div>
+        <div id="HowItWorks" className="">
+          <How_It_Works />
         </div>
       </div>
       <Footer />

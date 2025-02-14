@@ -15,7 +15,7 @@ export default function Comments() {
   const [replyText, setReplyText] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [comments, setComments] = useState([]);
-  const { user } = useContext(UsersContext);
+  const { user, url } = useContext(UsersContext);
 
   useEffect(() => {
     async function fetchComments() {
@@ -23,9 +23,11 @@ export default function Comments() {
         const response = await Api.get("api/seller/comments", {
           headers: {
             "X-XSRF-TOKEN": Cookies.get("XSRF-TOKEN"),
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
         setComments(response.data);
+        console.log(response.data);
       } catch (error) {
         console.error("Failed to fetch comments", error);
       }
@@ -56,6 +58,7 @@ export default function Comments() {
         {
           headers: {
             "X-XSRF-TOKEN": Cookies.get("XSRF-TOKEN"),
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );
@@ -106,6 +109,11 @@ export default function Comments() {
               <h2 className="text-primary text-lg mb-2">
                 Product: {comment.listing.title}
               </h2>
+              <img
+                src={url + comment.listing.image}
+                alt={comment.listing.title}
+                className="w-20 h-20 object-cover mb-2"
+              />
               <p className="text-primary mb-2">
                 <span className="font-semibold text-text">Comment: </span>
                 &quot;{comment.comment}&quot;
@@ -134,7 +142,7 @@ export default function Comments() {
                   {comment.replies.map((rep, index) => (
                     <div key={index} className="ml-4 p-2 border-l-2">
                       <p className="text-sm font-semibold">
-                        {rep.user.username}
+                        {rep.user?.username || "Unknown User"}
                       </p>
                       <p className="">{rep.comment}</p>
                     </div>

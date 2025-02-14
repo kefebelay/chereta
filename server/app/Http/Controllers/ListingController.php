@@ -86,6 +86,8 @@ class ListingController extends Controller
                 'title' => ['required', 'string', 'max:255'],
                 'description' => ['required', 'string'],
                 'starting_price' => ['required', 'numeric', 'min:0'],
+                'quantity' => ['required', 'integer', 'min:1'],
+                'is_private' => ['required', 'boolean'],
                 'bid_start_time' => ['required', 'date', 'before_or_equal:' . now()->addMonths(6)],
                 'bid_end_time' => ['required', 'date', 'after_or_equal:' . $request->input('bid_start_time')],
                 'image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:5000'],
@@ -101,6 +103,8 @@ class ListingController extends Controller
                 'title' => $request->title,
                 'description' => $request->description,
                 'starting_price' => $request->starting_price,
+                'quantity' => $request->quantity,
+                'is_private' => $request->is_private,
                 'bid_end_time' => $request->bid_end_time,
                 'bid_start_time' => $request->bid_start_time,
                 'image' => "images/listings/$imageName",
@@ -138,6 +142,8 @@ class ListingController extends Controller
                 'title' => ['sometimes', 'string', 'max:255'],
                 'description' => ['sometimes', 'string'],
                 'starting_price' => ['sometimes', 'numeric', 'min:0'],
+                'quantity' => ['sometimes', 'integer', 'min:1'],
+                'is_private' => ['sometimes', 'boolean'],
                 'bid_end_time' => ['sometimes', 'date', 'after:now'],
                 'image' => ['sometimes', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:5000'],
             ]);
@@ -158,6 +164,8 @@ class ListingController extends Controller
             if ($request->has('title')) $listing->title = $request->title;
             if ($request->has('description')) $listing->description = $request->description;
             if ($request->has('starting_price')) $listing->starting_price = $request->starting_price;
+            if ($request->has('quantity')) $listing->quantity = $request->quantity;
+            if ($request->has('is_private')) $listing->is_private = $request->is_private;
             if ($request->has('bid_end_time')) $listing->bid_end_time = $request->bid_end_time;
 
             $listing->save();
@@ -243,6 +251,19 @@ class ListingController extends Controller
                 'endedListings' => $endedListings,
                 'listingsWithWinner' => $listingsWithWinner,
             ]);
+        } catch (\Exception $e) {
+            return response()->json(["message" => $e->getMessage()], 500);
+        }
+    }
+
+    public function getSoldProducts(string $id)
+    {
+        try {
+            $listings = Listing::with(['category', 'user', 'bids', 'winner'])
+                ->where('user_id', $id)
+                ->whereNotNull('winner_id')
+                ->get();
+            return response()->json($listings);
         } catch (\Exception $e) {
             return response()->json(["message" => $e->getMessage()], 500);
         }

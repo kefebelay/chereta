@@ -14,7 +14,8 @@ class CompanySeller extends Model
         'user_id',
         'description',
         'address',
-
+        'is_verified',
+        'tin',
     ];
 
     public function user(){

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use App\Models\User;
 use App\Models\Listing;
+use App\Models\CompanySeller;
+use App\Models\IndividualSeller;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -139,6 +141,32 @@ class AdminController extends Controller
             return response()->json([
                 'message' => $e->getMessage()
             ], 500);
+        }
+    }
+
+    public function verifyCompanySeller($id)
+    {
+        try {
+            $companySeller = CompanySeller::where('user_id', $id)->firstOrFail();
+            $companySeller->is_verified = true;
+            $companySeller->save();
+
+            return response()->json(['message' => 'Company seller verified successfully'], 200);
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function verifyIndividualSeller($id)
+    {
+        try {
+            $individualSeller = IndividualSeller::where('user_id', $id)->firstOrFail();
+            $individualSeller->is_verified = true;
+            $individualSeller->save();
+
+            return response()->json(['message' => 'Individual seller verified successfully'], 200);
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 

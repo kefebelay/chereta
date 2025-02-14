@@ -31,7 +31,7 @@ class RegisteredUserController extends Controller
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:5000'],
             'password' => ['required', Rules\Password::defaults()],
             'address' => ['required', 'string', 'max:255'],
-            'age' => ['required', 'numeric', 'between:18,100'],
+            'dob' => ['required', 'date', 'before:'.now()->subYears(18)->format('Y-m-d')], // ensure user is at least 18 years old
             'gender' => ['required', 'string', 'in:male,female'],
         ]);
 
@@ -56,7 +56,7 @@ class RegisteredUserController extends Controller
         Buyer::create([
             'user_id' => $user->id,
             'gender' => $request->gender,
-            'age' => $request->age,
+            'dob' => $request->dob,
             'address' => $request->address
         ]);
         DB::commit();

@@ -35,6 +35,8 @@ export default function UserManagement() {
   const [users, setUsers] = useState([]);
   const [ispopup, setIsPopup] = useState(false);
   const [selectedID, setSelectedID] = useState(null);
+  const [filter, setFilter] = useState("all");
+  const [accountTypeFilter, setAccountTypeFilter] = useState("all");
 
   const ITEMS_PER_PAGE = 8;
   const { currentPage, totalPages, currentItems, handlePageChange } =
@@ -42,6 +44,72 @@ export default function UserManagement() {
 
   const handleRowClick = (userId) => {
     setSelectedUserId(selectedUserId === userId ? null : userId);
+  };
+
+  const handleFilterChange = (e) => {
+    setFilter(e.target.value);
+  };
+
+  const handleAccountTypeFilterChange = (e) => {
+    setAccountTypeFilter(e.target.value);
+  };
+
+  const filteredItems = items.filter((item) => {
+    if (filter === "all" && accountTypeFilter === "all") return true;
+    if (filter !== "all" && accountTypeFilter === "all") {
+      if (filter === "verified") return item.actor?.is_verified;
+      if (filter === "unverified") return !item.actor?.is_verified;
+    }
+    if (filter === "all" && accountTypeFilter !== "all") {
+      return item.roles[0]?.name === accountTypeFilter;
+    }
+    if (filter !== "all" && accountTypeFilter !== "all") {
+      if (filter === "verified")
+        return (
+          item.actor?.is_verified && item.roles[0]?.name === accountTypeFilter
+        );
+      if (filter === "unverified")
+        return (
+          !item.actor?.is_verified && item.roles[0]?.name === accountTypeFilter
+        );
+    }
+    return true;
+  });
+
+  const handleVerifyClick = async (userId, role) => {
+    try {
+      const endpoint =
+        role === "company_seller"
+          ? `/api/admin/verify-company-seller/${userId}`
+          : `/api/admin/verify-individual-seller/${userId}`;
+
+      const res = await Api.post(
+        endpoint,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "x-xsrf-token": Cookies.get("XSRF-TOKEN"),
+          },
+        }
+      );
+
+      if (res.status === 200) {
+        setItems((prevItems) =>
+          prevItems.map((item) =>
+            item.id === userId
+              ? { ...item, actor: { ...item.actor, is_verified: true } }
+              : item
+          )
+        );
+        toast.success(res.data.message);
+      } else {
+        toast.error(res.data.message);
+      }
+    } catch (error) {
+      toast.error("Failed to verify user. Please try again.");
+      console.error("Error verifying user:", error);
+    }
   };
 
   useEffect(() => {
@@ -70,6 +138,31 @@ export default function UserManagement() {
         <h1 className="text-3xl mt-12 mb-5 text-center font-bold text-primary">
           User management
         </h1>
+        <div className="mb-5">
+          <label className="mr-2">Filter by:</label>
+          <select
+            value={filter}
+            onChange={handleFilterChange}
+            className="border p-2 rounded"
+          >
+            <option value="all">All</option>
+            <option value="verified">Verified</option>
+            <option value="unverified">Unverified</option>
+          </select>
+          <label className="ml-4 mr-2">Account Type:</label>
+          <select
+            value={accountTypeFilter}
+            onChange={handleAccountTypeFilterChange}
+            className="border p-2 rounded"
+          >
+            <option value="all">All</option>
+            <option value="buyer">Buyer</option>
+            <option value="admin">Admin</option>
+            <option value="company_seller">Company Seller</option>
+            <option value="individual_seller">Individual Seller</option>
+            <option value="delivery_personnel">Delivery Personnel</option>
+          </select>
+        </div>
         {!users ? (
           <div className="grid place-items-center h-screen w-screen">
             <Loading />
@@ -96,7 +189,7 @@ export default function UserManagement() {
                   </tr>
                 </thead>
                 <tbody>
-                  {currentItems.map((user) => (
+                  {filteredItems.map((user) => (
                     <React.Fragment key={user.id}>
                       <tr
                         onClick={() => handleRowClick(user.id)}
@@ -110,21 +203,21 @@ export default function UserManagement() {
                             className={`py-2 px-2 w-fit text-white rounded-lg ${
                               user.roles.length === 0
                                 ? "bg-red-500"
-                                : user.roles[0].name === "buyer"
+                                : user.roles[0]?.name === "buyer"
                                 ? "bg-teal-500"
-                                : user.roles[0].name === "admin"
+                                : user.roles[0]?.name === "admin"
                                 ? "bg-purple-700"
-                                : user.roles[0].name === "company_seller"
+                                : user.roles[0]?.name === "company_seller"
                                 ? "bg-green-700"
-                                : user.roles[0].name === "individual_seller"
+                                : user.roles[0]?.name === "individual_seller"
                                 ? "bg-yellow-700"
-                                : user.roles[0].name === "delivery_personnel" &&
-                                  "bg-orange-700"
+                                : user.roles[0]?.name ===
+                                    "delivery_personnel" && "bg-orange-700"
                             }`}
                           >
                             {user.roles.length === 0
                               ? "no role"
-                              : user.roles[0].name}
+                              : user.roles[0]?.name}
                           </h1>
                         </td>
                         <td className="py-2 px-4">
@@ -137,6 +230,22 @@ export default function UserManagement() {
                           >
                             Delete
                           </button>
+                          {user.roles[0]?.name === "company_seller" ||
+                          user.roles[0]?.name === "individual_seller" ? (
+                            <button
+                              onClick={() =>
+                                handleVerifyClick(user.id, user.roles[0]?.name)
+                              }
+                              className={`btn font-bold py-1 px-3 rounded-lg ml-2 ${
+                                user.actor?.is_verified
+                                  ? "bg-gray-500 text-white"
+                                  : "bg-green-500 text-white"
+                              }`}
+                              disabled={user.actor?.is_verified}
+                            >
+                              {user.actor?.is_verified ? "Verified" : "Verify"}
+                            </button>
+                          ) : null}
                         </td>
                       </tr>
                       {selectedUserId === user.id && (

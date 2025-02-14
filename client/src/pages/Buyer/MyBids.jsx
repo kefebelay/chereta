@@ -115,12 +115,14 @@ export default function BidPage() {
           className="absolute top-5 right-20 hover:text-accent mx-3 hover:scale-105 transition-transform duration-300 cursor-pointer"
         >
           <i className="fas fa-heart text-2xl text-primary "></i>
+          <p>favorite</p>
         </button>
         <button
           onClick={() => navigate("/orderlist")}
           className="absolute top-5 right-5 hover:text-accent mx-3 hover:scale-105 transition-transform duration-300 cursor-pointer"
         >
           <i className="fas fa-truck text-2xl text-primary "></i>
+          <p>order</p>
         </button>
       </div>
 

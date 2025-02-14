@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        // Schedule the auctions:end command to run every minute
         $schedule->command('auctions:end')->everyMinute();
     }
 

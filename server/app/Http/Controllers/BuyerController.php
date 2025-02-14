@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 
-
 class BuyerController extends Controller
 {
     /**
@@ -48,44 +47,44 @@ class BuyerController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
-{
-    try {
-        $request->validate([
-            'name' => ['string', 'max:255'],
-            'username' => [ 'string', 'max:255', 'unique:'.User::class],
-            'image'=>['required','image', 'mimes:jpeg,png,jpg,gif,svg', 'max:5000'],
-            'phone_number' => [ 'string', 'max:15'],
-            'address' => [ 'string', 'max:255'],
-        ]);
+    {
+        try {
+            $request->validate([
+                'name' => ['string', 'max:255'],
+                'username' => [ 'string', 'max:255', 'unique:'.User::class],
+                'image'=>['required','image', 'mimes:jpeg,png,jpg,gif,svg', 'max:5000'],
+                'phone_number' => [ 'string', 'max:15'],
+                'address' => [ 'string', 'max:255'],
+                'dob' => ['date', 'before:'.now()->subYears(18)->format('Y-m-d')], // ensure user is at least 18 years old
+            ]);
 
-        $imageName = time().'.'.$request->image->extension();
-        $request->image->move(public_path('images'), $imageName);
+            $imageName = time().'.'.$request->image->extension();
+            $request->image->move(public_path('images'), $imageName);
 
-        User::where('id', $id)->update([
-            'name' => $request->name,
-            'username' => $request->username,
-            'phone_number' => $request->phone_number,
-            'image'=>"images/$imageName",
-        ]);
+            User::where('id', $id)->update([
+                'name' => $request->name,
+                'username' => $request->username,
+                'phone_number' => $request->phone_number,
+                'image'=>"images/$imageName",
+            ]);
 
-        Buyer::where('user_id', $id)->update([
-            'address' => $request->address,
-        ]);
+            Buyer::where('user_id', $id)->update([
+                'address' => $request->address,
+                'dob' => $request->dob,
+            ]);
 
-        $user = User::find($id);
+            $user = User::find($id);
 
-        return response()->json([
-            "message" => "Updated Successfully",
-            'user' => $user
-        ], 200);
-    } catch (Exception $e) {
-
-        return response()->json([
-            'message' => $e->getMessage()
-        ], 500);
+            return response()->json([
+                "message" => "Updated Successfully",
+                'user' => $user
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
-}
-
 
     /**
      * Remove the specified resource from storage.

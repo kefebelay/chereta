@@ -19,6 +19,7 @@ export default function CreateProduct() {
     bid_end_time: "",
     bid_start_time: "",
     quantity: "",
+    is_private: false,
     image: null,
   });
 
@@ -53,9 +54,11 @@ export default function CreateProduct() {
   }, []);
 
   const handleInputChange = (e) => {
-    const { name, value, files } = e.target;
+    const { name, value, files, type, checked } = e.target;
 
-    if (name === "image") {
+    if (type === "checkbox") {
+      setFormValues({ ...formValues, [name]: checked });
+    } else if (name === "image") {
       setFormValues({ ...formValues, image: files[0] });
     } else {
       setFormValues({ ...formValues, [name]: value });
@@ -86,7 +89,11 @@ export default function CreateProduct() {
     const formData = new FormData();
 
     for (const key in formValues) {
-      formData.append(key, formValues[key]);
+      if (key === "is_private") {
+        formData.append(key, formValues[key] ? 1 : 0);
+      } else {
+        formData.append(key, formValues[key]);
+      }
     }
 
     try {
@@ -105,6 +112,7 @@ export default function CreateProduct() {
         bid_end_time: "",
         bid_start_time: "",
         quantity: "",
+        is_private: false,
         image: null,
       });
       console.log(res);
@@ -255,6 +263,19 @@ export default function CreateProduct() {
                 onChange={handleDateTimeChange}
                 className="border rounded-md p-2 w-full md:w-3/4 border-text2"
               />
+            </div>
+            <div className="flex flex-col md:flex-row items-center">
+              <label className="font-semibold md:w-1/4">Bid Privacy</label>
+              <div className="flex items-center md:w-3/4">
+                <input
+                  type="checkbox"
+                  name="is_private"
+                  checked={formValues.is_private}
+                  onChange={handleInputChange}
+                  className="border rounded-md p-2 border-text2"
+                />
+                <span className="ml-2">Private</span>
+              </div>
             </div>
             <p className="text-sm text-red-600 text-center">{message}</p>
 

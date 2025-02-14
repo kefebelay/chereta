@@ -13,6 +13,7 @@ use Exception;
 
 class OrderController extends Controller
 {
+
     public function deliveryStats(string $id){
         try {
             $delivered = Order::where('delivery_person_id', $id)->where('status', 'delivered')->count();
@@ -57,6 +58,18 @@ class OrderController extends Controller
         }
     }
 
+    public function sellerOrders(string $sellerId)
+    {
+        try {
+            $orders = Order::whereHas('listing', function ($query) use ($sellerId) {
+                $query->where('user_id', $sellerId);
+            })->with(['user', 'listing', 'deliveryPersonnel'])->get();
+            return response()->json($orders, 200);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'Error fetching seller orders', 'error' => $e->getMessage()], 500);
+        }
+    }
+
     public function index()
     {
         try {
@@ -98,6 +111,8 @@ class OrderController extends Controller
                 'street' => $request->street,
                 'city' => $request->city,
                 'phone' => $request->phone,
+                'status' => 'Pending',
+                'is_arrived' => false,
             ]);
 
             return response()->json(['message' => 'Order created successfully', 'order' => $order], 201);
@@ -138,6 +153,7 @@ class OrderController extends Controller
                 'city' => 'required|string',
                 'phone' => 'required|string',
                 'status' => 'nullable|string',
+                'is_arrived' => 'nullable|boolean',
             ]);
 
             if ($validator->fails()) {
@@ -162,6 +178,7 @@ class OrderController extends Controller
                 'city' => $request->city,
                 'phone' => $request->phone,
                 'status' => $request->status,
+                'is_arrived' => $request->is_arrived,
             ]);
             return response()->json(['message' => 'Order updated successfully', 'order' => $order], 200);
         } catch (Exception $e) {
@@ -183,6 +200,20 @@ class OrderController extends Controller
             return response()->json(['message' => 'Order deleted successfully'], 200);
         } catch (Exception $e) {
             return response()->json(['message' => 'Error deleting order', 'error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function markAsArrived(string $id)
+    {
+        try {
+            $order = Order::find($id);
+            if (!$order) {
+                return response()->json(['message' => 'Order not found'], 404);
+            }
+            $order->update(['is_arrived' => true]);
+            return response()->json(['message' => 'Order marked as arrived successfully', 'order' => $order], 200);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'Error marking order as arrived', 'error' => $e->getMessage()], 500);
         }
     }
 }

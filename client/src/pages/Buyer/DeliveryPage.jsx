@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import Navbar from "../../components/common/Navbar";
 import { UsersContext } from "../../hooks/Users_Hook";
@@ -11,7 +11,6 @@ const DeliveryPage = () => {
   const listing_id = useParams().id;
   const navigate = useNavigate();
   const { user, url } = useContext(UsersContext);
-  const [message, setmessage] = useState(" ");
   const [formData, setFormData] = useState({
     buyer_id: user.id,
     listing_id: listing_id,
@@ -26,6 +25,14 @@ const DeliveryPage = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [popupIsOpen, setPopupIsOpen] = useState(false);
   const [errors, setErrors] = useState({});
+  const [deliveryFee, setDeliveryFee] = useState(0);
+
+  const vehicleDeliveryFees = {
+    Bicycle: 100,
+    Car: 200,
+    Motorbike: 150,
+    "Moving Truck": 500,
+  };
 
   useEffect(() => {
     async function getPersonnel() {
@@ -46,6 +53,7 @@ const DeliveryPage = () => {
   const handleSelectDeliveryPerson = (person) => {
     setFormData({ ...formData, delivery_person_id: person.id });
     setDropdownOpen(false);
+    setDeliveryFee(vehicleDeliveryFees[person.actor.vehicle] || 0);
   };
 
   const getVehicleIcon = (vehicle) => {
@@ -111,7 +119,9 @@ const DeliveryPage = () => {
         toast.error("Error creating order. Please try again.");
       }
     } else if (option === "Chapa") {
-      console.log("chapa");
+      navigate("/checkout", {
+        state: { productData, formData, deliveryFee, user },
+      });
     }
     console.log(`Selected payment option: ${option}`);
     closePopup();
@@ -261,7 +271,6 @@ const DeliveryPage = () => {
                 )}
               </div>
             </div>
-            <span> {message}</span>
           </div>
         </div>
 
@@ -280,6 +289,10 @@ const DeliveryPage = () => {
             <div className="flex justify-between border-b pb-3 mb-3">
               <span className="font-semibold">Won Bid</span>
               <span>{productData.winning_bid_amount}</span>
+            </div>
+            <div className="flex justify-between border-b pb-3 mb-3">
+              <span className="font-semibold">Delivery Fee</span>
+              <span>{deliveryFee} ETB</span>
             </div>
 
             <p className="text-sm text-gray-600">

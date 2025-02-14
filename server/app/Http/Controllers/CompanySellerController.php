@@ -45,7 +45,7 @@ class CompanySellerController extends Controller
             'password' => ['required', Rules\Password::defaults()],
             'address' => [ 'string', 'max:255'],
             'description' => [ 'string', 'max:255'],
-
+            'tin' => ['required', 'string', 'max:255'],
         ]);
 
         $imageName = time().'.'.$request->image->extension();
@@ -64,7 +64,8 @@ class CompanySellerController extends Controller
         CompanySeller::create([
             'user_id'=>$user->id,
             'address' => $request->company_address,
-            'description' => $request->company_description
+            'description' => $request->company_description,
+            'tin' => $request->tin,
         ]);
 
         $user->assignRole('company_seller');
@@ -92,6 +93,7 @@ class CompanySellerController extends Controller
                 'phone_number' => [ 'string', 'max:15'],
                 'address'=>['string', 'max:255'],
                 'description' => ['string', 'max:255'],
+                'tin' => ['string', 'max:255'],
             ]);
 
             User::where('id', $id)->update([
@@ -102,7 +104,8 @@ class CompanySellerController extends Controller
             ]);
             CompanySeller::where('user_id', $id)->update([
                 'address'=>$request->address,
-                'description'=>$request->description
+                'description'=>$request->description,
+                'tin' => $request->tin,
             ]);
             $user = User::find($id);
             $user = $user->load('companySeller');

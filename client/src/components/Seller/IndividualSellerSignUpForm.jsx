@@ -13,7 +13,7 @@ export default function IndividualSellerSignUpForm() {
     password: "",
     username: "",
     gender: "",
-    age: "",
+    dob: "",
     address: "",
     description: "",
     image: null,
@@ -132,15 +132,15 @@ export default function IndividualSellerSignUpForm() {
             />
           </div>
 
-          {/* Age and Gender */}
+          {/* DOB and Gender */}
           <div className="flex gap-x-5">
             <div className="mb-4">
-              <label className="block mb-2">Age</label>
+              <label className="block mb-2">Date of Birth</label>
               <input
-                type="number"
-                name="age"
+                type="date"
+                name="dob"
                 className="w-full p-2 border border-text2 rounded focus:ring-blue-500"
-                value={formData.age}
+                value={formData.dob}
                 onChange={handleChange}
               />
             </div>

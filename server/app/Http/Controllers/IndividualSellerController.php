@@ -44,7 +44,7 @@ class IndividualSellerController extends Controller
             'image'=>['nullable','image', 'mimes:jpeg,png,jpg,gif,svg', 'max:5000'],
             'password' => ['required', Rules\Password::defaults()],
             'address'=>['nullable','string', 'max:255'],
-            'age'=>['required', 'numeric', 'between:18,100'],
+            'dob'=>['required', 'date', 'before:'.now()->subYears(18)->format('Y-m-d')],
             'gender'=>['required','string', 'in:male,female'],
             'description' => [ 'nullable','string', 'max:255'],
         ]);
@@ -64,7 +64,7 @@ class IndividualSellerController extends Controller
         IndividualSeller::create([
             'user_id'=>$user->id,
             'address' => $request->address,
-            'age' => $request->age,
+            'dob' => $request->dob,
             'gender' => $request->gender,
             'description' => $request->description
         ]);
@@ -94,6 +94,7 @@ class IndividualSellerController extends Controller
                 'username' => [ 'string', 'max:255', 'unique:'.User::class],
                 'phone_number' => [ 'string', 'max:255'],
                 'address' => ['string', 'max:255'],
+                'dob' => ['date', 'before:'.now()->subYears(18)->format('Y-m-d')], // ensure user is at least 18 years old
             ]);
 
             $user = User::where('id', $id)->update([
@@ -104,6 +105,7 @@ class IndividualSellerController extends Controller
             ]);
             IndividualSeller::where('user_id', $id)->update([
                 'address' => $request->address,
+                'dob' => $request->dob,
             ]);
             return response()->json([
             "message" => "Updated Successfully",

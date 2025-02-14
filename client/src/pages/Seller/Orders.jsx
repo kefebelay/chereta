@@ -1,52 +1,45 @@
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 import SellerDashboard from "../../components/Seller/SellerDashboard";
 import usePagination from "../../hooks/usePagination";
 import Pagination from "../../components/common/Pagination";
+import { UsersContext } from "../../hooks/Users_Hook";
+import Api from "../Auth/Axios";
+
 export default function Orders() {
   const ITEMS_PER_PAGE = 8;
+  const [orders, setOrders] = useState([]);
+  const [isOpen, setIsOpen] = useState(true);
+  const { user } = useContext(UsersContext);
+  const [filter, setFilter] = useState("");
 
-  const dummyOrders = [
-    {
-      id: 1,
-      product: "Product A",
-      quantity: 2,
-      price: 800.0,
-      status: "Pending",
-    },
-    {
-      id: 2,
-      product: "Product B",
-      quantity: 1,
-      price: 798.0,
-      status: "Delivered",
-    },
-    {
-      id: 3,
-      product: "Product C",
-      quantity: 3,
-      price: 134.0,
-      status: "Cancelled",
-    },
-    {
-      id: 4,
-      product: "Product D",
-      quantity: 4,
-      price: 989.0,
-      status: "Delivered",
-    },
-    {
-      id: 5,
-      product: "Product E",
-      quantity: 5,
-      price: 25.0,
-      status: "Pending",
-    },
-  ];
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = await Api.get(`/api/seller-orders/${user.id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        setOrders(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error fetching seller orders:", error);
+      }
+    };
+
+    fetchOrders();
+  }, [user.id]);
+
+  const filteredOrders = orders.filter((order) => {
+    if (filter === "Arrived") {
+      return order.is_arrived;
+    }
+    return order.status.toLowerCase().includes(filter.toLowerCase());
+  });
 
   const { currentPage, totalPages, currentItems, handlePageChange } =
-    usePagination(dummyOrders, ITEMS_PER_PAGE);
+    usePagination(filteredOrders, ITEMS_PER_PAGE);
 
-  const [isOpen, setIsOpen] = useState(true);
   return (
     <div className="">
       <SellerDashboard isOpen={isOpen} setIsOpen={setIsOpen} />
@@ -54,14 +47,28 @@ export default function Orders() {
         <h1 className="text-3xl font-bold text-center text-primary p-5">
           Orders
         </h1>
-        <table className="w-full border border-text2">
+        <div className="flex justify-start gap-6 rounded mt-6">
+          <select
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            className="border border-text2 font-bold p-2 rounded bg-secondary"
+          >
+            <option value="">All</option>
+            <option value="Pending">Pending</option>
+            <option value="Delivered">Delivered</option>
+            <option value="Cancelled">Cancelled</option>
+            <option value="Arrived">Has Arrived</option>
+          </select>
+        </div>
+        <table className="w-full border border-text2 mt-6">
           <thead>
             <tr className="border-b-2 border-text2">
               <th className="bg-background2 p-3">Id</th>
               <th className="bg-background2 p-3">Product</th>
-              <th className="bg-background2 p-3">Quantity</th>
+              <th className="bg-background2 p-3">User</th>
               <th className="bg-background2 p-3">Price</th>
               <th className="bg-background2 p-3">Status</th>
+              <th className="bg-background2 p-3">Has Arrived</th>
             </tr>
           </thead>
           <tbody>
@@ -71,9 +78,11 @@ export default function Orders() {
                 className="border-b border-text2 hover:border-b-primary hover:border-b-4 transition-transform duration-300"
               >
                 <td className="py-2 text-center">{order.id}</td>
-                <td className="py-2 text-center">{order.product}</td>
-                <td className="py-2 text-center">{order.quantity}</td>
-                <td className="py-2 text-center">{order.price}</td>
+                <td className="py-2 text-center">{order.listing.title}</td>
+                <td className="py-2 text-center">{order.user.name}</td>
+                <td className="py-2 text-center">
+                  {order.listing.winning_bid_amount}
+                </td>
                 <td
                   className={`py-2 text-center ${
                     order.status === "Pending"
@@ -84,6 +93,9 @@ export default function Orders() {
                   }`}
                 >
                   {order.status}
+                </td>
+                <td className="py-2 text-center">
+                  {order.is_arrived ? "Yes" : "No"}
                 </td>
               </tr>
             ))}

@@ -26,14 +26,9 @@ import How_It_Works from "./components/common/How_It_Works";
 import Why_choose_us from "./components/common/Why_choose_us";
 // Buyer routes
 import MyBids from "./pages/Buyer/MyBids";
-import BidPage from "./pages/Buyer/BidPage";
-import BuyerDashboardPage from "./pages/Buyer/BuyerDashboard";
-import WinningBids from "./pages/Buyer/WinningBids";
 import Favorites from "./pages/Buyer/Favorite";
-import DeliveryTracking from "./pages/Buyer/DeliveryTracking";
-import OngoingBids from "./pages/Buyer/OngoingBids";
 import DeliveryPage from "./pages/Buyer/DeliveryPage";
-
+import CheckoutPage from "./pages/Buyer/CheckoutPage";
 // Seller routes
 import SellerInfo from "./pages/Seller/SellerInfo";
 import SellerDashboard from "./pages/Seller/SellerDashboardPage";
@@ -64,6 +59,7 @@ import DeliveryOrders from "./pages/DeliveryPersonnel/Orders";
 import ResetPassword from "./pages/Auth/ResetPassword";
 import Loading from "./components/common/Loading";
 import SignUp from "./components/Buyer/SignUp";
+import SoldProducts from "./pages/Seller/SoldProducts";
 
 export default function App() {
   const { user } = useContext(UsersContext);
@@ -116,6 +112,7 @@ export default function App() {
           element={<RedirectRoute element={<MainPage />} />}
         />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/register" element={<SignUp />} />
         <Route path="/seller/register" element={<RegisterPage />} />
         <Route
@@ -152,10 +149,7 @@ export default function App() {
           path="/search"
           element={<RedirectRoute element={<SearchResults />} />}
         />
-        <Route
-          path="/about"
-          element={<RedirectRoute element={<About />} />}
-        />
+        <Route path="/about" element={<RedirectRoute element={<About />} />} />
         <Route
           path="/how-it-works"
           element={<RedirectRoute element={<How_It_Works />} />}
@@ -174,41 +168,12 @@ export default function App() {
           path="/profile"
           element={<ProtectedRoute element={<Profile />} roles={["buyer"]} />}
         />
-        <Route
-          path="/bid-page"
-          element={<ProtectedRoute element={<BidPage />} roles={["buyer"]} />}
-        />
-        <Route
-          path="/buyer/dashboard"
-          element={
-            <ProtectedRoute
-              element={<BuyerDashboardPage />}
-              roles={["buyer"]}
-            />
-          }
-        />
-        <Route
-          path="/ongoing-bids"
-          element={
-            <ProtectedRoute element={<OngoingBids />} roles={["buyer"]} />
-          }
-        />
-        <Route
-          path="/winning-bids"
-          element={
-            <ProtectedRoute element={<WinningBids />} roles={["buyer"]} />
-          }
-        />
+
         <Route
           path="/favorites"
           element={<ProtectedRoute element={<Favorites />} roles={["buyer"]} />}
         />
-        <Route
-          path="/delivery-tracking"
-          element={
-            <ProtectedRoute element={<DeliveryTracking />} roles={["buyer"]} />
-          }
-        />
+
         <Route
           path="/delivery-page/:id"
           element={
@@ -271,6 +236,15 @@ export default function App() {
           element={
             <ProtectedRoute
               element={<Comments />}
+              roles={["individual_seller", "company_seller"]}
+            />
+          }
+        />
+        <Route
+          path="/seller/sold-products"
+          element={
+            <ProtectedRoute
+              element={<SoldProducts />}
               roles={["individual_seller", "company_seller"]}
             />
           }

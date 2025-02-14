@@ -11,7 +11,6 @@ export default function Hamburger({ isOpen, setIsOpen }) {
   async function getNotificationCount() {
     const res = await Api.get(`/api/unread-notifications/${user.id}`);
     setNotificationsCount(res.data);
-    console.log(res);
   }
 
   useEffect(() => {

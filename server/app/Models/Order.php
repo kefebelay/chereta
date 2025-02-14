@@ -17,11 +17,12 @@ class Order extends Model
         'listing_id',
         'delivery_person_id',
         'status',
+        'is_arrived',
     ];
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'buyer_id');
     }
 
     public function listing()

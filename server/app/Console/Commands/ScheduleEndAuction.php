@@ -31,6 +31,12 @@ class ScheduleEndAuction extends Command
 
         foreach ($activeListings as $listing) {
             $listing->endAuction();
+
+            // Notify the winner
+            if ($listing->winner_id) {
+                $winner = $listing->winner;
+                sendNotification($winner->id, 'Congratulations!', 'You have won the auction for ' . $listing->title . '.');
+            }
         }
 
         $this->info('Auctions ended successfully.');

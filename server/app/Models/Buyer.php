@@ -12,7 +12,7 @@ class Buyer extends Model
     protected $fillable = [
         'user_id',
         'address',
-        'age',
+        'dob',
         'gender',
     ];
     public function user(){
