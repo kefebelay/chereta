@@ -40,7 +40,7 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/chereta.git
+git clone https://github.com/kefebelay/chereta.git
 cd chereta
 
 # Install dependencies
